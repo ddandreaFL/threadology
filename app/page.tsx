@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -7,12 +6,18 @@ export default function Home() {
       <h1 className="text-4xl font-bold tracking-tight">Threadology</h1>
       <p className="text-muted-foreground">Your personal wardrobe vault.</p>
       <div className="flex gap-4">
-        <Button asChild>
-          <Link href="/login">Log in</Link>
-        </Button>
-        <Button variant="outline" asChild>
-          <Link href="/signup">Sign up</Link>
-        </Button>
+        <Link
+          href="/login"
+          className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+        >
+          Log in
+        </Link>
+        <Link
+          href="/signup"
+          className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-background px-4 text-sm font-medium transition-colors hover:bg-muted"
+        >
+          Sign up
+        </Link>
       </div>
     </main>
   );
