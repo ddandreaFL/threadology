@@ -29,6 +29,7 @@ export type Database = {
           is_premium?: boolean;
           created_at?: string;
         };
+        Relationships: [];
       };
       pieces: {
         Row: {
@@ -76,6 +77,15 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "pieces_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       fits: {
         Row: {
@@ -120,6 +130,15 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "fits_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       fit_pieces: {
         Row: {
@@ -143,8 +162,26 @@ export type Database = {
           layer_order?: number;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "fit_pieces_fit_id_fkey";
+            columns: ["fit_id"];
+            isOneToOne: false;
+            referencedRelation: "fits";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "fit_pieces_piece_id_fkey";
+            columns: ["piece_id"];
+            isOneToOne: false;
+            referencedRelation: "pieces";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
     Enums: {
       fit_visibility: "private" | "link_only" | "public";
     };
