@@ -46,7 +46,7 @@ export function UserMenu({ username, avatarUrl }: UserMenuProps) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-10 z-50 min-w-[160px] overflow-hidden rounded-xl border border-[#E0D8CC] bg-white shadow-md">
+        <div className="animate-dropdown-enter absolute right-0 top-10 z-50 min-w-[160px] overflow-hidden rounded-xl border border-[#E0D8CC] bg-white shadow-md">
           <div className="border-b border-[#E0D8CC] px-4 py-2.5">
             <p className="text-xs text-gray-500">Signed in as</p>
             <p className="truncate text-sm font-medium text-gray-900">@{username}</p>

@@ -81,7 +81,7 @@ export function PhotoUpload({
           setEntries((prev) => {
             const updated = prev.map((e) =>
               e.id === entry.id
-                ? { ...e, publicUrl, preview: publicUrl, uploading: false }
+                ? { ...e, publicUrl, uploading: false }
                 : e
             );
             syncParent(updated);
@@ -120,7 +120,31 @@ export function PhotoUpload({
     });
   }
 
+  const dragId = useRef<string | null>(null);
   const canAddMore = entries.length < maxFiles;
+
+  function handleDragStart(id: string) {
+    dragId.current = id;
+  }
+
+  function handleDragOver(e: React.DragEvent, overId: string) {
+    e.preventDefault();
+    if (!dragId.current || dragId.current === overId) return;
+    setEntries((prev) => {
+      const from = prev.findIndex((e) => e.id === dragId.current);
+      const to = prev.findIndex((e) => e.id === overId);
+      if (from === -1 || to === -1) return prev;
+      const next = [...prev];
+      next.splice(to, 0, next.splice(from, 1)[0]);
+      syncParent(next);
+      return next;
+    });
+    dragId.current = overId;
+  }
+
+  function handleDragEnd() {
+    dragId.current = null;
+  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -130,7 +154,11 @@ export function PhotoUpload({
           {entries.map((entry) => (
             <div
               key={entry.id}
-              className="group relative aspect-square overflow-hidden rounded-lg border border-[#E0D8CC] bg-[#F5F1EA]"
+              draggable={!entry.uploading}
+              onDragStart={() => handleDragStart(entry.id)}
+              onDragOver={(e) => handleDragOver(e, entry.id)}
+              onDragEnd={handleDragEnd}
+              className="group relative aspect-square cursor-grab overflow-hidden rounded-lg border border-[#E0D8CC] bg-[#F5F1EA] active:cursor-grabbing"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
