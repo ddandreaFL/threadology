@@ -124,3 +124,16 @@
 - Piece detail uses `.eq("user_id", user.id)` at the query level in addition to RLS for defence in depth
 
 ---
+
+## [2026-04-02] — Automated CHANGELOG & Commit Hook
+
+### Added
+- `docs/CHANGELOG.md` with full project history from day one
+- `.claude/settings.local.json` Stop hook: after every Claude response, injects a checklist reminder into Claude's context to (1) append to CHANGELOG.md and (2) run `git add . && git commit && git push`
+- `Bash(git push:*)` added to the local settings allow list so push runs without a permission prompt
+
+### Notes
+- The Stop hook uses `hookSpecificOutput.additionalContext` — invisible in the UI, but injects the reminder into Claude's model context after every turn
+- `settings.local.json` is gitignored (personal overrides); hook only applies to this machine
+
+---
