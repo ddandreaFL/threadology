@@ -125,6 +125,28 @@
 
 ---
 
+## [2026-04-02] — Piece Detail Page
+
+### Added
+- `components/vault/photo-gallery.tsx` — client component with selected-photo state; large primary image swaps on thumbnail click; thumbnail strip hidden when only one photo; active thumbnail gets forest green ring
+- `components/vault/delete-piece-modal.tsx` — confirmation dialog with backdrop blur; shows piece name in confirmation copy; destructive red Delete button; loading/error states; redirects to `/vault` on success
+- `lib/actions/pieces.ts` — added `deletePiece(pieceId)` server action; scoped to `user_id` for defence in depth on top of RLS
+
+### Changed
+- `app/(main)/vault/[id]/page.tsx` — full redesign of piece detail:
+  - Back chevron link to vault
+  - `PhotoGallery` client component replaces static images
+  - Brand in IBM Plex Mono (uppercase, tracking-widest); name/type in Cormorant Garamond serif at `text-3xl`; year · season in gray below
+  - Metadata 2-col grid (type, size, condition, year, season — empty fields omitted)
+  - Story rendered as `<blockquote>` with `#2D5A45` left border, serif italic
+  - Owner-only Edit link + Delete modal below details
+
+### Notes
+- `isOwner` guard derived from `piece.user_id === user.id` client-side (redundant with `.eq("user_id", user.id)` in the query, but explicit for future public-viewing mode)
+- `deletePiece` does not delete associated Storage files — orphaned images remain in the bucket; clean-up can be added when edit flow is built
+
+---
+
 ## [2026-04-02] — Automated CHANGELOG & Commit Hook
 
 ### Added
