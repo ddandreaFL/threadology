@@ -137,3 +137,10 @@
 - `settings.local.json` is gitignored (personal overrides); hook only applies to this machine
 
 ---
+
+## [2026-04-02] — README
+
+### Changed
+- Replaced the default create-next-app README with a project overview covering what Threadology does, the tech stack, project structure, getting-started steps, and database/storage schema summary
+
+---
