@@ -8,7 +8,7 @@ export function EmptyVault() {
         <Shirt className="h-7 w-7 text-[#C8BFB0]" strokeWidth={1.25} />
       </div>
 
-      <p className="text-xl text-gray-700">Your vault is empty.</p>
+      <p className="text-lg text-gray-700">Your vault is empty.</p>
       <p className="mt-1.5 text-sm text-gray-400">
         Start documenting your wardrobe.
       </p>

@@ -64,7 +64,7 @@ export default async function PiecePage({ params }: PiecePageProps) {
             <p className="font-mono-display text-xs uppercase tracking-widest text-gray-400">
               {piece.brand}
             </p>
-            <h1 className="mt-1 text-3xl capitalize leading-tight text-gray-900">
+            <h1 className="mt-1 text-2xl capitalize leading-tight text-gray-900">
               {displayName}
             </h1>
             {(piece.year || piece.season) && (

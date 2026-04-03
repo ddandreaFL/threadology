@@ -15,7 +15,7 @@ export default async function NewPiecePage() {
           ← Vault
         </Link>
         <span className="text-gray-300">/</span>
-        <h1 className="text-xl font-semibold text-gray-900">Add a piece</h1>
+        <h1 className="text-lg font-semibold text-gray-900">Add a piece</h1>
       </div>
 
       <div className="rounded-2xl border border-[#E0D8CC] bg-white px-6 py-8">

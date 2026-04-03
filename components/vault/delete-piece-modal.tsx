@@ -48,7 +48,7 @@ export function DeletePieceModal({ pieceId, pieceName }: DeletePieceModalProps) 
 
           {/* Dialog */}
           <div className="animate-dropdown-enter relative w-full max-w-sm rounded-2xl border border-[#E0D8CC] bg-[#FDFCFA] p-6 shadow-xl">
-            <h2 className="text-xl text-gray-900">Delete piece?</h2>
+            <h2 className="text-lg text-gray-900">Delete piece?</h2>
             <p className="mt-2 text-sm text-gray-500">
               <span className="font-medium text-gray-700">{pieceName}</span> will be permanently removed from your vault. This can&apos;t be undone.
             </p>

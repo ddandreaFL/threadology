@@ -32,7 +32,7 @@ export default async function NewFitPage() {
           </svg>
           Back to Vault
         </Link>
-        <h1 className="mt-4 text-3xl text-gray-900">Log a Fit</h1>
+        <h1 className="mt-4 text-2xl text-gray-900">Log a Fit</h1>
       </div>
 
       <FitForm

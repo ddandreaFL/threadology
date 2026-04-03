@@ -120,7 +120,7 @@ export function ImageAdjuster({
       >
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="text-lg text-gray-900">Reposition photo</h2>
+          <h2 className="text-base text-gray-900">Reposition photo</h2>
           <button
             type="button"
             onClick={onClose}

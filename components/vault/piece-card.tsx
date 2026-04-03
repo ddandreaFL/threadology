@@ -57,7 +57,7 @@ export function PieceCard({ piece }: PieceCardProps) {
         <p className="truncate font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
           {piece.brand}
         </p>
-        <p className="mt-0.5 truncate text-[17px] leading-snug text-gray-900 capitalize">
+        <p className="mt-0.5 truncate text-sm leading-snug text-gray-900 capitalize">
           {label}
         </p>
         {piece.year && (

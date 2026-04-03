@@ -42,7 +42,7 @@ export default async function EditPiecePage({ params }: EditPageProps) {
         <p className="font-mono-display text-xs uppercase tracking-widest text-gray-400">
           {piece.brand}
         </p>
-        <h1 className="mt-1 text-3xl capitalize text-gray-900">
+        <h1 className="mt-1 text-2xl capitalize text-gray-900">
           Edit {displayName}
         </h1>
       </div>

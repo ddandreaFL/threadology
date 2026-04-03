@@ -23,7 +23,7 @@ export default async function VaultPage() {
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h1 className="text-3xl text-gray-900">Your Vault</h1>
+          <h1 className="text-2xl text-gray-900">Your Vault</h1>
           {pieceCount > 0 && (
             <div className="mt-1.5 flex items-center gap-4 text-sm text-gray-400">
               <span>
