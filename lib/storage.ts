@@ -1,12 +1,12 @@
 import { supabase } from "@/lib/supabase";
 
 const BUCKET = "images";
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 function validateFile(file: File): void {
   if (file.size > MAX_FILE_SIZE) {
-    throw new Error(`"${file.name}" is too large. Max size is 5 MB.`);
+    throw new Error(`"${file.name}" is too large. Max size is 20 MB.`);
   }
   if (!ALLOWED_TYPES.includes(file.type)) {
     throw new Error(
