@@ -10,7 +10,7 @@ export default async function VaultPage() {
 
   const { data: pieces } = await supabase
     .from("pieces")
-    .select("id, brand, type, name, year, photos")
+    .select("id, brand, type, name, year, photos, crop_positions")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 

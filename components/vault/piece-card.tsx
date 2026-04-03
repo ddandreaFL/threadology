@@ -3,7 +3,7 @@ import type { Database } from "@/types/database";
 
 type Piece = Pick<
   Database["public"]["Tables"]["pieces"]["Row"],
-  "id" | "brand" | "type" | "name" | "year" | "photos"
+  "id" | "brand" | "type" | "name" | "year" | "photos" | "crop_positions"
 >;
 
 interface PieceCardProps {
@@ -26,6 +26,11 @@ export function PieceCard({ piece }: PieceCardProps) {
             src={piece.photos[0]}
             alt={label}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            style={{
+              objectPosition: piece.crop_positions?.["0"]
+                ? `${piece.crop_positions["0"].x}% ${piece.crop_positions["0"].y}%`
+                : "50% 50%",
+            }}
           />
         ) : (
           <div className="flex h-full items-center justify-center">

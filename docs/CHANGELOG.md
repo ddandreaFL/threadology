@@ -160,6 +160,35 @@
 
 ---
 
+## [2026-04-03] — Swipe Gallery & Image Repositioning
+
+### Added
+- `components/vault/image-adjuster.tsx` — drag-to-reposition modal: pointer-captured drag updates `object-position` in real time; calculates per-axis sensitivity from natural image dimensions so drag feels 1:1 regardless of portrait/landscape ratio; calls `updateCropPositions` server action on Save
+- `supabase/migrations/add_crop_positions.sql` — `ALTER TABLE pieces ADD COLUMN crop_positions jsonb DEFAULT '{}'`
+
+### Changed
+- `components/vault/photo-gallery.tsx` — full rewrite:
+  - Touch swipe (left→next, right→prev) with 50px threshold
+  - Smooth opacity fade (120ms) between photos
+  - Dot indicators overlaid at bottom of primary image; tappable to jump to photo
+  - Desktop prev/next arrow buttons; hidden until hover (`group-hover:opacity-100`)
+  - `cropPositions` prop applied via `object-position` on primary image and thumbnails
+  - Owner-only "Reposition photo" button below the image; opens `ImageAdjuster` modal
+  - Optimistic local update of `cropPositions` after a successful save
+- `app/(main)/vault/[id]/page.tsx` — passes `cropPositions`, `pieceId`, `isOwner` to `PhotoGallery`
+- `app/(main)/vault/page.tsx` — adds `crop_positions` to piece select query
+- `components/vault/vault-grid.tsx` — adds `crop_positions` to Piece Pick type
+- `components/vault/piece-card.tsx` — applies `object-position` on cover photo from `crop_positions["0"]`
+- `types/database.ts` — adds `crop_positions: Record<string, { x: number; y: number }> | null` to pieces Row/Insert/Update
+- `lib/actions/pieces.ts` — adds `updateCropPositions(pieceId, cropPositions)` server action
+
+### Notes
+- Run `supabase/migrations/add_crop_positions.sql` in the Supabase SQL editor before deploying
+- Drag sensitivity is calculated from natural image dimensions on load; square images (no overflow) correctly show 0 sensitivity (nothing to reposition)
+- `object-position` percentages stored as `{ x, y }` where 50/50 = center (CSS default)
+
+---
+
 ## [2026-04-03] — Vercel Deployment & Security Audit
 
 ### Fixed

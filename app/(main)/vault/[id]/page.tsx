@@ -49,7 +49,13 @@ export default async function PiecePage({ params }: PiecePageProps) {
 
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         {/* Photo gallery */}
-        <PhotoGallery photos={piece.photos} alt={displayName} />
+        <PhotoGallery
+          photos={piece.photos}
+          alt={displayName}
+          cropPositions={piece.crop_positions}
+          pieceId={piece.id}
+          isOwner={isOwner}
+        />
 
         {/* Details */}
         <div className="flex flex-col">

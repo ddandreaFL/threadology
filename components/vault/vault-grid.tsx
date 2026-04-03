@@ -3,7 +3,7 @@ import type { Database } from "@/types/database";
 
 type Piece = Pick<
   Database["public"]["Tables"]["pieces"]["Row"],
-  "id" | "brand" | "type" | "name" | "year" | "photos"
+  "id" | "brand" | "type" | "name" | "year" | "photos" | "crop_positions"
 >;
 
 interface VaultGridProps {

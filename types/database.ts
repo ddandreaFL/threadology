@@ -44,6 +44,7 @@ export type Database = {
           condition: string | null;
           story: string | null;
           photos: string[];
+          crop_positions: Record<string, { x: number; y: number }> | null;
           created_at: string;
           updated_at: string;
         };
@@ -59,6 +60,7 @@ export type Database = {
           condition?: string | null;
           story?: string | null;
           photos?: string[];
+          crop_positions?: Record<string, { x: number; y: number }> | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -74,6 +76,7 @@ export type Database = {
           condition?: string | null;
           story?: string | null;
           photos?: string[];
+          crop_positions?: Record<string, { x: number; y: number }> | null;
           created_at?: string;
           updated_at?: string;
         };
