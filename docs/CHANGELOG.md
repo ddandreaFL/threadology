@@ -160,6 +160,23 @@
 
 ---
 
+## [2026-04-03] — Create Fit Flow
+
+### Added
+- `lib/actions/fits.ts` — `createFit(data)` server action: inserts `fits` row + all `fit_pieces` rows, returns `{ username, slug }` for client-side redirect
+- `components/fit/piece-slot.tsx` — slot component; empty state shows dashed border + add icon; filled state shows thumbnail (with `crop_positions` applied), brand in IBM Plex Mono, piece name, drag handle, and × remove button
+- `components/fit/piece-selector.tsx` — bottom-sheet modal (full-screen on mobile, centered on sm+); live search by brand/type/name; 3-col thumbnail grid; already-selected pieces shown with green checkmark and disabled; "Add a new piece to your vault" footer link
+- `components/fit/fit-form.tsx` — client component managing all form state: photos (up to 3 via `PhotoUpload`), piece slots (start 4, expandable), drag-to-reorder slots, title/caption/date/location fields, real-time preview URL, submit validation (≥1 photo + ≥1 piece), redirects to `/fit/[username]/[slug]` on success
+- `app/(main)/fit/new/page.tsx` — server page: fetches user profile + vault pieces in parallel, renders `FitForm`
+
+### Notes
+- `generateSlug` in `FitForm`: slugifies title if provided, falls back to `fit-YYYY-MM-DD`; used for both the live preview URL and the submitted slug
+- Slug uniqueness is enforced by the DB; a duplicate-slug error surfaces as a form error message
+- Fit visibility defaults to `link_only` on creation
+- `layer_order` = slot index of filled pieces after nulls are filtered out
+
+---
+
 ## [2026-04-03] — Carousel Slide Animation & Edit Piece Page
 
 ### Added
