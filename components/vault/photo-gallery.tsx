@@ -9,7 +9,6 @@ interface PhotoGalleryProps {
   photos: string[];
   alt: string;
   cropPositions?: CropPositions | null;
-  /** Provide to enable the owner-only Reposition button */
   pieceId?: string;
   isOwner?: boolean;
 }
@@ -22,7 +21,9 @@ export function PhotoGallery({
   isOwner = false,
 }: PhotoGalleryProps) {
   const [selected, setSelected] = useState(0);
-  const [visible, setVisible] = useState(true);
+  const [prev, setPrev] = useState<number | null>(null);
+  const [direction, setDirection] = useState<"next" | "prev">("next");
+  const [transitioning, setTransitioning] = useState(false);
   const [adjustingIndex, setAdjustingIndex] = useState<number | null>(null);
   const [cropPositions, setCropPositions] = useState<CropPositions>(
     initialCropPositions ?? {}
@@ -37,22 +38,21 @@ export function PhotoGallery({
     );
   }
 
-  function goTo(index: number) {
-    if (index === selected) return;
-    setVisible(false);
+  function goTo(index: number, dir?: "next" | "prev") {
+    if (transitioning || index === selected) return;
+    const d = dir ?? (index > selected ? "next" : "prev");
+    setPrev(selected);
+    setDirection(d);
+    setTransitioning(true);
+    setSelected(index);
     setTimeout(() => {
-      setSelected(index);
-      setVisible(true);
-    }, 120);
+      setPrev(null);
+      setTransitioning(false);
+    }, 300);
   }
 
-  function goNext() {
-    goTo((selected + 1) % photos.length);
-  }
-
-  function goPrev() {
-    goTo((selected - 1 + photos.length) % photos.length);
-  }
+  function goNext() { goTo((selected + 1) % photos.length, "next"); }
+  function goPrev() { goTo((selected - 1 + photos.length) % photos.length, "prev"); }
 
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
@@ -67,8 +67,10 @@ export function PhotoGallery({
     else goPrev();
   }
 
-  const cropPos = cropPositions[String(selected)];
-  const objectPosition = cropPos ? `${cropPos.x}% ${cropPos.y}%` : "50% 50%";
+  function cropStyle(index: number): React.CSSProperties {
+    const pos = cropPositions[String(index)];
+    return { objectPosition: pos ? `${pos.x}% ${pos.y}%` : "50% 50%" };
+  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -78,22 +80,46 @@ export function PhotoGallery({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* Outgoing image — slides out */}
+        {transitioning && prev !== null && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={`out-${prev}`}
+            src={photos[prev]}
+            alt={alt}
+            className={`absolute inset-0 h-full w-full object-cover ${
+              direction === "next"
+                ? "animate-carousel-out-left"
+                : "animate-carousel-out-right"
+            }`}
+            style={cropStyle(prev)}
+          />
+        )}
+
+        {/* Current image — slides in */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          key={`in-${selected}`}
           src={photos[selected]}
           alt={alt}
-          className="h-full w-full object-cover transition-opacity duration-150"
-          style={{ opacity: visible ? 1 : 0, objectPosition }}
+          className={`absolute inset-0 h-full w-full object-cover ${
+            transitioning
+              ? direction === "next"
+                ? "animate-carousel-in-right"
+                : "animate-carousel-in-left"
+              : ""
+          }`}
+          style={cropStyle(selected)}
         />
 
-        {/* Desktop prev/next arrows — hidden until hover */}
+        {/* Desktop arrows — hover to reveal */}
         {photos.length > 1 && (
           <>
             <button
               type="button"
               onClick={goPrev}
               aria-label="Previous photo"
-              className="absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-700 opacity-0 shadow transition-opacity hover:bg-white group-hover:opacity-100 focus-visible:opacity-100"
+              className="absolute left-2 top-1/2 z-10 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-700 opacity-0 shadow transition-opacity hover:bg-white group-hover:opacity-100 focus-visible:opacity-100"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -103,7 +129,7 @@ export function PhotoGallery({
               type="button"
               onClick={goNext}
               aria-label="Next photo"
-              className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-700 opacity-0 shadow transition-opacity hover:bg-white group-hover:opacity-100 focus-visible:opacity-100"
+              className="absolute right-2 top-1/2 z-10 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-700 opacity-0 shadow transition-opacity hover:bg-white group-hover:opacity-100 focus-visible:opacity-100"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -114,7 +140,7 @@ export function PhotoGallery({
 
         {/* Dot indicators */}
         {photos.length > 1 && (
-          <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
+          <div className="absolute bottom-3 left-0 right-0 z-10 flex justify-center gap-1.5">
             {photos.map((_, i) => (
               <button
                 key={i}
@@ -122,16 +148,14 @@ export function PhotoGallery({
                 onClick={() => goTo(i)}
                 aria-label={`Photo ${i + 1}`}
                 className="h-1.5 w-1.5 rounded-full transition-colors"
-                style={{
-                  backgroundColor: i === selected ? "#2D5A45" : "#E0D8CC",
-                }}
+                style={{ backgroundColor: i === selected ? "#2D5A45" : "#E0D8CC" }}
               />
             ))}
           </div>
         )}
       </div>
 
-      {/* Reposition button — owner only, below the image */}
+      {/* Reposition button — owner only */}
       {isOwner && pieceId && (
         <div className="flex">
           <button
@@ -142,7 +166,7 @@ export function PhotoGallery({
             <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
             </svg>
-            Reposition photo {photos.length > 1 ? `${selected + 1}` : ""}
+            Reposition photo{photos.length > 1 ? ` ${selected + 1}` : ""}
           </button>
         </div>
       )}
@@ -150,33 +174,26 @@ export function PhotoGallery({
       {/* Thumbnail strip */}
       {photos.length > 1 && (
         <div className="grid grid-cols-5 gap-2">
-          {photos.map((url, i) => {
-            const thumbCrop = cropPositions[String(i)];
-            return (
-              <button
-                key={url}
-                type="button"
-                onClick={() => goTo(i)}
-                className={`aspect-square overflow-hidden rounded-lg border transition-all ${
-                  i === selected
-                    ? "border-[#2D5A45] ring-2 ring-[#2D5A45]/30"
-                    : "border-[#E0D8CC] opacity-60 hover:opacity-100"
-                }`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={url}
-                  alt={`${alt} ${i + 1}`}
-                  className="h-full w-full object-cover"
-                  style={{
-                    objectPosition: thumbCrop
-                      ? `${thumbCrop.x}% ${thumbCrop.y}%`
-                      : "50% 50%",
-                  }}
-                />
-              </button>
-            );
-          })}
+          {photos.map((url, i) => (
+            <button
+              key={url}
+              type="button"
+              onClick={() => goTo(i)}
+              className={`aspect-square overflow-hidden rounded-lg border transition-all ${
+                i === selected
+                  ? "border-[#2D5A45] ring-2 ring-[#2D5A45]/30"
+                  : "border-[#E0D8CC] opacity-60 hover:opacity-100"
+              }`}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt={`${alt} ${i + 1}`}
+                className="h-full w-full object-cover"
+                style={cropStyle(i)}
+              />
+            </button>
+          ))}
         </div>
       )}
 

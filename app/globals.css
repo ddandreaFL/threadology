@@ -25,6 +25,23 @@
   }
 }
 
+@keyframes carousel-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes carousel-in-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes carousel-out-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+@keyframes carousel-out-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -34,6 +51,18 @@
   }
   .animate-dropdown-enter {
     animation: dropdown-enter 0.15s ease-out both;
+  }
+  .animate-carousel-in-right {
+    animation: carousel-in-right 300ms ease-in-out both;
+  }
+  .animate-carousel-in-left {
+    animation: carousel-in-left 300ms ease-in-out both;
+  }
+  .animate-carousel-out-left {
+    animation: carousel-out-left 300ms ease-in-out both;
+  }
+  .animate-carousel-out-right {
+    animation: carousel-out-right 300ms ease-in-out both;
   }
 }
 

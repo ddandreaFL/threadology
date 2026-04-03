@@ -160,6 +160,27 @@
 
 ---
 
+## [2026-04-03] — Carousel Slide Animation & Edit Piece Page
+
+### Added
+- `app/(main)/vault/[id]/edit/page.tsx` — edit piece page; fetches piece server-side, guards with `requireUser()` + `.eq("user_id", user.id)`, renders `EditPieceForm`
+- `components/vault/edit-piece-form.tsx` — pre-populated edit form; calls `updatePiece` server action on submit; Cancel link returns to piece detail
+- `lib/actions/pieces.ts` — `updatePiece(pieceId, data)` server action; scoped to `user_id`; redirects to `/vault/[id]` on success
+
+### Fixed
+- Photo gallery white flash on navigation: replaced opacity-fade with CSS slide animation — outgoing image slides out while incoming slides in simultaneously (no background visible)
+- Edit piece button 404: `/vault/[id]/edit` route now exists
+
+### Changed
+- `app/globals.css` — added `carousel-in-right`, `carousel-in-left`, `carousel-out-left`, `carousel-out-right` keyframes and corresponding `animate-carousel-*` utility classes
+- `components/vault/photo-gallery.tsx` — carousel now tracks `prev`/`direction`/`transitioning` state; both outgoing and incoming images are absolutely positioned and animate simultaneously; `key` props ensure CSS animations restart on each transition
+
+### Notes
+- Carousel animation duration is 300ms ease-in-out; touch swipe threshold remains 50px
+- Both images are rendered during the 300ms transition window, then the outgoing image is unmounted
+
+---
+
 ## [2026-04-03] — Swipe Gallery & Image Repositioning
 
 ### Added
