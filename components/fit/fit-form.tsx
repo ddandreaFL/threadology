@@ -144,7 +144,7 @@ export function FitForm({ userId, username, pieces }: FitFormProps) {
         {/* ── Photos ── */}
         <section className="flex flex-col gap-4">
           <div>
-            <h2 className="font-serif text-xl text-gray-900">Photos</h2>
+            <h2 className="text-xl text-gray-900">Photos</h2>
             <p className="mt-0.5 text-sm text-gray-400">Up to 3 photos of the fit</p>
           </div>
           <PhotoUpload
@@ -161,7 +161,7 @@ export function FitForm({ userId, username, pieces }: FitFormProps) {
         {/* ── Pieces ── */}
         <section className="flex flex-col gap-4">
           <div>
-            <h2 className="font-serif text-xl text-gray-900">What are you wearing?</h2>
+            <h2 className="text-xl text-gray-900">What are you wearing?</h2>
             <p className="mt-0.5 text-sm text-gray-400">Drag to reorder — top to bottom sets layer order</p>
           </div>
 
@@ -198,7 +198,7 @@ export function FitForm({ userId, username, pieces }: FitFormProps) {
 
         {/* ── Details ── */}
         <section className="flex flex-col gap-4">
-          <h2 className="font-serif text-xl text-gray-900">Details</h2>
+          <h2 className="text-xl text-gray-900">Details</h2>
 
           <div className="flex flex-col gap-4">
             <Field label="Title">

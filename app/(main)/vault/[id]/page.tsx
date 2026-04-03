@@ -64,7 +64,7 @@ export default async function PiecePage({ params }: PiecePageProps) {
             <p className="font-mono-display text-xs uppercase tracking-widest text-gray-400">
               {piece.brand}
             </p>
-            <h1 className="mt-1 font-serif text-3xl capitalize leading-tight text-gray-900">
+            <h1 className="mt-1 text-3xl capitalize leading-tight text-gray-900">
               {displayName}
             </h1>
             {(piece.year || piece.season) && (
@@ -94,7 +94,7 @@ export default async function PiecePage({ params }: PiecePageProps) {
               <p className="font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
                 Story
               </p>
-              <blockquote className="mt-3 border-l-2 border-[#2D5A45] pl-4 font-serif text-base italic leading-relaxed text-gray-600">
+              <blockquote className="mt-3 border-l-2 border-[#2D5A45] pl-4 text-base italic leading-relaxed text-gray-600">
                 {piece.story}
               </blockquote>
             </div>

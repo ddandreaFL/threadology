@@ -41,7 +41,7 @@ export function PieceSelector({
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[#E0D8CC] px-5 py-4">
-          <h2 className="font-serif text-lg text-gray-900">Select a piece</h2>
+          <h2 className="text-lg text-gray-900">Select a piece</h2>
           <button
             type="button"
             onClick={onClose}
@@ -137,7 +137,7 @@ export function PieceSelector({
                       <p className="truncate font-mono-display text-[9px] uppercase tracking-widest text-gray-400">
                         {piece.brand}
                       </p>
-                      <p className="truncate font-serif text-xs capitalize text-gray-800">
+                      <p className="truncate text-xs capitalize text-gray-800">
                         {label}
                       </p>
                     </div>

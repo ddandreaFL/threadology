@@ -93,7 +93,7 @@ export function PieceSlot({
         <p className="truncate font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
           {piece.brand}
         </p>
-        <p className="truncate font-serif text-sm capitalize text-gray-800">
+        <p className="truncate text-sm capitalize text-gray-800">
           {label}
         </p>
       </div>
