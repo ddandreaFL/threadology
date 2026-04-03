@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { uploadImage, deleteImage } from "@/lib/storage";
+import { compressImage } from "@/lib/compress";
 
 interface PhotoEntry {
   id: string;
@@ -71,7 +72,8 @@ export function PhotoUpload({
     await Promise.all(
       newEntries.map(async (entry, i) => {
         try {
-          const publicUrl = await uploadImage(batch[i], userId);
+          const compressed = await compressImage(batch[i]);
+          const publicUrl = await uploadImage(compressed, userId);
           setEntries((prev) => {
             const updated = prev.map((e) =>
               e.id === entry.id
