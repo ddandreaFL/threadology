@@ -48,10 +48,10 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "sans-serif"],
+        sans: ["var(--font-dm-sans)", "sans-serif"],
         mono: ["var(--font-geist-mono)", "monospace"],
-        "mono-display": ['"IBM Plex Mono"', "monospace"],
-        serif: ['"Cormorant Garamond"', "Georgia", "serif"],
+        "mono-display": ["var(--font-ibm-plex-mono)", "monospace"],
+        serif: ["var(--font-cormorant)", "Georgia", "serif"],
       },
     },
   },

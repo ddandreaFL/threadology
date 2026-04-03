@@ -40,12 +40,6 @@ export function PhotoUpload({
     }))
   );
 
-  function setEntryState(id: string, patch: Partial<PhotoEntry>) {
-    setEntries((prev) =>
-      prev.map((e) => (e.id === id ? { ...e, ...patch } : e))
-    );
-  }
-
   function syncParent(updatedEntries: PhotoEntry[]) {
     const urls = updatedEntries
       .filter((e) => e.publicUrl !== null)
@@ -121,14 +115,47 @@ export function PhotoUpload({
   }
 
   const dragId = useRef<string | null>(null);
+  const dragOverId = useRef<string | null>(null);
+  const [dropActive, setDropActive] = useState(false);
+  const [dragOverThumbnail, setDragOverThumbnail] = useState<string | null>(null);
   const canAddMore = entries.length < maxFiles;
+
+  function handleDropZoneDragOver(e: React.DragEvent) {
+    if (!dragId.current && e.dataTransfer.types.includes("Files")) {
+      e.preventDefault();
+      setDropActive(true);
+    }
+  }
+
+  function handleDropZoneDragLeave() {
+    setDropActive(false);
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDropActive(false);
+    if (dragId.current) return;
+    handleFiles(e.dataTransfer.files);
+  }
 
   function handleDragStart(id: string) {
     dragId.current = id;
   }
 
-  function handleDragOver(e: React.DragEvent, overId: string) {
+  function handleThumbnailDragOver(e: React.DragEvent, overId: string) {
+    if (!dragId.current) return;
     e.preventDefault();
+    dragOverId.current = overId;
+    setDragOverThumbnail(overId);
+  }
+
+  function handleThumbnailDragLeave() {
+    setDragOverThumbnail(null);
+  }
+
+  function handleThumbnailDrop(e: React.DragEvent, overId: string) {
+    e.preventDefault();
+    setDragOverThumbnail(null);
     if (!dragId.current || dragId.current === overId) return;
     setEntries((prev) => {
       const from = prev.findIndex((e) => e.id === dragId.current);
@@ -139,11 +166,12 @@ export function PhotoUpload({
       syncParent(next);
       return next;
     });
-    dragId.current = overId;
   }
 
   function handleDragEnd() {
     dragId.current = null;
+    dragOverId.current = null;
+    setDragOverThumbnail(null);
   }
 
   return (
@@ -156,9 +184,15 @@ export function PhotoUpload({
               key={entry.id}
               draggable={!entry.uploading}
               onDragStart={() => handleDragStart(entry.id)}
-              onDragOver={(e) => handleDragOver(e, entry.id)}
+              onDragOver={(e) => handleThumbnailDragOver(e, entry.id)}
+              onDragLeave={handleThumbnailDragLeave}
+              onDrop={(e) => handleThumbnailDrop(e, entry.id)}
               onDragEnd={handleDragEnd}
-              className="group relative aspect-square cursor-grab overflow-hidden rounded-lg border border-[#E0D8CC] bg-[#F5F1EA] active:cursor-grabbing"
+              className={`group relative aspect-square cursor-grab overflow-hidden rounded-lg border bg-[#F5F1EA] transition-all active:cursor-grabbing active:opacity-50 ${
+                dragOverThumbnail === entry.id
+                  ? "border-[#2D5A45] ring-2 ring-[#2D5A45]/40 scale-105"
+                  : "border-[#E0D8CC]"
+              }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -229,16 +263,23 @@ export function PhotoUpload({
         </div>
       )}
 
-      {/* Add photos button */}
+      {/* Add photos / drop zone */}
       {canAddMore && (
         <>
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-3 text-sm text-gray-500 transition-colors hover:border-[#2D5A45] hover:text-[#2D5A45]"
+            onDragOver={handleDropZoneDragOver}
+            onDragLeave={handleDropZoneDragLeave}
+            onDrop={handleDrop}
+            className={`flex w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed py-5 text-sm transition-colors ${
+              dropActive
+                ? "border-[#2D5A45] bg-[#2D5A45]/5 text-[#2D5A45]"
+                : "border-[#C8BFB0] bg-[#FDFCFA] text-gray-500 hover:border-[#2D5A45] hover:text-[#2D5A45]"
+            }`}
           >
             <svg
-              className="h-4 w-4"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -250,9 +291,9 @@ export function PhotoUpload({
                 d="M12 4v16m8-8H4"
               />
             </svg>
-            {entries.length === 0 ? "Add photos" : "Add more"}
+            <span>{dropActive ? "Drop to upload" : entries.length === 0 ? "Add photos" : "Add more"}</span>
             <span className="text-xs text-gray-400">
-              ({entries.length}/{maxFiles})
+              {dropActive ? "" : `drag & drop or click · ${entries.length}/${maxFiles}`}
             </span>
           </button>
           <input

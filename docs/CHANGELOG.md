@@ -160,6 +160,22 @@
 
 ---
 
+## [2026-04-02] — Font & Build Fix
+
+### Changed
+- `app/layout.tsx` — replaced raw `<link>` Google Fonts tags with `next/font/google` imports (`DM_Sans`, `Cormorant_Garamond`, `IBM_Plex_Mono`); removed Geist Sans local font; CSS variables renamed to `--font-dm-sans`, `--font-cormorant`, `--font-ibm-plex-mono`
+- `tailwind.config.ts` — updated `fontFamily` entries to use new CSS variables (`var(--font-dm-sans)`, `var(--font-cormorant)`, `var(--font-ibm-plex-mono)`)
+
+### Fixed
+- Removed unused `setEntryState` helper from `components/vault/photo-upload.tsx` that was causing an ESLint `no-unused-vars` build error
+- `npm run build` now passes cleanly with zero errors or warnings
+
+### Notes
+- Vercel "custom fonts not added in _document.js" warning was caused by raw `<link>` tags in JSX; resolved by using `next/font/google`
+- `next/font/google` correctly exports `Cormorant_Garamond`, `DM_Sans`, `IBM_Plex_Mono` in Next.js 14.2.35 (earlier `node -e require()` test was a false negative — ESM module not resolvable via CommonJS)
+
+---
+
 ## [2026-04-02] — README
 
 ### Changed
