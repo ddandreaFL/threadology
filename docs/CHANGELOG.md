@@ -160,6 +160,27 @@
 
 ---
 
+## [2026-04-03] — Vercel Deployment & Security Audit
+
+### Fixed
+- Vercel build was deploying old commit (98d5382) due to manual redeploy of stale deployment — resolved by pushing a clean commit
+- Git committer email (`ddandrea@threadology.dev`) not linked to GitHub account — updated `git config user.email` to `dill10dill@gmail.com`; force-pushed amended commit so Vercel could associate committer with GitHub user
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Vercel had spaces and `.env.local` appended due to paste error — corrected to clean JWT value
+- Updated `.env.local` to use JWT anon key (replacing old `sb_publishable_*` format key)
+
+### Security Audit
+- No hardcoded credentials in any source file
+- `.env.local` properly gitignored; only `.env.local.example` committed
+- Supabase anon key correctly uses `NEXT_PUBLIC_` prefix (safe for client exposure)
+- No service role key used anywhere in the codebase
+- RLS policies enforce ownership on all four tables and storage bucket
+- Auth enforced at middleware level and via `requireUser()` in all server actions/pages
+
+### Notes
+- Omitting `Co-Authored-By` Claude trailer from all commits — Vercel free (Hobby) plan treats co-authors as team members and blocks deploys
+
+---
+
 ## [2026-04-02] — Font & Build Fix
 
 ### Changed
