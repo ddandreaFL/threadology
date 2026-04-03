@@ -19,7 +19,7 @@ export default async function MainLayout({
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <Link
             href="/vault"
-            className="text-lg font-semibold tracking-tight text-gray-900 hover:opacity-70 transition-opacity"
+            className="font-sans text-lg font-semibold tracking-tight text-gray-900 hover:opacity-70 transition-opacity"
           >
             Threadology
           </Link>
