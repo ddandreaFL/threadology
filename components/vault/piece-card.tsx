@@ -8,14 +8,16 @@ type Piece = Pick<
 
 interface PieceCardProps {
   piece: Piece;
+  basePath?: string; // e.g. "/vault/dill10dill" — piece link becomes basePath/id
 }
 
-export function PieceCard({ piece }: PieceCardProps) {
+export function PieceCard({ piece, basePath }: PieceCardProps) {
   const label = piece.name ?? piece.type;
+  const href = basePath ? `${basePath}/${piece.id}` : `/vault/${piece.id}`;
 
   return (
     <Link
-      href={`/vault/${piece.id}`}
+      href={href}
       className="group block overflow-hidden rounded-xl border border-[#E0D8CC] bg-[#FDFCFA] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
     >
       {/* Photo */}

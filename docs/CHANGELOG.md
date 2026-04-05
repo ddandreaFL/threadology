@@ -2,6 +2,33 @@
 
 ---
 
+## [2026-04-05] — Public Vault Page
+
+### Added
+- `app/vault/[username]/page.tsx` — Public vault page accessible to anyone (no auth required). Displays the owner's piece grid, username, bio, and stats. Includes owner-only actions (Edit Profile, Copy Link, floating Add Piece button) and a visitor footer CTA ("Create your own vault →") for non-logged-in users.
+- `app/vault/[username]/[id]/page.tsx` — Public piece detail page. Anyone can view; owner gets Edit/Delete controls. Replaces the old auth-only `/vault/[id]` route.
+- `app/vault/[username]/[id]/edit/page.tsx` — Edit piece page, now at the username-scoped URL. Auth enforced inline via `requireUser()`.
+- `app/vault/layout.tsx` — Public layout wrapping all `/vault/[username]` routes. Shows Threadology header with UserMenu (logged-in) or Login/Sign Up buttons (visitor).
+- `components/vault/public-vault-header.tsx` — Vault header component: username (Cormorant Garamond, text-3xl), bio, stats row, and owner action buttons.
+- `components/vault/vault-stats.tsx` — Stats component computing piece count, brand count, and era span (parses 4-digit years from year strings).
+- `components/vault/copy-link-button.tsx` — Client component that copies the vault URL to clipboard with a "Copied!" confirmation flash.
+- OpenGraph + Twitter card metadata generated per vault from `generateMetadata`.
+
+### Changed
+- **URL structure:** Piece detail and edit pages moved from `/vault/[id]` and `/vault/[id]/edit` to `/vault/[username]/[id]` and `/vault/[username]/[id]/edit` to support the public vault URL scheme.
+- `app/(main)/vault/page.tsx` — Now redirects immediately to `/vault/[username]` (the public vault). Logged-in users land on their own public vault, where they see owner controls.
+- `components/vault/piece-card.tsx` — Added optional `basePath` prop; piece link becomes `${basePath}/${piece.id}` when provided.
+- `components/vault/vault-grid.tsx` — Added optional `basePath` prop, passed through to each `PieceCard`.
+- `components/vault/edit-piece-form.tsx` — Added `backHref` prop replacing hardcoded `/vault/${piece.id}` cancel link.
+- `lib/actions/pieces.ts` — `updatePiece` now fetches the user's username after saving and redirects to `/vault/${username}/${pieceId}`.
+- `middleware.ts` — Narrowed vault protection from `startsWith("/vault")` to only `/vault` and `/vault/add`. Public vault routes (`/vault/[username]/**`) are now accessible without auth.
+
+### Removed
+- `app/(main)/vault/[id]/page.tsx` — Replaced by `app/vault/[username]/[id]/page.tsx`.
+- `app/(main)/vault/[id]/edit/page.tsx` — Replaced by `app/vault/[username]/[id]/edit/page.tsx`.
+
+---
+
 ## [2026-03-31] — Project Scaffold
 
 ### Added

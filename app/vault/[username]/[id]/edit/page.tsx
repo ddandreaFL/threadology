@@ -4,13 +4,22 @@ import { requireUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { EditPieceForm } from "@/components/vault/edit-piece-form";
 
-interface EditPageProps {
-  params: { id: string };
+interface Props {
+  params: { username: string; id: string };
 }
 
-export default async function EditPiecePage({ params }: EditPageProps) {
+export default async function EditPiecePage({ params }: Props) {
   const user = await requireUser();
   const supabase = await createServerClient();
+
+  // Owner-only: verify the username matches the logged-in user
+  const { data: profile } = await supabase
+    .from("users")
+    .select("id")
+    .eq("username", params.username)
+    .single();
+
+  if (!profile || profile.id !== user.id) notFound();
 
   const { data: piece } = await supabase
     .from("pieces")
@@ -22,13 +31,13 @@ export default async function EditPiecePage({ params }: EditPageProps) {
   if (!piece) notFound();
 
   const displayName = piece.name ?? piece.type;
+  const backHref = `/vault/${params.username}/${params.id}`;
 
   return (
     <div className="mx-auto max-w-2xl">
-      {/* Back navigation */}
       <div className="mb-8">
         <Link
-          href={`/vault/${piece.id}`}
+          href={backHref}
           className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-gray-700"
         >
           <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +56,7 @@ export default async function EditPiecePage({ params }: EditPageProps) {
         </h1>
       </div>
 
-      <EditPieceForm piece={piece} userId={user.id} />
+      <EditPieceForm piece={piece} userId={user.id} backHref={backHref} />
     </div>
   );
 }

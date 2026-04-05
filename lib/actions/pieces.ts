@@ -39,7 +39,13 @@ export async function updatePiece(
 
   if (error) throw new Error(error.message);
 
-  redirect(`/vault/${pieceId}`);
+  const { data: profile } = await supabase
+    .from("users")
+    .select("username")
+    .eq("id", user.id)
+    .single();
+
+  redirect(`/vault/${profile?.username ?? user.id}/${pieceId}`);
 }
 
 export async function updateCropPositions(

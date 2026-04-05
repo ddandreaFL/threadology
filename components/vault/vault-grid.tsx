@@ -8,13 +8,14 @@ type Piece = Pick<
 
 interface VaultGridProps {
   pieces: Piece[];
+  basePath?: string;
 }
 
-export function VaultGrid({ pieces }: VaultGridProps) {
+export function VaultGrid({ pieces, basePath }: VaultGridProps) {
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
       {pieces.map((piece) => (
-        <PieceCard key={piece.id} piece={piece} />
+        <PieceCard key={piece.id} piece={piece} basePath={basePath} />
       ))}
     </div>
   );

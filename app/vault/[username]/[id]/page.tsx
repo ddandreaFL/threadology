@@ -1,29 +1,38 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { requireUser } from "@/lib/auth";
+import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { PhotoGallery } from "@/components/vault/photo-gallery";
 import { DeletePieceModal } from "@/components/vault/delete-piece-modal";
 
-interface PiecePageProps {
-  params: { id: string };
+interface Props {
+  params: { username: string; id: string };
 }
 
-export default async function PiecePage({ params }: PiecePageProps) {
-  const user = await requireUser();
+export default async function PublicPiecePage({ params }: Props) {
   const supabase = await createServerClient();
+
+  const { data: profile } = await supabase
+    .from("users")
+    .select("id")
+    .eq("username", params.username)
+    .single();
+
+  if (!profile) notFound();
 
   const { data: piece } = await supabase
     .from("pieces")
     .select("*")
     .eq("id", params.id)
-    .eq("user_id", user.id)
+    .eq("user_id", profile.id)
     .single();
 
   if (!piece) notFound();
 
-  const isOwner = piece.user_id === user.id;
+  const viewer = await getUser();
+  const isOwner = viewer?.id === profile.id;
   const displayName = piece.name ?? piece.type;
+
   const metaFields = [
     { label: "Type", value: piece.type },
     { label: "Size", value: piece.size },
@@ -37,13 +46,13 @@ export default async function PiecePage({ params }: PiecePageProps) {
       {/* Back navigation */}
       <div className="mb-8">
         <Link
-          href="/vault"
+          href={`/vault/${params.username}`}
           className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-gray-700"
         >
           <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to Vault
+          Back to vault
         </Link>
       </div>
 
@@ -59,7 +68,6 @@ export default async function PiecePage({ params }: PiecePageProps) {
 
         {/* Details */}
         <div className="flex flex-col">
-          {/* Brand + name */}
           <div>
             <p className="font-mono-display text-xs uppercase tracking-widest text-gray-400">
               {piece.brand}
@@ -74,7 +82,6 @@ export default async function PiecePage({ params }: PiecePageProps) {
             )}
           </div>
 
-          {/* Metadata grid */}
           {metaFields.length > 0 && (
             <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-[#E0D8CC] pt-8">
               {metaFields.map((f) => (
@@ -88,7 +95,6 @@ export default async function PiecePage({ params }: PiecePageProps) {
             </dl>
           )}
 
-          {/* Story */}
           {piece.story && (
             <div className="mt-8 border-t border-[#E0D8CC] pt-8">
               <p className="font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
@@ -100,19 +106,15 @@ export default async function PiecePage({ params }: PiecePageProps) {
             </div>
           )}
 
-          {/* Owner actions */}
           {isOwner && (
-            <div className="mt-auto border-t border-[#E0D8CC] pt-8 mt-8 flex items-center gap-3">
+            <div className="mt-8 flex items-center gap-3 border-t border-[#E0D8CC] pt-8">
               <Link
-                href={`/vault/${piece.id}/edit`}
+                href={`/vault/${params.username}/${piece.id}/edit`}
                 className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
               >
                 Edit
               </Link>
-              <DeletePieceModal
-                pieceId={piece.id}
-                pieceName={displayName}
-              />
+              <DeletePieceModal pieceId={piece.id} pieceName={displayName} />
             </div>
           )}
         </div>

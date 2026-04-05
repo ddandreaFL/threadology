@@ -19,9 +19,10 @@ type Piece = Database["public"]["Tables"]["pieces"]["Row"];
 interface EditPieceFormProps {
   piece: Piece;
   userId: string;
+  backHref: string;
 }
 
-export function EditPieceForm({ piece, userId }: EditPieceFormProps) {
+export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
   const [form, setForm] = useState({
     brand: piece.brand,
     type: piece.type,
@@ -179,7 +180,7 @@ export function EditPieceForm({ piece, userId }: EditPieceFormProps) {
 
       <div className="flex gap-3">
         <Link
-          href={`/vault/${piece.id}`}
+          href={backHref}
           className="flex-1 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2.5 text-center text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
         >
           Cancel

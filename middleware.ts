@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 function isProtectedRoute(pathname: string): boolean {
-  if (pathname.startsWith("/vault")) return true;
+  // Logged-in only pages — public vault lives at /vault/[username] (no auth)
+  if (pathname === "/vault") return true;
+  if (pathname === "/vault/add") return true;
   if (pathname === "/fit/new") return true;
   // /fit/[slug]/edit
   if (/^\/fit\/[^/]+\/edit$/.test(pathname)) return true;
