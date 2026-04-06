@@ -1,10 +1,13 @@
 import Link from "next/link";
 import type { Database } from "@/types/database";
-import { VaultStats } from "./vault-stats";
+import { CollectionStats } from "./collection-stats";
 import { CopyLinkButton } from "./copy-link-button";
 
 type Profile = Database["public"]["Tables"]["users"]["Row"];
-type Piece = Pick<Database["public"]["Tables"]["pieces"]["Row"], "brand" | "year">;
+type Piece = Pick<
+  Database["public"]["Tables"]["pieces"]["Row"],
+  "brand" | "year" | "type" | "estimated_value"
+>;
 
 interface PublicVaultHeaderProps {
   profile: Profile;
@@ -32,7 +35,7 @@ export function PublicVaultHeader({
       {/* Stats */}
       {pieces.length > 0 && (
         <div className="mt-4">
-          <VaultStats pieces={pieces} />
+          <CollectionStats pieces={pieces} />
         </div>
       )}
 
@@ -43,8 +46,18 @@ export function PublicVaultHeader({
             href="/settings"
             className="inline-flex items-center gap-1.5 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
           >
-            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            <svg
+              className="h-3.5 w-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
             </svg>
             Edit profile
           </Link>

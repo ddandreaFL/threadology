@@ -39,6 +39,7 @@ interface FormState {
   size: string;
   condition: string;
   story: string;
+  estimatedValue: string;
   photos: string[];
 }
 
@@ -51,6 +52,7 @@ const EMPTY: FormState = {
   size: "",
   condition: "",
   story: "",
+  estimatedValue: "",
   photos: [],
 };
 
@@ -90,6 +92,7 @@ export function AddPieceForm({ userId }: AddPieceFormProps) {
       size: form.size.trim() || null,
       condition: form.condition || null,
       story: form.story.trim() || null,
+      estimated_value: form.estimatedValue ? parseInt(form.estimatedValue, 10) : null,
       photos: form.photos,
     });
 
@@ -190,6 +193,22 @@ export function AddPieceForm({ userId }: AddPieceFormProps) {
               </option>
             ))}
           </select>
+        </Field>
+
+        <Field label="Est. Value ($)">
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+              $
+            </span>
+            <input
+              type="number"
+              min="0"
+              value={form.estimatedValue}
+              onChange={(e) => set("estimatedValue", e.target.value)}
+              placeholder="0"
+              className={`${inputCls} pl-7`}
+            />
+          </div>
         </Field>
       </div>
 

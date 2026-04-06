@@ -2,6 +2,39 @@
 
 ---
 
+## [2026-04-06] — Collection Stats, Free Tier Limits & Value Field
+
+### Added
+
+**Collection Stats**
+- `components/vault/collection-stats.tsx` — client component computing and displaying collection stats from the pieces array. Primary row always visible (pieces · brands · era span). Expandable detail section (click "more ↓") reveals: top 3 brands by count, type breakdown, and estimated collection value (or "Add values to see estimate" if none set).
+- Replaces `VaultStats` in `PublicVaultHeader` — stats are now interactive on the vault page.
+
+**Free Tier Limits**
+- `lib/subscription.ts` — `getUserSubscription(userId)` fetches `is_premium` + piece count in parallel; returns `{ isPremium, pieceCount, pieceLimit }`. `FREE_PIECE_LIMIT = 25`.
+- `components/vault/piece-limit-banner.tsx` — usage banner showing "X of 25 pieces" with a forest green progress bar. Turns amber when within 5 of limit or at limit. Owner-only; always visible to free users on their vault.
+- `components/vault/upgrade-prompt.tsx` — full replacement for the add form when the free limit is hit. Shows lock icon, current count, benefits list (unlimited pieces, valuation dashboard, AI tag ID, PDF export, priority support), and "Upgrade for $8/month" CTA.
+- `app/(main)/upgrade/page.tsx` — upgrade page showing plan details and benefits. Button is disabled with "Coming soon — payment not yet active" (Stripe integration pending). Shows "You're on Premium" confirmation for premium users.
+
+**Value Field**
+- `supabase/migrations/add_estimated_value.sql` — adds `estimated_value integer` column to pieces table.
+- `estimated_value` added to `types/database.ts` pieces Row/Insert/Update.
+- "Est. Value ($)" input field added to both `AddPieceForm` and `EditPieceForm` (dollar-prefixed number input, optional).
+
+### Changed
+- `app/(main)/vault/add/page.tsx` — now fetches subscription status before rendering. If at limit: shows `UpgradePrompt`. If within 5 of limit: shows `PieceLimitBanner` above the form. Otherwise: normal form.
+- `app/vault/[username]/page.tsx` — adds `estimated_value` to pieces select; shows `PieceLimitBanner` below the vault header for free-tier owners.
+- `components/vault/public-vault-header.tsx` — replaced `VaultStats` with `CollectionStats`; updated piece type to include `type` and `estimated_value`.
+- `lib/actions/pieces.ts` — `updatePiece` now includes `estimated_value` in the updatable fields.
+- `middleware.ts` — added `/upgrade` to protected routes.
+
+### SQL to run in Supabase
+```sql
+ALTER TABLE pieces ADD COLUMN IF NOT EXISTS estimated_value integer;
+```
+
+---
+
 ## [2026-04-05] — Public Vault Page
 
 ### Added

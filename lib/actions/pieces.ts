@@ -25,7 +25,7 @@ export async function updatePiece(
   pieceId: string,
   data: Pick<
     PieceInsert,
-    "brand" | "type" | "name" | "year" | "season" | "size" | "condition" | "story" | "photos"
+    "brand" | "type" | "name" | "year" | "season" | "size" | "condition" | "story" | "photos" | "estimated_value"
   >
 ) {
   const user = await requireUser();

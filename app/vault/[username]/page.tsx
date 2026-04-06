@@ -6,6 +6,8 @@ import { createServerClient } from "@/lib/supabase-server";
 import { VaultGrid } from "@/components/vault/vault-grid";
 import { EmptyVault } from "@/components/vault/empty-vault";
 import { PublicVaultHeader } from "@/components/vault/public-vault-header";
+import { PieceLimitBanner } from "@/components/vault/piece-limit-banner";
+import { FREE_PIECE_LIMIT } from "@/lib/subscription";
 
 interface Props {
   params: { username: string };
@@ -24,7 +26,7 @@ async function getVaultData(username: string) {
 
   const { data: pieces } = await supabase
     .from("pieces")
-    .select("id, brand, type, name, year, photos, crop_positions")
+    .select("id, brand, type, name, year, photos, crop_positions, estimated_value")
     .eq("user_id", profile.id)
     .order("created_at", { ascending: false });
 
@@ -66,6 +68,9 @@ export default async function PublicVaultPage({ params }: Props) {
   const isOwner = viewer?.id === profile.id;
   const vaultUrl = `https://threadology.vercel.app/vault/${profile.username}`;
 
+  // Free tier: show usage banner to owner
+  const showLimitBanner = isOwner && !profile.is_premium;
+
   return (
     <div className="pb-24">
       <PublicVaultHeader
@@ -74,6 +79,12 @@ export default async function PublicVaultPage({ params }: Props) {
         isOwner={isOwner}
         vaultUrl={vaultUrl}
       />
+
+      {showLimitBanner && (
+        <div className="mt-6">
+          <PieceLimitBanner count={pieces.length} limit={FREE_PIECE_LIMIT} />
+        </div>
+      )}
 
       <div className="mt-10">
         {pieces.length === 0 ? (

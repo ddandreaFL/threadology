@@ -32,6 +32,7 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
     size: piece.size ?? "",
     condition: piece.condition ?? "",
     story: piece.story ?? "",
+    estimatedValue: piece.estimated_value != null ? String(piece.estimated_value) : "",
     photos: piece.photos,
   });
   const [uploading, setUploading] = useState(false);
@@ -61,6 +62,7 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
         size: form.size.trim() || null,
         condition: form.condition || null,
         story: form.story.trim() || null,
+        estimated_value: form.estimatedValue ? parseInt(form.estimatedValue, 10) : null,
         photos: form.photos,
       });
     } catch (err) {
@@ -154,6 +156,22 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
               </option>
             ))}
           </select>
+        </Field>
+
+        <Field label="Est. Value ($)">
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">
+              $
+            </span>
+            <input
+              type="number"
+              min="0"
+              value={form.estimatedValue}
+              onChange={(e) => set("estimatedValue", e.target.value)}
+              placeholder="0"
+              className={`${inputCls} pl-7`}
+            />
+          </div>
         </Field>
       </div>
 
