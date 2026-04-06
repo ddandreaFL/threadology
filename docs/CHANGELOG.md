@@ -2,6 +2,20 @@
 
 ---
 
+## [2026-04-03] — Vault Header Redesign
+
+### Changed
+- `components/vault/public-vault-header.tsx` — fully rewritten as a compact, info-dense 5-row layout inspired by Grailed's profile UI:
+  - Row 1: 40px avatar (URL or username initial fallback) + `@username` (serif) + "Joined [date] · N pieces" meta + icon buttons (copy link, settings gear)
+  - Row 2: 3-column stats grid — Pieces / Brands / Era Span with large numerals and uppercase mono labels
+  - Row 3: Top brands horizontal scroll chips (shown only when 2+ unique brands)
+  - Row 4: Inline piece limit progress bar for free-tier owners — "X of 25" + green/amber bar + "Upgrade →"
+  - Row 5: "Create your own vault →" visitor CTA (shown to unauthenticated visitors)
+- `components/vault/copy-link-button.tsx` — added `iconOnly?: boolean` prop. When true, renders as a 32×32 ghost icon button for use in the compact header action row.
+- `app/vault/[username]/page.tsx` — removed standalone `PieceLimitBanner` and footer visitor CTA; both now rendered inside `PublicVaultHeader` via `showVisitorCta` prop.
+
+---
+
 ## [2026-04-06] — Collection Stats, Free Tier Limits & Value Field
 
 ### Added
