@@ -6,8 +6,6 @@ import { createServerClient } from "@/lib/supabase-server";
 import { VaultGrid } from "@/components/vault/vault-grid";
 import { EmptyVault } from "@/components/vault/empty-vault";
 import { PublicVaultHeader } from "@/components/vault/public-vault-header";
-import { PieceLimitBanner } from "@/components/vault/piece-limit-banner";
-import { FREE_PIECE_LIMIT } from "@/lib/subscription";
 
 interface Props {
   params: { username: string };
@@ -68,9 +66,6 @@ export default async function PublicVaultPage({ params }: Props) {
   const isOwner = viewer?.id === profile.id;
   const vaultUrl = `https://threadology.vercel.app/vault/${profile.username}`;
 
-  // Free tier: show usage banner to owner
-  const showLimitBanner = isOwner && !profile.is_premium;
-
   return (
     <div className="pb-24">
       <PublicVaultHeader
@@ -78,13 +73,8 @@ export default async function PublicVaultPage({ params }: Props) {
         pieces={pieces}
         isOwner={isOwner}
         vaultUrl={vaultUrl}
+        showVisitorCta={!viewer}
       />
-
-      {showLimitBanner && (
-        <div className="mt-6">
-          <PieceLimitBanner count={pieces.length} limit={FREE_PIECE_LIMIT} />
-        </div>
-      )}
 
       <div className="mt-10">
         {pieces.length === 0 ? (
@@ -102,21 +92,6 @@ export default async function PublicVaultPage({ params }: Props) {
           />
         )}
       </div>
-
-      {/* Non-owner footer CTA */}
-      {!viewer && (
-        <div className="mt-20 border-t border-[#E0D8CC] pt-10 text-center">
-          <p className="font-mono-display text-xs uppercase tracking-widest text-gray-400">
-            Documented with Threadology
-          </p>
-          <Link
-            href="/signup"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#2D5A45] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1E3D2F]"
-          >
-            Create your own vault →
-          </Link>
-        </div>
-      )}
 
       {/* Owner: floating Add button */}
       {isOwner && (
