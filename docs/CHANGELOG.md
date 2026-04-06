@@ -2,6 +2,18 @@
 
 ---
 
+## [2026-04-06] — Profile Settings: Bio & Avatar
+
+### Added
+- `lib/actions/profile.ts` — `updateProfile` server action. Saves `bio` and `avatar_url` to the `users` table, then revalidates `/settings` and `/vault/[username]`.
+- `components/settings/profile-settings-form.tsx` — client form with:
+  - **Avatar upload**: click-to-change circle (shows preview or username initial). Compresses via `compressImage` before upload to Supabase `images` bucket. Spinner during upload.
+  - **Bio textarea**: 160-char max, live character counter.
+  - Save/saving/saved states on submit button.
+- `app/(main)/settings/page.tsx` — replaced placeholder with full settings UI. Shows `@username · email` subheader above the profile card.
+
+---
+
 ## [2026-04-03] — Vault Header Redesign
 
 ### Changed
