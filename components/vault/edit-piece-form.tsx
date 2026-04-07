@@ -86,6 +86,17 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {/* Photos first */}
+      <Field label="Photos">
+        <PhotoUpload
+          userId={userId}
+          value={form.photos}
+          onChange={(urls) => set("photos", urls)}
+          onUploadingChange={setUploading}
+          variant="gallery"
+        />
+      </Field>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Brand *">
           <input
@@ -221,15 +232,6 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
           placeholder="Where did you get it? Why does it matter?"
           rows={3}
           className={`${inputCls} resize-none`}
-        />
-      </Field>
-
-      <Field label="Photos">
-        <PhotoUpload
-          userId={userId}
-          value={form.photos}
-          onChange={(urls) => set("photos", urls)}
-          onUploadingChange={setUploading}
         />
       </Field>
 
