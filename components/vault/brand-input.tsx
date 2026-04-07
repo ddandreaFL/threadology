@@ -14,25 +14,6 @@ export function BrandInput({ value, onChange, frequentBrands }: BrandInputProps)
     <div className="flex flex-col gap-1.5">
       <label className="text-sm font-medium text-gray-700">Brand *</label>
 
-      {frequentBrands.length > 0 && (
-        <div className="flex flex-wrap gap-1.5">
-          {frequentBrands.map((brand) => (
-            <button
-              key={brand}
-              type="button"
-              onClick={() => onChange(brand)}
-              className={`rounded-full border px-3 py-1 font-mono-display text-[11px] uppercase tracking-wide transition-colors ${
-                value.toLowerCase() === brand.toLowerCase()
-                  ? "border-[#2D5A45] bg-[#2D5A45] text-white"
-                  : "border-[#E0D8CC] bg-[#FDFCFA] text-gray-600 hover:border-[#2D5A45] hover:text-[#2D5A45]"
-              }`}
-            >
-              {brand}
-            </button>
-          ))}
-        </div>
-      )}
-
       <input
         type="text"
         value={value}
@@ -40,6 +21,21 @@ export function BrandInput({ value, onChange, frequentBrands }: BrandInputProps)
         placeholder="e.g. Carhartt, Arc'teryx"
         className={inputCls}
       />
+
+      {frequentBrands.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {frequentBrands.map((brand) => (
+            <button
+              key={brand}
+              type="button"
+              onClick={() => onChange(brand)}
+              className="rounded-full border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1 font-mono-display text-[11px] uppercase tracking-wide text-gray-500 transition-colors hover:border-[#2D5A45] hover:text-[#2D5A45]"
+            >
+              {brand}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
