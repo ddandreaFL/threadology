@@ -23,7 +23,7 @@ export default async function VaultPublicLayout({
           </Link>
 
           {user && profile ? (
-            <UserMenu username={username} avatarUrl={profile.avatar_url} />
+            <UserMenu username={username} avatarUrl={profile.avatar_url} isPremium={profile.is_premium} />
           ) : (
             <div className="flex items-center gap-3">
               <Link
