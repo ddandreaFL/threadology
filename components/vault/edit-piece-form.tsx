@@ -14,6 +14,15 @@ const PIECE_TYPES = [
 
 const CONDITIONS = ["deadstock", "excellent", "good", "fair", "worn"] as const;
 
+const ACQUISITION_METHODS = [
+  { value: "online", label: "Online" },
+  { value: "in_person", label: "In Person" },
+  { value: "thrift", label: "Thrift" },
+  { value: "gift", label: "Gift" },
+  { value: "trade", label: "Trade" },
+  { value: "other", label: "Other" },
+] as const;
+
 type Piece = Database["public"]["Tables"]["pieces"]["Row"];
 
 interface EditPieceFormProps {
@@ -33,6 +42,7 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
     condition: piece.condition ?? "",
     story: piece.story ?? "",
     estimatedValue: piece.estimated_value != null ? String(piece.estimated_value) : "",
+    acquisitionMethod: piece.acquisition_method ?? "",
     photos: piece.photos,
   });
   const [uploading, setUploading] = useState(false);
@@ -63,6 +73,7 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
         condition: form.condition || null,
         story: form.story.trim() || null,
         estimated_value: form.estimatedValue ? parseInt(form.estimatedValue, 10) : null,
+        acquisition_method: form.acquisitionMethod || null,
         photos: form.photos,
       });
     } catch (err) {
@@ -173,6 +184,34 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
             />
           </div>
         </Field>
+      </div>
+
+      {/* Acquisition method */}
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium text-gray-700">
+          How did you get it?
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {ACQUISITION_METHODS.map((m) => (
+            <button
+              key={m.value}
+              type="button"
+              onClick={() =>
+                set(
+                  "acquisitionMethod",
+                  form.acquisitionMethod === m.value ? "" : m.value
+                )
+              }
+              className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
+                form.acquisitionMethod === m.value
+                  ? "border-[#2D5A45] bg-[#2D5A45] text-white"
+                  : "border-[#E0D8CC] bg-[#FDFCFA] text-gray-600 hover:border-[#2D5A45] hover:text-[#2D5A45]"
+              }`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <Field label="Story">
