@@ -40,6 +40,10 @@ export const metadata: Metadata = {
   description: "Your personal wardrobe vault",
 };
 
+export const viewport = {
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{

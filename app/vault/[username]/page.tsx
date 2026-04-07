@@ -198,7 +198,10 @@ export default async function PublicVaultPage({ params, searchParams }: Props) {
 
       {/* Owner: floating Add button */}
       {isOwner && (
-        <div className="fixed bottom-6 left-0 right-0 z-40 flex justify-center px-4">
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-4"
+          style={{ paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom))" }}
+        >
           <Link
             href="/vault/add"
             className="flex items-center gap-2 rounded-full bg-[#2D5A45] px-6 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-[#1E3D2F] hover:shadow-xl active:scale-95"
