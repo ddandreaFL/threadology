@@ -18,10 +18,10 @@
 
 | Check | Status | Notes |
 |---|---|---|
-| Private fits not readable unauthenticated | Pending SQL | No fits in DB yet to test against; fix requires running migration |
-| `is_premium` cannot be self-granted | Pending SQL | Requires running migration; exploit confirmed possible before fix |
+| Private fits not readable unauthenticated | Verified | REST API returns `[]` without auth; `42501` with auth on private visibility query |
+| `is_premium` cannot be self-granted | Verified | PATCH with authenticated JWT returns `42501 permission denied for table users` |
 | Piece limit enforced server-side | Verified (code) | Server action checked; form no longer reaches DB directly |
-| Security headers present | Deployed | Verifiable via `curl -I` on any page after Vercel build |
+| Security headers present | Deployed | Live on main via Vercel |
 
 ---
 
