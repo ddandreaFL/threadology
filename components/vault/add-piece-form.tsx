@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { addPiece } from "@/lib/actions/pieces";
 import { PhotoUploadWithCrop } from "@/components/vault/photo-upload-with-crop";
 import { BrandInput } from "@/components/vault/brand-input";
 
@@ -61,7 +60,6 @@ interface AddPieceFormProps {
 }
 
 export function AddPieceForm({ userId, frequentBrands }: AddPieceFormProps) {
-  const router = useRouter();
   const [form, setForm] = useState<FormState>(EMPTY);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -81,8 +79,7 @@ export function AddPieceForm({ userId, frequentBrands }: AddPieceFormProps) {
 
     setSubmitting(true);
 
-    const { error: dbError } = await supabase.from("pieces").insert({
-      user_id: userId,
+    const result = await addPiece({
       brand: form.brand.trim(),
       type: form.type,
       name: form.name.trim() || null,
@@ -97,14 +94,11 @@ export function AddPieceForm({ userId, frequentBrands }: AddPieceFormProps) {
       crop_positions: Object.keys(form.cropPositions).length > 0 ? form.cropPositions : null,
     });
 
-    if (dbError) {
-      setError(dbError.message);
+    if (result?.error) {
+      setError(result.error);
       setSubmitting(false);
       return;
     }
-
-    router.push("/vault");
-    router.refresh();
   }
 
   const isDisabled = submitting || uploading;
