@@ -174,7 +174,7 @@ export function PublicVaultHeader({
         </div>
       )}
 
-      {/* ── Row 4: Piece Limit (owner + free tier) ── */}
+      {/* ── Row 4: Piece Limit (owner + free tier) or Premium badge ── */}
       {isOwner && !profile.is_premium && (
         <div className="flex items-center gap-3">
           <span className="shrink-0 font-mono-display text-[11px] text-gray-400">
@@ -194,6 +194,17 @@ export function PublicVaultHeader({
           >
             Upgrade →
           </Link>
+        </div>
+      )}
+
+      {isOwner && profile.is_premium && (
+        <div className="flex items-center gap-1.5">
+          <svg className="h-3 w-3 text-[#2D5A45]" viewBox="0 0 12 12" fill="currentColor">
+            <path d="M6 0l1.5 4h4l-3.25 2.5 1.25 4L6 8.25 2.5 10.5l1.25-4L.5 4h4z" />
+          </svg>
+          <span className="font-mono-display text-[11px] uppercase tracking-widest text-[#2D5A45]">
+            Premium
+          </span>
         </div>
       )}
 

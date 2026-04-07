@@ -7,9 +7,10 @@ import { signOut } from "@/lib/actions/auth";
 interface UserMenuProps {
   username: string;
   avatarUrl: string | null;
+  isPremium: boolean;
 }
 
-export function UserMenu({ username, avatarUrl }: UserMenuProps) {
+export function UserMenu({ username, avatarUrl, isPremium }: UserMenuProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -49,7 +50,17 @@ export function UserMenu({ username, avatarUrl }: UserMenuProps) {
         <div className="animate-dropdown-enter absolute right-0 top-10 z-50 min-w-[160px] overflow-hidden rounded-xl border border-[#E0D8CC] bg-white shadow-md">
           <div className="border-b border-[#E0D8CC] px-4 py-2.5">
             <p className="text-xs text-gray-500">Signed in as</p>
-            <p className="truncate text-sm font-medium text-gray-900">@{username}</p>
+            <div className="flex items-center gap-2">
+              <p className="truncate text-sm font-medium text-gray-900">@{username}</p>
+              {isPremium && (
+                <span className="flex shrink-0 items-center gap-1 rounded-full bg-[#2D5A45]/10 px-1.5 py-0.5 text-[10px] font-medium text-[#2D5A45]">
+                  <svg className="h-2.5 w-2.5" viewBox="0 0 12 12" fill="currentColor">
+                    <path d="M6 0l1.5 4h4l-3.25 2.5 1.25 4L6 8.25 2.5 10.5l1.25-4L.5 4h4z" />
+                  </svg>
+                  Premium
+                </span>
+              )}
+            </div>
           </div>
 
           <nav className="flex flex-col py-1">

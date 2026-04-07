@@ -12,6 +12,7 @@ export default async function MainLayout({
 
   const username = profile?.username ?? user.email?.split("@")[0] ?? "you";
   const avatarUrl = profile?.avatar_url ?? null;
+  const isPremium = profile?.is_premium ?? false;
 
   return (
     <div className="min-h-screen bg-[#F5F1EA]">
@@ -24,7 +25,7 @@ export default async function MainLayout({
             Threadology
           </Link>
 
-          <UserMenu username={username} avatarUrl={avatarUrl} />
+          <UserMenu username={username} avatarUrl={avatarUrl} isPremium={isPremium} />
         </div>
       </header>
 
