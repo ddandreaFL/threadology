@@ -2,6 +2,28 @@
 
 ---
 
+## [2026-04-06] — Add Flow Polish & Vault Filters
+
+### Added
+- `components/vault/photo-upload-with-crop.tsx` — new photo upload component for the add flow. Photos show as a large square crop frame (full-width) with inline drag-to-reposition. "Recenter" resets to 50/50. "Remove" deletes from storage. Thumbnail strip below for multi-photo navigation and an "+ add more" tile. Empty state is a large illustrated drop zone.
+- `components/vault/brand-input.tsx` — brand input with frequent brand chips above the text field. Top 5 brands from user's vault shown as selectable pills; active chip highlights forest green.
+- `components/vault/vault-filters.tsx` — client-side filter/sort bar. Sort options: Recently Added, Recently Updated, Brand A–Z, Year Oldest, Year Newest. Type and Brand dropdowns show only values present in the vault. URL-state driven (`?sort=&type=&brand=`), shareable and bookmarkable. "Clear ×" removes active filters. Wrapped in `<Suspense>` on vault page.
+
+### Changed
+- `components/vault/add-piece-form.tsx` — restructured: Photos section (hero, top) then Details section. Uses `PhotoUploadWithCrop` and `BrandInput`. Added acquisition method chip selector (Online / In Person / Thrift / Gift / Trade / Other) — toggle off by clicking again. `crop_positions` and `acquisition_method` now saved on submit.
+- `app/(main)/vault/add/page.tsx` — fetches user's top 5 brands server-side and passes as `frequentBrands` to form.
+- `app/vault/[username]/page.tsx` — accepts `searchParams`. Applies sort + filter in memory from full piece list (no extra DB query). Passes unique brands/types arrays to `VaultFilters`. Shows "No pieces match this filter" empty state when filtered view is empty.
+- `components/vault/edit-piece-form.tsx` — acquisition method chip selector added.
+- `types/database.ts` — added `acquisition_method: string | null` to pieces Row/Insert/Update.
+- `lib/actions/pieces.ts` — added `acquisition_method` to `updatePiece` pick type.
+
+### Pending SQL
+```sql
+ALTER TABLE pieces ADD COLUMN IF NOT EXISTS acquisition_method text;
+```
+
+---
+
 ## [2026-04-06] — Profile Settings: Bio & Avatar
 
 ### Added
