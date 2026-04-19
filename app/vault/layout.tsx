@@ -43,7 +43,7 @@ export default async function VaultPublicLayout({
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+      <main className="mx-auto max-w-5xl px-4 pb-8 pt-4">{children}</main>
     </div>
   );
 }
