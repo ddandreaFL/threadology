@@ -13,7 +13,7 @@ export default async function VaultPublicLayout({
 
   return (
     <div className="min-h-screen bg-[#F5F1EA]">
-      <header className="sticky top-0 z-40 border-b border-[#E0D8CC] bg-[#F5F1EA]/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-40 bg-[#F5F1EA]/90 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <Link
             href={user ? "/vault" : "/"}
