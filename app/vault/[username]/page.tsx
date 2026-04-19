@@ -7,7 +7,6 @@ import { createServerClient } from "@/lib/supabase-server";
 import { VaultGrid } from "@/components/vault/vault-grid";
 import { VaultFilters } from "@/components/vault/vault-filters";
 import { EmptyVault } from "@/components/vault/empty-vault";
-import { PublicVaultHeader } from "@/components/vault/public-vault-header";
 
 interface Props {
   params: { username: string };
@@ -32,7 +31,7 @@ async function getVaultData(username: string) {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("*")
+    .select("id, username, avatar_url")
     .eq("username", username)
     .single();
 
@@ -66,9 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [profile.avatar_url ?? "/og-default.png"],
       url: `https://threadology.vercel.app/vault/${profile.username}`,
     },
-    twitter: {
-      card: "summary_large_image",
-    },
+    twitter: { card: "summary_large_image" },
   };
 }
 
@@ -80,14 +77,11 @@ function applyFiltersAndSort(
 ): Piece[] {
   let result = [...pieces];
 
-  if (typeFilter) {
-    result = result.filter((p) => p.type === typeFilter);
-  }
-  if (brandFilter) {
+  if (typeFilter) result = result.filter((p) => p.type === typeFilter);
+  if (brandFilter)
     result = result.filter(
       (p) => p.brand.toLowerCase() === brandFilter.toLowerCase()
     );
-  }
 
   switch (sort) {
     case "updated":
@@ -137,7 +131,6 @@ export default async function PublicVaultPage({ params, searchParams }: Props) {
 
   const { profile, pieces: allPieces } = data;
   const isOwner = viewer?.id === profile.id;
-  const vaultUrl = `https://threadology.vercel.app/vault/${profile.username}`;
 
   const sort = searchParams?.sort ?? "added";
   const typeFilter = searchParams?.type;
@@ -154,49 +147,37 @@ export default async function PublicVaultPage({ params, searchParams }: Props) {
 
   return (
     <div className="pb-24">
-      <PublicVaultHeader
-        profile={profile}
-        pieces={allPieces}
-        isOwner={isOwner}
-        vaultUrl={vaultUrl}
-        showVisitorCta={!viewer}
-      />
-
-      <div className="mt-8">
-        {allPieces.length === 0 ? (
-          isOwner ? (
-            <EmptyVault />
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-24 text-center">
-              <p className="text-lg text-gray-500">This vault is empty.</p>
-            </div>
-          )
+      {allPieces.length === 0 ? (
+        isOwner ? (
+          <EmptyVault />
         ) : (
-          <>
-            {/* Filter bar — only show when vault has pieces */}
-            <div className="mb-6">
-              <Suspense fallback={null}>
-                <VaultFilters brands={uniqueBrands} types={uniqueTypes} />
-              </Suspense>
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-24 text-center">
+            <p className="text-lg text-gray-500">This vault is empty.</p>
+          </div>
+        )
+      ) : (
+        <>
+          <div className="mb-6">
+            <Suspense fallback={null}>
+              <VaultFilters brands={uniqueBrands} types={uniqueTypes} />
+            </Suspense>
+          </div>
+
+          {pieces.length === 0 && isFiltered ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-16 text-center">
+              <p className="text-sm text-gray-400">
+                No pieces match this filter.
+              </p>
             </div>
+          ) : (
+            <VaultGrid
+              pieces={pieces}
+              basePath={`/vault/${profile.username}`}
+            />
+          )}
+        </>
+      )}
 
-            {pieces.length === 0 && isFiltered ? (
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-16 text-center">
-                <p className="text-sm text-gray-400">
-                  No pieces match this filter.
-                </p>
-              </div>
-            ) : (
-              <VaultGrid
-                pieces={pieces}
-                basePath={`/vault/${profile.username}`}
-              />
-            )}
-          </>
-        )}
-      </div>
-
-      {/* Owner: floating Add button */}
       {isOwner && (
         <div
           className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-4"
@@ -206,18 +187,8 @@ export default async function PublicVaultPage({ params, searchParams }: Props) {
             href="/vault/add"
             className="flex items-center gap-2 rounded-full bg-[#2D5A45] px-6 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-[#1E3D2F] hover:shadow-xl active:scale-95"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             Add piece
           </Link>

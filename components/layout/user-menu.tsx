@@ -27,11 +27,11 @@ export function UserMenu({ username, avatarUrl, isPremium }: UserMenuProps) {
   const initial = username.charAt(0).toUpperCase();
 
   return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        aria-label="Open user menu"
-        aria-expanded={open}
+    <div ref={ref} className="relative flex items-center gap-0.5">
+      {/* Avatar → /profile */}
+      <Link
+        href="/profile"
+        aria-label="View profile"
         className="flex h-8 w-8 items-center justify-center rounded-full bg-[#2D5A45] text-sm font-semibold text-white transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2D5A45]/50"
       >
         {avatarUrl ? (
@@ -44,6 +44,18 @@ export function UserMenu({ username, avatarUrl, isPremium }: UserMenuProps) {
         ) : (
           initial
         )}
+      </Link>
+
+      {/* Chevron → opens dropdown */}
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-label="Open user menu"
+        aria-expanded={open}
+        className="flex h-6 w-5 items-center justify-center rounded text-gray-400 transition-colors hover:text-gray-700 focus:outline-none"
+      >
+        <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
 
       {open && (
