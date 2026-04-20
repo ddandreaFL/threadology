@@ -1,16 +1,13 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { VaultGrid } from "@/components/vault/vault-grid";
-import { VaultFilters } from "@/components/vault/vault-filters";
 import { EmptyVault } from "@/components/vault/empty-vault";
 
 interface Props {
   params: { username: string };
-  searchParams?: { sort?: string; type?: string; brand?: string };
 }
 
 type Piece = {
@@ -69,59 +66,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function applyFiltersAndSort(
-  pieces: Piece[],
-  sort: string,
-  typeFilter: string | undefined,
-  brandFilter: string | undefined
-): Piece[] {
-  let result = [...pieces];
-
-  if (typeFilter) result = result.filter((p) => p.type === typeFilter);
-  if (brandFilter)
-    result = result.filter(
-      (p) => p.brand.toLowerCase() === brandFilter.toLowerCase()
-    );
-
-  switch (sort) {
-    case "updated":
-      result.sort(
-        (a, b) =>
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-      );
-      break;
-    case "brand":
-      result.sort((a, b) => a.brand.localeCompare(b.brand));
-      break;
-    case "year_asc":
-      result.sort((a, b) => {
-        const ya = parseInt(a.year ?? "0") || 0;
-        const yb = parseInt(b.year ?? "0") || 0;
-        if (ya === 0) return 1;
-        if (yb === 0) return -1;
-        return ya - yb;
-      });
-      break;
-    case "year_desc":
-      result.sort((a, b) => {
-        const ya = parseInt(a.year ?? "0") || 0;
-        const yb = parseInt(b.year ?? "0") || 0;
-        if (ya === 0) return 1;
-        if (yb === 0) return -1;
-        return yb - ya;
-      });
-      break;
-    default:
-      result.sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-  }
-
-  return result;
-}
-
-export default async function PublicVaultPage({ params, searchParams }: Props) {
+export default async function PublicVaultPage({ params }: Props) {
   const [data, viewer] = await Promise.all([
     getVaultData(params.username),
     getUser(),
@@ -129,25 +74,12 @@ export default async function PublicVaultPage({ params, searchParams }: Props) {
 
   if (!data) notFound();
 
-  const { profile, pieces: allPieces } = data;
+  const { profile, pieces } = data;
   const isOwner = viewer?.id === profile.id;
-
-  const sort = searchParams?.sort ?? "added";
-  const typeFilter = searchParams?.type;
-  const brandFilter = searchParams?.brand;
-
-  const pieces = applyFiltersAndSort(allPieces, sort, typeFilter, brandFilter);
-
-  const uniqueBrands = Array.from(
-    new Set(allPieces.map((p) => p.brand.toLowerCase()))
-  ).sort();
-  const uniqueTypes = Array.from(new Set(allPieces.map((p) => p.type))).sort();
-
-  const isFiltered = !!typeFilter || !!brandFilter;
 
   return (
     <div className="pb-24">
-      {allPieces.length === 0 ? (
+      {pieces.length === 0 ? (
         isOwner ? (
           <EmptyVault />
         ) : (
@@ -156,26 +88,7 @@ export default async function PublicVaultPage({ params, searchParams }: Props) {
           </div>
         )
       ) : (
-        <>
-          <div className="mb-6">
-            <Suspense fallback={null}>
-              <VaultFilters brands={uniqueBrands} types={uniqueTypes} />
-            </Suspense>
-          </div>
-
-          {pieces.length === 0 && isFiltered ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-16 text-center">
-              <p className="text-sm text-gray-400">
-                No pieces match this filter.
-              </p>
-            </div>
-          ) : (
-            <VaultGrid
-              pieces={pieces}
-              basePath={`/vault/${profile.username}`}
-            />
-          )}
-        </>
+        <VaultGrid pieces={pieces} basePath={`/vault/${profile.username}`} />
       )}
 
       {isOwner && (
