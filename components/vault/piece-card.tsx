@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Database } from "@/types/database";
 
 type Piece = Pick<
@@ -21,13 +22,14 @@ export function PieceCard({ piece, basePath }: PieceCardProps) {
       className="group block overflow-hidden rounded-xl border border-[#E0D8CC] bg-[#FDFCFA] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
     >
       {/* Photo */}
-      <div className="aspect-square overflow-hidden bg-[#F5F1EA]">
+      <div className="relative aspect-square overflow-hidden bg-[#F5F1EA]">
         {piece.photos[0] ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={piece.photos[0]}
             alt={label}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             style={{
               objectPosition: piece.crop_positions?.["0"]
                 ? `${piece.crop_positions["0"].x}% ${piece.crop_positions["0"].y}%`
