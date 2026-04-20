@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
-import { VaultGrid } from "@/components/vault/vault-grid";
 import { EmptyVault } from "@/components/vault/empty-vault";
+import { VaultClient } from "@/components/vault/vault-client";
 import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
 
 interface Props {
@@ -93,7 +93,7 @@ export default async function PublicVaultPage({ params }: Props) {
           </div>
         )
       ) : (
-        <VaultGrid pieces={pieces} basePath={`/vault/${profile.username}`} />
+        <VaultClient pieces={pieces} basePath={`/vault/${profile.username}`} />
       )}
 
       {isOwner && (
