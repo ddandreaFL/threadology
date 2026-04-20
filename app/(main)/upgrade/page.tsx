@@ -31,7 +31,10 @@ export default function UpgradePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const stripeEnabled = process.env.NEXT_PUBLIC_STRIPE_ENABLED === "true";
+
   const handleUpgrade = async () => {
+    if (!stripeEnabled) return;
     setLoading(true);
     setError(null);
 
@@ -103,17 +106,32 @@ export default function UpgradePage() {
 
         {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
-        <button
-          onClick={handleUpgrade}
-          disabled={loading}
-          className="mt-5 w-full rounded-full bg-[#2D5A45] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1E3D2F] disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {loading ? "Loading..." : "Subscribe Now"}
-        </button>
-
-        <p className="mt-3 text-xs text-gray-400">
-          Secure payment via Stripe. Cancel anytime.
-        </p>
+        {stripeEnabled ? (
+          <>
+            <button
+              onClick={handleUpgrade}
+              disabled={loading}
+              className="mt-5 w-full rounded-full bg-[#2D5A45] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1E3D2F] disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? "Loading..." : "Subscribe Now"}
+            </button>
+            <p className="mt-3 text-xs text-gray-400">
+              Secure payment via Stripe. Cancel anytime.
+            </p>
+          </>
+        ) : (
+          <>
+            <button
+              disabled
+              className="mt-5 w-full rounded-full bg-[#2D5A45]/40 px-6 py-3 text-sm font-medium text-white cursor-not-allowed"
+            >
+              Coming Soon
+            </button>
+            <p className="mt-3 text-xs text-gray-400">
+              Payments launching soon — check back shortly.
+            </p>
+          </>
+        )}
       </div>
 
       <div className="mt-4 text-center">

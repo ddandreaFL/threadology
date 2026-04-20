@@ -1,38 +1,56 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export function UpgradeSuccessToast() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (searchParams.get("upgraded") === "true") {
-      // Show a simple banner — no external toast library needed
-      const banner = document.createElement("div");
-      banner.textContent = "Welcome to Premium! You now have unlimited pieces.";
-      banner.style.cssText = `
-        position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-        background: #2D5A45; color: white; padding: 12px 20px;
-        border-radius: 9999px; font-size: 14px; font-weight: 500;
-        z-index: 100; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        animation: fadeIn 0.3s ease;
-      `;
-      document.body.appendChild(banner);
-
-      const timer = setTimeout(() => {
-        banner.remove();
-      }, 4000);
-
+      setVisible(true);
       router.replace(window.location.pathname);
-
-      return () => {
-        clearTimeout(timer);
-        banner.remove();
-      };
     }
   }, [searchParams, router]);
 
-  return null;
+  if (!visible) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      onClick={() => setVisible(false)}
+    >
+      {/* Blurred backdrop */}
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm animate-in fade-in duration-300" />
+
+      {/* Modal */}
+      <div
+        className="relative w-full max-w-sm rounded-3xl border border-[#2D5A45]/20 bg-white p-8 shadow-2xl text-center animate-in fade-in zoom-in-95 duration-300"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Icon */}
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-[#2D5A45]/10">
+          <svg className="h-7 w-7 text-[#2D5A45]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+
+        <h2 className="font-serif text-2xl text-gray-900">Welcome to Premium</h2>
+        <p className="mt-2 text-sm text-gray-500">
+          Your vault is now unlimited. Document your entire wardrobe with no ceiling.
+        </p>
+
+        <button
+          onClick={() => setVisible(false)}
+          className="mt-7 w-full rounded-full bg-[#2D5A45] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1E3D2F]"
+        >
+          Start adding pieces
+        </button>
+
+        <p className="mt-3 text-xs text-gray-400">Cancel anytime from Settings.</p>
+      </div>
+    </div>
+  );
 }

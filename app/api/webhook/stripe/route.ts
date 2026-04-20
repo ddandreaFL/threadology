@@ -31,11 +31,12 @@ export async function POST(req: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const userId = session.metadata?.userId;
+    const customerId = session.customer as string | null;
 
     if (userId) {
       const { error } = await supabaseAdmin
         .from("users")
-        .update({ is_premium: true })
+        .update({ is_premium: true, stripe_customer_id: customerId })
         .eq("id", userId);
 
       if (error) {
@@ -50,23 +51,35 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  if (event.type === "customer.subscription.deleted") {
+  if (
+    event.type === "customer.subscription.updated" &&
+    event.data.object.cancel_at_period_end === false &&
+    event.data.object.status === "active"
+  ) {
+    const customerId = event.data.object.customer as string;
+    await supabaseAdmin
+      .from("users")
+      .update({ is_premium: true })
+      .eq("stripe_customer_id", customerId);
+  }
+
+  if (
+    event.type === "customer.subscription.deleted" ||
+    (event.type === "customer.subscription.updated" &&
+      event.data.object.cancel_at_period_end === true)
+  ) {
     const subscription = event.data.object;
-    const customer = await stripe.customers.retrieve(
-      subscription.customer as string
-    );
+    const customerId = subscription.customer as string;
 
-    if ("email" in customer && customer.email) {
-      const { error } = await supabaseAdmin
-        .from("users")
-        .update({ is_premium: false })
-        .eq("email", customer.email);
+    const { error } = await supabaseAdmin
+      .from("users")
+      .update({ is_premium: false })
+      .eq("stripe_customer_id", customerId);
 
-      if (error) {
-        console.error("Failed to downgrade user:", error);
-      } else {
-        console.log(`User with email ${customer.email} downgraded`);
-      }
+    if (error) {
+      console.error("Failed to downgrade user:", error);
+    } else {
+      console.log(`User with customer ${customerId} downgraded`);
     }
   }
 
