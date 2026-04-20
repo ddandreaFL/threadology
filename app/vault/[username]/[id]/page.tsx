@@ -4,6 +4,7 @@ import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { PhotoGallery } from "@/components/vault/photo-gallery";
 import { DeletePieceModal } from "@/components/vault/delete-piece-modal";
+import { PieceCollectionButton } from "@/components/collections/piece-collection-button";
 
 interface Props {
   params: { username: string; id: string };
@@ -31,6 +32,18 @@ export default async function PublicPiecePage({ params }: Props) {
 
   const viewer = await getUser();
   const isOwner = viewer?.id === profile.id;
+
+  let userCollections: { id: string; name: string }[] = [];
+  if (isOwner) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = (await createServerClient()) as any;
+    const { data } = await db
+      .from("collections")
+      .select("id, name")
+      .eq("user_id", profile.id)
+      .order("position") as { data: { id: string; name: string }[] | null };
+    userCollections = data ?? [];
+  }
   const displayName = piece.name ?? piece.type;
 
   const metaFields = [
@@ -123,6 +136,7 @@ export default async function PublicPiecePage({ params }: Props) {
               >
                 Edit
               </Link>
+              <PieceCollectionButton pieceId={piece.id} collections={userCollections} />
               <DeletePieceModal pieceId={piece.id} pieceName={displayName} />
             </div>
           )}

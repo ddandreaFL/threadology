@@ -1,25 +1,28 @@
 import { createServerClient } from "@/lib/supabase-server";
 
 export const FREE_PIECE_LIMIT = 25;
+export const FREE_COLLECTION_LIMIT = 3;
 
-export async function getUserSubscription(userId: string): Promise<{
-  isPremium: boolean;
-  pieceCount: number;
-  pieceLimit: number;
-}> {
+export async function getUserSubscription(userId: string) {
   const supabase = await createServerClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any;
 
-  const [profileResult, countResult] = await Promise.all([
+  const [userResult, pieceCountResult, collectionCountResult] = await Promise.all([
     supabase.from("users").select("is_premium").eq("id", userId).single(),
-    supabase
-      .from("pieces")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", userId),
+    supabase.from("pieces").select("*", { count: "exact", head: true }).eq("user_id", userId),
+    db.from("collections").select("*", { count: "exact", head: true }).eq("user_id", userId),
   ]);
 
-  const isPremium = profileResult.data?.is_premium ?? false;
-  const pieceCount = countResult.count ?? 0;
-  const pieceLimit = isPremium ? Infinity : FREE_PIECE_LIMIT;
+  const isPremium = userResult.data?.is_premium ?? false;
+  const pieceCount = pieceCountResult.count ?? 0;
+  const collectionCount = collectionCountResult.count ?? 0;
 
-  return { isPremium, pieceCount, pieceLimit };
+  return {
+    isPremium,
+    pieceCount,
+    pieceLimit: isPremium ? Infinity : FREE_PIECE_LIMIT,
+    collectionCount,
+    collectionLimit: isPremium ? Infinity : FREE_COLLECTION_LIMIT,
+  };
 }

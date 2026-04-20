@@ -91,6 +91,13 @@ export function UserMenu({ username, avatarUrl, isPremium }: UserMenuProps) {
               Log a Fit
             </Link>
             <Link
+              href="/collections"
+              onClick={() => setOpen(false)}
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-[#F5F1EA]"
+            >
+              Collections
+            </Link>
+            <Link
               href="/settings"
               onClick={() => setOpen(false)}
               className="px-4 py-2 text-sm text-gray-700 hover:bg-[#F5F1EA]"

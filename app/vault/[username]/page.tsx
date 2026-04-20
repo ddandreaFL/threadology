@@ -6,6 +6,7 @@ import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { EmptyVault } from "@/components/vault/empty-vault";
 import { VaultClient } from "@/components/vault/vault-client";
+import { VaultFAB } from "@/components/vault/vault-fab";
 import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
 
 interface Props {
@@ -36,15 +37,26 @@ async function getVaultData(username: string) {
 
   if (!profile) return null;
 
-  const { data: pieces } = await supabase
-    .from("pieces")
-    .select(
-      "id, brand, type, name, year, photos, crop_positions, estimated_value, created_at, updated_at"
-    )
-    .eq("user_id", profile.id)
-    .order("created_at", { ascending: false });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any;
+  const [piecesResult, collectionsResult] = await Promise.all([
+    supabase
+      .from("pieces")
+      .select("id, brand, type, name, year, photos, crop_positions, estimated_value, created_at, updated_at")
+      .eq("user_id", profile.id)
+      .order("created_at", { ascending: false }),
+    db
+      .from("collections")
+      .select("id, name, slug")
+      .eq("user_id", profile.id)
+      .order("position"),
+  ]);
 
-  return { profile, pieces: (pieces ?? []) as Piece[] };
+  return {
+    profile,
+    pieces: (piecesResult.data ?? []) as Piece[],
+    collections: (collectionsResult.data ?? []) as { id: string; name: string; slug: string }[],
+  };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -76,7 +88,7 @@ export default async function PublicVaultPage({ params }: Props) {
 
   if (!data) notFound();
 
-  const { profile, pieces } = data;
+  const { profile, pieces, collections } = data;
   const isOwner = viewer?.id === profile.id;
 
   return (
@@ -84,6 +96,27 @@ export default async function PublicVaultPage({ params }: Props) {
       <Suspense fallback={null}>
         <UpgradeSuccessToast />
       </Suspense>
+
+      {collections.length > 0 && (
+        <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
+          <Link
+            href={`/vault/${profile.username}`}
+            className="shrink-0 rounded-full bg-[#2D5A45] px-3 py-1 text-sm text-white"
+          >
+            All
+          </Link>
+          {collections.map((c) => (
+            <Link
+              key={c.id}
+              href={`/vault/${profile.username}/c/${c.slug}`}
+              className="shrink-0 rounded-full border border-[#E0D8CC] px-3 py-1 text-sm text-gray-600 hover:border-[#2D5A45] hover:text-[#2D5A45] transition-colors whitespace-nowrap"
+            >
+              {c.name}
+            </Link>
+          ))}
+        </div>
+      )}
+
       {pieces.length === 0 ? (
         isOwner ? (
           <EmptyVault />
@@ -96,22 +129,7 @@ export default async function PublicVaultPage({ params }: Props) {
         <VaultClient pieces={pieces} basePath={`/vault/${profile.username}`} />
       )}
 
-      {isOwner && (
-        <div
-          className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-4"
-          style={{ paddingBottom: "calc(1.5rem + env(safe-area-inset-bottom))" }}
-        >
-          <Link
-            href="/vault/add"
-            className="flex items-center gap-2 rounded-full bg-[#2D5A45] px-6 py-3 text-sm font-medium text-white shadow-lg transition-all hover:bg-[#1E3D2F] hover:shadow-xl active:scale-95"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add piece
-          </Link>
-        </div>
-      )}
+      {isOwner && <VaultFAB />}
     </div>
   );
 }
