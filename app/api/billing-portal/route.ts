@@ -16,7 +16,7 @@ export async function POST() {
     .from("users")
     .select("stripe_customer_id")
     .eq("id", user.id)
-    .single();
+    .single() as { data: { stripe_customer_id: string | null } | null };
 
   if (!profile?.stripe_customer_id) {
     return NextResponse.json({ error: "No billing account found" }, { status: 400 });
