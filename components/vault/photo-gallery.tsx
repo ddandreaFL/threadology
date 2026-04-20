@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import { ImageAdjuster } from "./image-adjuster";
 
 type CropPositions = Record<string, { x: number; y: number }>;
@@ -82,12 +83,13 @@ export function PhotoGallery({
       >
         {/* Outgoing image — slides out */}
         {transitioning && prev !== null && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             key={`out-${prev}`}
             src={photos[prev]}
             alt={alt}
-            className={`absolute inset-0 h-full w-full object-cover ${
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className={`object-cover ${
               direction === "next"
                 ? "animate-carousel-out-left"
                 : "animate-carousel-out-right"
@@ -97,12 +99,14 @@ export function PhotoGallery({
         )}
 
         {/* Current image — slides in */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           key={`in-${selected}`}
           src={photos[selected]}
           alt={alt}
-          className={`absolute inset-0 h-full w-full object-cover ${
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
+          className={`object-cover ${
             transitioning
               ? direction === "next"
                 ? "animate-carousel-in-right"
@@ -179,17 +183,18 @@ export function PhotoGallery({
               key={url}
               type="button"
               onClick={() => goTo(i)}
-              className={`aspect-square overflow-hidden rounded-lg border transition-all ${
+              className={`relative aspect-square overflow-hidden rounded-lg border transition-all ${
                 i === selected
                   ? "border-[#2D5A45] ring-2 ring-[#2D5A45]/30"
                   : "border-[#E0D8CC] opacity-60 hover:opacity-100"
               }`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={url}
                 alt={`${alt} ${i + 1}`}
-                className="h-full w-full object-cover"
+                fill
+                sizes="10vw"
+                className="object-cover"
                 style={cropStyle(i)}
               />
             </button>
