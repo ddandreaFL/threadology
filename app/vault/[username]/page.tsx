@@ -1,10 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { VaultGrid } from "@/components/vault/vault-grid";
 import { EmptyVault } from "@/components/vault/empty-vault";
+import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
 
 interface Props {
   params: { username: string };
@@ -79,6 +81,9 @@ export default async function PublicVaultPage({ params }: Props) {
 
   return (
     <div className="pb-24">
+      <Suspense fallback={null}>
+        <UpgradeSuccessToast />
+      </Suspense>
       {pieces.length === 0 ? (
         isOwner ? (
           <EmptyVault />
