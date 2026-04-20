@@ -11,7 +11,9 @@ interface Props {
 }
 
 export default async function PublicPiecePage({ params }: Props) {
-  const supabase = await createServerClient();
+  const [supabase, viewer] = await Promise.all([createServerClient(), getUser()]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any;
 
   const { data: profile } = await supabase
     .from("users")
@@ -21,29 +23,19 @@ export default async function PublicPiecePage({ params }: Props) {
 
   if (!profile) notFound();
 
-  const { data: piece } = await supabase
-    .from("pieces")
-    .select("*")
-    .eq("id", params.id)
-    .eq("user_id", profile.id)
-    .single();
-
-  if (!piece) notFound();
-
-  const viewer = await getUser();
   const isOwner = viewer?.id === profile.id;
 
-  let userCollections: { id: string; name: string }[] = [];
-  if (isOwner) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const db = (await createServerClient()) as any;
-    const { data } = await db
-      .from("collections")
-      .select("id, name")
-      .eq("user_id", profile.id)
-      .order("position") as { data: { id: string; name: string }[] | null };
-    userCollections = data ?? [];
-  }
+  const [pieceResult, collectionsResult] = await Promise.all([
+    supabase.from("pieces").select("*").eq("id", params.id).eq("user_id", profile.id).single(),
+    isOwner
+      ? db.from("collections").select("id, name").eq("user_id", profile.id).order("position")
+      : Promise.resolve({ data: [] }),
+  ]);
+
+  const piece = pieceResult.data;
+  if (!piece) notFound();
+
+  const userCollections: { id: string; name: string }[] = collectionsResult.data ?? [];
   const displayName = piece.name ?? piece.type;
 
   const metaFields = [
