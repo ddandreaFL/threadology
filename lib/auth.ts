@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase-server";
-import type { Database } from "@/types/database";
+import type { Database } from "@/types/supabase";
 
 type UserProfile = Database["public"]["Tables"]["users"]["Row"];
 

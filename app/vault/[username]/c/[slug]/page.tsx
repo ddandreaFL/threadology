@@ -8,47 +8,35 @@ interface Props {
   params: { username: string; slug: string };
 }
 
-type Collection = { id: string; name: string; slug: string; description: string | null };
-type Piece = {
-  id: string;
-  brand: string;
-  type: string;
-  name: string | null;
-  year: string | null;
-  photos: string[];
-  crop_positions: Record<string, { x: number; y: number }> | null;
-};
-
 export default async function CollectionPage({ params }: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = (await createServerClient()) as any;
+  const supabase = await createServerClient();
 
-  const { data: profile } = await db
+  const { data: profile } = await supabase
     .from("users")
     .select("id, username")
     .eq("username", params.username)
-    .single() as { data: { id: string; username: string } | null };
+    .single();
 
   if (!profile) notFound();
 
-  const { data: collection } = await db
+  const { data: collection } = await supabase
     .from("collections")
     .select("id, name, slug, description")
     .eq("user_id", profile.id)
     .eq("slug", params.slug)
-    .single() as { data: Collection | null };
+    .single();
 
   if (!collection) notFound();
 
-  const { data: collectionPieces } = await db
+  const { data: collectionPieces } = await supabase
     .from("collection_pieces")
     .select("pieces(id, brand, type, name, year, photos, crop_positions)")
     .eq("collection_id", collection.id)
-    .order("position") as { data: { pieces: Piece }[] | null };
+    .order("position");
 
-  const pieces: Piece[] = (collectionPieces ?? [])
+  const pieces = (collectionPieces ?? [])
     .map((cp) => cp.pieces)
-    .filter(Boolean);
+    .filter(Boolean) as NonNullable<typeof collectionPieces>[number]["pieces"][];
 
   return (
     <div className="pb-24">

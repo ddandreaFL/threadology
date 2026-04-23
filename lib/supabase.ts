@@ -1,5 +1,5 @@
 import { createBrowserClient } from "@supabase/ssr";
-import type { Database } from "@/types/database";
+import type { Database } from "@/types/supabase";
 
 // Browser client — use in Client Components.
 // createBrowserClient stores the session in cookies so the middleware

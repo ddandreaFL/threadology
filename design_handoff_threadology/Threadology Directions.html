@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threadology — Design Directions v3</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; overflow:hidden; }
+    ::-webkit-scrollbar { display:none; }
+  </style>
+</head>
+<body>
+<div id="root" style="height:100vh"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+
+const HN = '"Helvetica Neue", Helvetica, Arial, sans-serif';
+
+// ── PIECE DATA ───────────────────────────────────────────────────
+const PIECES = [
+  { id:1, brand:'comme des garçons', name:'asymmetric wool coat',  year:'1994', type:'outerwear', condition:'excellent', c1:'#8B7A65', c2:'#5C4E3A' },
+  { id:2, brand:'issey miyake',      name:'pleats please blouse',  year:'1998', type:'tops',      condition:'good',      c1:'#4A6B8A', c2:'#2D4F6B' },
+  { id:3, brand:'vivienne westwood', name:'tartan mini skirt',     year:'1991', type:'bottoms',   condition:'fair',      c1:'#7A2F2F', c2:'#4F1A1A' },
+  { id:4, brand:'helmut lang',       name:'archive trousers',      year:'1996', type:'bottoms',   condition:'excellent', c1:'#2E2C2A', c2:'#181614' },
+  { id:5, brand:'yohji yamamoto',    name:'draped linen dress',    year:'2001', type:'dresses',   condition:'good',      c1:'#4A4540', c2:'#28221E' },
+  { id:6, brand:'maison margiela',   name:'tabi ankle boots',      year:'2003', type:'footwear',  condition:'vg',        c1:'#1E1A18', c2:'#0A0806' },
+];
+const HERO = PIECES[0];
+
+function Photo({ piece, style, children }) {
+  return (
+    <div style={{ background:`linear-gradient(150deg, ${piece.c1} 20%, ${piece.c2} 100%)`, position:'relative', overflow:'hidden', flexShrink:0, ...style }}>
+      {children}
+    </div>
+  );
+}
+
+const DotsIcon = ({ color }) => (
+  <svg width="16" height="4" viewBox="0 0 16 4" fill={color}>
+    <circle cx="2" cy="2" r="1.5"/><circle cx="8" cy="2" r="1.5"/><circle cx="14" cy="2" r="1.5"/>
+  </svg>
+);
+const SearchIcon = ({ color, size=16 }) => (
+  <svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="7" stroke={color} strokeWidth="1.8"/>
+    <path d="m16.5 16.5 3.5 3.5" stroke={color} strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+const BackIcon = ({ color }) => (
+  <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+    <path d="M19 12H5M5 12l7-7M5 12l7 7" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const PlusIcon = ({ color, size=20 }) => (
+  <svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14" stroke={color} strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// DIRECTION A — MINIMAL
+// "Photos float. Chrome disappears. Like [untitled] for clothes."
+// Pure white · Borderless cards · Lowercase · Bracket header
+// ═══════════════════════════════════════════════════════════════════
+const A = { bg:'#FFFFFF', text:'#111111', muted:'#999999', accent:'#2D5A45', faint:'#F5F5F5' };
+
+// View toggle icons
+const GridIcon = ({ active, color }) => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <rect x="1" y="1" width="6" height="6" rx="1.5" fill={active ? color : 'none'} stroke={color} strokeWidth="1.5"/>
+    <rect x="9" y="1" width="6" height="6" rx="1.5" fill={active ? color : 'none'} stroke={color} strokeWidth="1.5"/>
+    <rect x="1" y="9" width="6" height="6" rx="1.5" fill={active ? color : 'none'} stroke={color} strokeWidth="1.5"/>
+    <rect x="9" y="9" width="6" height="6" rx="1.5" fill={active ? color : 'none'} stroke={color} strokeWidth="1.5"/>
+  </svg>
+);
+const CoverflowIcon = ({ active, color }) => (
+  <svg width="18" height="16" viewBox="0 0 18 16" fill="none">
+    <rect x="5" y="1" width="8" height="14" rx="2" fill={active ? color : 'none'} stroke={color} strokeWidth="1.5"/>
+    <rect x="0.75" y="3" width="5" height="10" rx="1.5" fill="none" stroke={color} strokeWidth="1.2" opacity="0.5" transform="skewY(-6) translate(-1,1)"/>
+    <rect x="12.25" y="3" width="5" height="10" rx="1.5" fill="none" stroke={color} strokeWidth="1.2" opacity="0.5" transform="skewY(6) translate(1,1)"/>
+  </svg>
+);
+
+function AMinimalVault() {
+  const [tab, setTab]       = React.useState(0);
+  const [view, setView]     = React.useState('coverflow');
+  const [active, setActive] = React.useState(0);
+  const tabs = ['all', 'outerwear', 'dresses', 'footwear'];
+
+  const CARD_W = 192;
+  const CARD_H = 272;
+  const cx = 195; // horizontal center of phone
+
+  function getStyle(i) {
+    const off = i - active;
+    const abs = Math.abs(off);
+    if (abs > 2) return null;
+    const rotY   = off * -48;
+    const transX = off * 118;
+    const scale  = 1 - abs * 0.2;
+    const opacity = 1 - abs * 0.32;
+    const zIndex = 10 - abs * 2;
+    return { rotY, transX, scale, opacity, zIndex };
+  }
+
+  const piece = PIECES[active];
+
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      {/* Status */}
+      <div style={{ height:44, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0 }}>
+        <span style={{ fontSize:13, fontWeight:600, color:A.text }}>9:41</span>
+        <div style={{ display:'flex', gap:6, alignItems:'center' }}>
+          {[...Array(3)].map((_,i) => <div key={i} style={{ width:4, height:4, borderRadius:'50%', background:A.text, opacity:0.2+i*0.3 }}/>)}
+        </div>
+      </div>
+
+      {/* Header + view toggle */}
+      <div style={{ padding:'4px 20px 0', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, color:A.text, letterSpacing:'-0.02em' }}>Threadology</span>
+        <div style={{ display:'flex', gap:14, alignItems:'center' }}>
+          {/* View toggles */}
+          <button onClick={()=>setView('coverflow')} style={{ background:'none', border:'none', cursor:'pointer', padding:2, opacity: view==='coverflow' ? 1 : 0.35 }}>
+            <CoverflowIcon active={view==='coverflow'} color={A.text} />
+          </button>
+          <button onClick={()=>setView('grid')} style={{ background:'none', border:'none', cursor:'pointer', padding:2, opacity: view==='grid' ? 1 : 0.35 }}>
+            <GridIcon active={view==='grid'} color={A.text} />
+          </button>
+          <SearchIcon color={A.muted} size={18} />
+          <div style={{ width:28, height:28, borderRadius:'50%', background:A.accent, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:'white', fontSize:11, fontWeight:600 }}>mk</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Collection tabs */}
+      <div style={{ display:'flex', gap:0, padding:'14px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {tabs.map((t,i) => (
+          <button key={t} onClick={()=>setTab(i)} style={{ border:'none', background:'none', cursor:'pointer', padding:'0 0 10px', marginRight:20, fontFamily:HN, fontSize:13, fontWeight:tab===i?500:400, color:tab===i?A.text:A.muted, borderBottom:`1.5px solid ${tab===i?A.text:'transparent'}`, whiteSpace:'nowrap' }}>{t}</button>
+        ))}
+      </div>
+      <div style={{ height:1, background:'#EBEBEB', flexShrink:0 }} />
+
+      {view === 'coverflow' ? (
+        <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden', paddingBottom:80 }}>
+          {/* Coverflow stage — fills all available space */}
+          <div style={{ flex:1, position:'relative', perspective:'1000px', perspectiveOrigin:'50% 50%', overflow:'hidden' }}>
+            {PIECES.map((p, i) => {
+              const s = getStyle(i);
+              if (!s) return null;
+              return (
+                <div key={p.id} onClick={()=>setActive(i)} style={{
+                  position:'absolute',
+                  top: `calc(50% - ${CARD_H/2}px)`,
+                  left: cx - CARD_W/2,
+                  width: CARD_W,
+                  height: CARD_H,
+                  borderRadius: 14,
+                  overflow:'hidden',
+                  cursor: i !== active ? 'pointer' : 'default',
+                  transform: `translateX(${s.transX}px) rotateY(${s.rotY}deg) scale(${s.scale})`,
+                  transformOrigin: 'center center',
+                  transition: 'transform 0.38s cubic-bezier(0.25,0.1,0.25,1), opacity 0.38s',
+                  zIndex: s.zIndex,
+                  opacity: s.opacity,
+                  boxShadow: i === active ? '0 12px 40px rgba(0,0,0,0.18)' : 'none',
+                }}>
+                  <Photo piece={p} style={{ width:'100%', height:'100%' }} />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Active piece info + dots */}
+          <div style={{ textAlign:'center', padding:'0 20px 14px', flexShrink:0 }}>
+            <p style={{ fontSize:16, fontWeight:500, color:A.text, lineHeight:1.3 }}>{piece.name}</p>
+            <p style={{ fontSize:12, color:A.muted, marginTop:4 }}>{piece.brand} · {piece.year}</p>
+            <div style={{ display:'flex', justifyContent:'center', gap:6, marginTop:12 }}>
+              {PIECES.map((_,i) => (
+                <button key={i} onClick={()=>setActive(i)} style={{ width: i===active?18:6, height:6, borderRadius:3, background: i===active ? A.text : '#DEDEDE', border:'none', cursor:'pointer', padding:0, transition:'width 0.2s' }} />
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Grid view */
+        <div style={{ flex:1, overflow:'hidden', padding:'16px 20px 0', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0 12px', alignContent:'start' }}>
+          {PIECES.map(p => (
+            <div key={p.id} style={{ marginBottom:22 }}>
+              <div style={{ position:'relative' }}>
+                <Photo piece={p} style={{ width:'100%', aspectRatio:'1', borderRadius:6 }} />
+                <div style={{ position:'absolute', top:8, right:8, background:'rgba(255,255,255,0.88)', backdropFilter:'blur(4px)', borderRadius:3, padding:'2px 6px' }}>
+                  <span style={{ fontFamily:HN, fontSize:9, color:A.text, fontWeight:600 }}>{p.year}</span>
+                </div>
+              </div>
+              <div style={{ marginTop:8 }}>
+                <p style={{ fontFamily:HN, fontSize:13, color:A.text, lineHeight:1.35, fontWeight:500 }}>{p.name}</p>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:2 }}>
+                  <p style={{ fontFamily:HN, fontSize:11, color:A.muted }}>{p.brand}</p>
+                  <DotsIcon color={A.muted} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Floating add pill */}
+      <div style={{ position:'absolute', bottom:24, left:0, right:0, display:'flex', justifyContent:'center' }}>
+        <div style={{ background:'#1A1A1A', borderRadius:30, height:48, padding:'0 28px', display:'flex', alignItems:'center' }}>
+          <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:14, fontWeight:500, color:'white', letterSpacing:'0.01em' }}>add +</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AMinimalDetail() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      {/* Status */}
+      <div style={{ height:44, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0 }}>
+        <span style={{ fontSize:13, fontWeight:600, color:A.text }}>9:41</span>
+        <div style={{ display:'flex', gap:6, alignItems:'center' }}>
+          {[...Array(3)].map((_,i) => <div key={i} style={{ width:4, height:4, borderRadius:'50%', background:A.text, opacity:0.2+i*0.3 }}/>)}
+        </div>
+      </div>
+
+      {/* Back */}
+      <div style={{ padding:'2px 20px 0', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <button style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:6, fontFamily:HN, fontSize:13, color:A.muted, padding:0 }}>
+          <BackIcon color={A.muted} />
+          vault
+        </button>
+        <button style={{ background:'none', border:'none', cursor:'pointer' }}>
+          <DotsIcon color={A.muted} />
+        </button>
+      </div>
+
+      <div style={{ flex:1, overflow:'hidden', padding:'14px 20px 0' }}>
+        {/* Photo — borderless, floating */}
+        <Photo piece={HERO} style={{ width:'100%', aspectRatio:'1', borderRadius:8 }}>
+          {/* Minimal dots */}
+          <div style={{ position:'absolute', bottom:10, left:0, right:0, display:'flex', justifyContent:'center', gap:4 }}>
+            {[true,false,false].map((a,i) => <div key={i} style={{ width:a?20:5, height:4, borderRadius:2, background:a?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.4)' }} />)}
+          </div>
+        </Photo>
+
+        {/* Name + brand */}
+        <div style={{ marginTop:16 }}>
+          <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:8 }}>
+            <div>
+              <p style={{ fontSize:11, color:A.muted, marginBottom:4 }}>{HERO.brand}</p>
+              <h1 style={{ fontSize:22, fontWeight:500, color:A.text, lineHeight:1.2, letterSpacing:'-0.02em' }}>{HERO.name}</h1>
+            </div>
+          </div>
+          <p style={{ fontSize:12, color:A.muted, marginTop:6 }}>1994 · autumn / winter</p>
+        </div>
+
+        {/* Metadata — clean rows, no container */}
+        <div style={{ marginTop:20, borderTop:'1px solid #EBEBEB', paddingTop:16 }}>
+          {[['type', HERO.type], ['condition', HERO.condition], ['size', 'm / it 42'], ['origin', 'japan']].map(([k,v], i, arr) => (
+            <div key={k} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < arr.length-1 ? '1px solid #F0F0F0' : 'none' }}>
+              <span style={{ fontSize:12, color:A.muted }}>{k}</span>
+              <span style={{ fontSize:12, color:A.text }}>{v}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Story — left border green (from your codebase) */}
+        <div style={{ marginTop:20 }}>
+          <p style={{ fontSize:11, color:A.muted, marginBottom:10, textTransform:'lowercase' }}>story</p>
+          <blockquote style={{ borderLeft:`2px solid ${A.accent}`, paddingLeft:14, fontSize:14, color:'#444', lineHeight:1.8 }}>
+            found in antwerp, 2019. kawakubo's mid-90s asymmetry — one shoulder raised, the back cut on the bias. the wool is still pristine.
+          </blockquote>
+        </div>
+
+        {/* Collections */}
+        <div style={{ marginTop:18, display:'flex', gap:8, flexWrap:'wrap' }}>
+          {['japanese avant-garde', '90s coats'].map(c => (
+            <div key={c} style={{ border:'1px solid #E0E0E0', borderRadius:4, padding:'5px 10px', fontSize:11, color:A.muted }}>{c}</div>
+          ))}
+          <div style={{ border:`1px dashed ${A.accent}`, borderRadius:4, padding:'5px 10px', fontSize:11, color:A.accent }}>+ add</div>
+        </div>
+      </div>
+
+      {/* Floating bottom bar */}
+      <div style={{ position:'absolute', bottom:20, left:16, right:16, height:52, background:'#1A1A1A', borderRadius:30, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 18px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+          <Photo piece={HERO} style={{ width:32, height:32, borderRadius:4 }} />
+          <p style={{ fontFamily:HN, fontSize:12, color:'white', fontWeight:500 }}>asymmetric wool coat</p>
+        </div>
+        <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:12, color:'white', fontWeight:500 }}>edit</button>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DIRECTION B — ARCHIVE
+// "More structure. Still restrained. The collection as a ledger.
+//  Subtle dividers, more info per card, breadcrumb hierarchy."
+// ═══════════════════════════════════════════════════════════════════
+const B = { bg:'#FFFFFF', text:'#111111', muted:'#999999', accent:'#2D5A45', faint:'#F7F7F7', border:'#E8E8E8' };
+
+function BArchiveVault() {
+  const [tab, setTab] = React.useState(0);
+  const tabs = ['all 47', 'outerwear', 'dresses', 'footwear'];
+  return (
+    <div style={{ width:390, height:844, background:B.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      {/* Status */}
+      <div style={{ height:44, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0 }}>
+        <span style={{ fontSize:13, fontWeight:600, color:B.text }}>9:41</span>
+        <div style={{ display:'flex', gap:6 }}>{[...Array(3)].map((_,i) => <div key={i} style={{ width:4, height:4, borderRadius:'50%', background:B.text, opacity:0.2+i*0.3 }}/>)}</div>
+      </div>
+
+      {/* Header — cleaner, with username breadcrumb */}
+      <div style={{ padding:'4px 20px 0', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <div>
+          <p style={{ fontSize:11, color:B.muted, letterSpacing:'0.04em' }}>mkollection</p>
+          <h1 style={{ fontSize:22, fontWeight:600, color:B.text, letterSpacing:'-0.02em', marginTop:1 }}>vault</h1>
+        </div>
+        <div style={{ display:'flex', gap:14, alignItems:'center' }}>
+          <SearchIcon color={B.muted} size={18} />
+          <div style={{ width:28, height:28, borderRadius:'50%', background:B.accent, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:'white', fontSize:11, fontWeight:600 }}>mk</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs — pill style (matches current codebase) but smaller */}
+      <div style={{ display:'flex', gap:6, padding:'16px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {tabs.map((t,i) => (
+          <button key={t} onClick={()=>setTab(i)} style={{ border:tab===i?'none':`1px solid ${B.border}`, background:tab===i?B.accent:'transparent', color:tab===i?'white':B.muted, fontFamily:HN, fontSize:12, padding:'5px 12px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap' }}>{t}</button>
+        ))}
+      </div>
+      <div style={{ height:1, background:B.border, margin:'12px 0 0', flexShrink:0 }} />
+
+      {/* Grid — slightly more info, year visible */}
+      <div style={{ flex:1, overflow:'hidden', padding:'16px 20px 0', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0 12px', alignContent:'start' }}>
+        {PIECES.map(p => (
+          <div key={p.id} style={{ marginBottom:22 }}>
+            <div style={{ position:'relative' }}>
+              <Photo piece={p} style={{ width:'100%', aspectRatio:'1', borderRadius:6 }} />
+              <div style={{ position:'absolute', top:8, right:8, background:'rgba(255,255,255,0.88)', backdropFilter:'blur(4px)', borderRadius:3, padding:'2px 6px' }}>
+                <span style={{ fontFamily:HN, fontSize:9, color:B.text, fontWeight:600 }}>{p.year}</span>
+              </div>
+            </div>
+            <div style={{ marginTop:8 }}>
+              <p style={{ fontFamily:HN, fontSize:13, color:B.text, lineHeight:1.35, fontWeight:500 }}>{p.name}</p>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:2 }}>
+                <p style={{ fontFamily:HN, fontSize:11, color:B.muted }}>{p.brand}</p>
+                <DotsIcon color={B.muted} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* FAB only */}
+      <div style={{ position:'absolute', bottom:24, right:20, width:48, height:48, borderRadius:24, background:B.accent, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 16px rgba(45,90,69,0.3)' }}>
+        <PlusIcon color="white" size={18} />
+      </div>
+    </div>
+  );
+}
+
+function BArchiveDetail() {
+  return (
+    <div style={{ width:390, height:844, background:B.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      {/* Status */}
+      <div style={{ height:44, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0 }}>
+        <span style={{ fontSize:13, fontWeight:600, color:B.text }}>9:41</span>
+        <div style={{ display:'flex', gap:6 }}>{[...Array(3)].map((_,i) => <div key={i} style={{ width:4, height:4, borderRadius:'50%', background:B.text, opacity:0.2+i*0.3 }}/>)}</div>
+      </div>
+
+      {/* Back */}
+      <div style={{ padding:'2px 20px 0', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <button style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:6, fontFamily:HN, fontSize:13, color:B.muted, padding:0 }}>
+          <BackIcon color={B.muted} />
+          vault
+        </button>
+        <div style={{ display:'flex', gap:14 }}>
+          <button style={{ background:'none', border:`1px solid ${B.border}`, borderRadius:6, padding:'5px 12px', fontFamily:HN, fontSize:12, color:B.text, cursor:'pointer' }}>edit</button>
+          <DotsIcon color={B.muted} />
+        </div>
+      </div>
+
+      <div style={{ flex:1, overflow:'hidden', padding:'14px 20px 0' }}>
+        {/* Photo */}
+        <Photo piece={HERO} style={{ width:'100%', aspectRatio:'1', borderRadius:8 }}>
+          <div style={{ position:'absolute', bottom:10, left:0, right:0, display:'flex', justifyContent:'center', gap:4 }}>
+            {[true,false,false].map((a,i) => <div key={i} style={{ width:a?20:5, height:4, borderRadius:2, background:a?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.4)' }} />)}
+          </div>
+        </Photo>
+
+        {/* Year badge below photo */}
+        <div style={{ marginTop:14, display:'flex', justifyContent:'space-between', alignItems:'flex-end' }}>
+          <div>
+            <p style={{ fontSize:11, color:B.muted }}>{HERO.brand} · {HERO.type}</p>
+            <h1 style={{ fontSize:22, fontWeight:600, letterSpacing:'-0.02em', color:B.text, marginTop:3, lineHeight:1.2 }}>{HERO.name}</h1>
+          </div>
+          <div style={{ background:B.faint, borderRadius:6, padding:'6px 10px', textAlign:'center', flexShrink:0 }}>
+            <p style={{ fontSize:18, fontWeight:600, color:B.text }}>1994</p>
+            <p style={{ fontSize:9, color:B.muted, marginTop:1 }}>aw</p>
+          </div>
+        </div>
+
+        {/* Meta rows */}
+        <div style={{ marginTop:18, borderTop:`1px solid ${B.border}`, paddingTop:14 }}>
+          {[['type',HERO.type],['condition',HERO.condition],['size','m / it 42'],['origin','japan']].map(([k,v],i,arr) => (
+            <div key={k} style={{ display:'flex', justifyContent:'space-between', padding:'8px 0', borderBottom:i<arr.length-1?`1px solid ${B.border}`:'none' }}>
+              <span style={{ fontSize:12, color:B.muted }}>{k}</span>
+              <span style={{ fontSize:12, color:B.text }}>{v}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Story */}
+        <div style={{ marginTop:18 }}>
+          <p style={{ fontSize:11, color:B.muted, marginBottom:10 }}>story</p>
+          <blockquote style={{ borderLeft:`2px solid ${B.accent}`, paddingLeft:14, fontSize:14, color:'#444', lineHeight:1.8 }}>
+            found in antwerp, 2019. kawakubo's mid-90s asymmetry — one shoulder raised, the back cut on the bias. the wool is still pristine.
+          </blockquote>
+        </div>
+
+        {/* Add to collection */}
+        <div style={{ marginTop:20 }}>
+          <button style={{ width:'100%', background:B.accent, border:'none', borderRadius:8, padding:'13px', fontFamily:HN, fontSize:13, fontWeight:500, color:'white', cursor:'pointer' }}>
+            add to collection
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DIRECTION C — DARKROOM
+// "Same [untitled] restraint, inverted. Every photo pops.
+//  Gold accent. Feels like a private gallery."
+// ═══════════════════════════════════════════════════════════════════
+const C = { bg:'#0F0E0D', surface:'#191817', text:'#F0ECE4', muted:'#6A6560', accent:'#C8A96E', border:'#272422', faint:'#1C1A18' };
+
+function CDarkroomVault() {
+  const [tab, setTab] = React.useState(0);
+  const tabs = ['all', 'outerwear', 'dresses', 'footwear'];
+  return (
+    <div style={{ width:390, height:844, background:C.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      {/* Status */}
+      <div style={{ height:44, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0 }}>
+        <span style={{ fontSize:13, fontWeight:600, color:C.muted }}>9:41</span>
+        <div style={{ display:'flex', gap:6 }}>{[...Array(3)].map((_,i) => <div key={i} style={{ width:4, height:4, borderRadius:'50%', background:C.muted, opacity:0.5+i*0.2 }}/>)}</div>
+      </div>
+
+      {/* Header */}
+      <div style={{ padding:'4px 20px 0', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, color:C.text, letterSpacing:'-0.02em' }}>[vault]</span>
+        <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+          <SearchIcon color={C.muted} size={18} />
+          <div style={{ width:28, height:28, borderRadius:'50%', border:`1px solid ${C.accent}`, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:C.accent, fontSize:11, fontWeight:600 }}>mk</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs — gold underline */}
+      <div style={{ display:'flex', gap:0, padding:'18px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {tabs.map((t,i) => (
+          <button key={t} onClick={()=>setTab(i)} style={{ border:'none', background:'none', cursor:'pointer', padding:'0 0 10px', marginRight:20, fontFamily:HN, fontSize:13, fontWeight:tab===i?500:400, color:tab===i?C.accent:C.muted, borderBottom:`1.5px solid ${tab===i?C.accent:'transparent'}`, whiteSpace:'nowrap' }}>{t}</button>
+        ))}
+      </div>
+      <div style={{ height:1, background:C.border, flexShrink:0 }} />
+
+      {/* Grid — borderless on dark */}
+      <div style={{ flex:1, overflow:'hidden', padding:'20px 20px 0', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0 12px', alignContent:'start' }}>
+        {PIECES.map(p => (
+          <div key={p.id} style={{ marginBottom:24 }}>
+            <Photo piece={p} style={{ width:'100%', aspectRatio:'1', borderRadius:6 }} />
+            <div style={{ marginTop:9 }}>
+              <p style={{ fontFamily:HN, fontSize:13, color:C.text, lineHeight:1.35 }}>{p.name}</p>
+              <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginTop:3 }}>
+                <p style={{ fontFamily:HN, fontSize:11, color:C.muted }}>{p.brand}</p>
+                <DotsIcon color={C.muted} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Floating bottom bar — lighter on dark */}
+      <div style={{ position:'absolute', bottom:20, left:16, right:16, height:52, background:'#2A2724', borderRadius:30, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 18px', border:`1px solid ${C.border}` }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+          <Photo piece={PIECES[0]} style={{ width:32, height:32, borderRadius:4 }} />
+          <div>
+            <p style={{ fontFamily:HN, fontSize:12, color:C.text, fontWeight:500 }}>comme des garçons</p>
+            <p style={{ fontFamily:HN, fontSize:10, color:C.muted }}>47 pieces</p>
+          </div>
+        </div>
+        <div style={{ width:34, height:34, borderRadius:17, background:C.accent, display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <PlusIcon color="#111" size={15} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CDarkroomDetail() {
+  return (
+    <div style={{ width:390, height:844, background:C.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      {/* Status */}
+      <div style={{ height:44, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0 }}>
+        <span style={{ fontSize:13, fontWeight:600, color:C.muted }}>9:41</span>
+        <div style={{ display:'flex', gap:6 }}>{[...Array(3)].map((_,i) => <div key={i} style={{ width:4, height:4, borderRadius:'50%', background:C.muted, opacity:0.5+i*0.2 }}/>)}</div>
+      </div>
+
+      <div style={{ padding:'2px 20px 0', display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <button style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:6, fontFamily:HN, fontSize:13, color:C.muted, padding:0 }}>
+          <BackIcon color={C.muted} />
+          vault
+        </button>
+        <DotsIcon color={C.muted} />
+      </div>
+
+      <div style={{ flex:1, overflow:'hidden', padding:'14px 20px 0' }}>
+        {/* Photo — floats on dark */}
+        <Photo piece={HERO} style={{ width:'100%', aspectRatio:'1', borderRadius:8 }}>
+          <div style={{ position:'absolute', bottom:10, left:0, right:0, display:'flex', justifyContent:'center', gap:4 }}>
+            {[true,false,false].map((a,i) => <div key={i} style={{ width:a?20:5, height:4, borderRadius:2, background:a?C.accent:'rgba(255,255,255,0.25)' }} />)}
+          </div>
+        </Photo>
+
+        {/* Name */}
+        <div style={{ marginTop:16 }}>
+          <p style={{ fontSize:11, color:C.accent, letterSpacing:'0.04em' }}>{HERO.brand}</p>
+          <h1 style={{ fontSize:22, fontWeight:500, color:C.text, marginTop:4, lineHeight:1.2, letterSpacing:'-0.02em' }}>{HERO.name}</h1>
+          <p style={{ fontSize:12, color:C.muted, marginTop:5 }}>1994 · autumn / winter</p>
+        </div>
+
+        {/* Meta rows */}
+        <div style={{ marginTop:18, borderTop:`1px solid ${C.border}`, paddingTop:14 }}>
+          {[['type',HERO.type],['condition',HERO.condition],['size','m / it 42'],['origin','japan']].map(([k,v],i,arr) => (
+            <div key={k} style={{ display:'flex', justifyContent:'space-between', padding:'8px 0', borderBottom:i<arr.length-1?`1px solid ${C.border}`:'none' }}>
+              <span style={{ fontSize:12, color:C.muted }}>{k}</span>
+              <span style={{ fontSize:12, color:C.text }}>{v}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Story */}
+        <div style={{ marginTop:18 }}>
+          <p style={{ fontSize:11, color:C.muted, marginBottom:10 }}>story</p>
+          <blockquote style={{ borderLeft:`2px solid ${C.accent}`, paddingLeft:14, fontSize:14, color:C.muted, lineHeight:1.8 }}>
+            found in antwerp, 2019. kawakubo's mid-90s asymmetry — one shoulder raised, the back cut on the bias. the wool is still pristine.
+          </blockquote>
+        </div>
+
+        {/* Add to collection */}
+        <div style={{ marginTop:20 }}>
+          <button style={{ width:'100%', background:C.accent, border:'none', borderRadius:8, padding:'13px', fontFamily:HN, fontSize:13, fontWeight:600, color:'#111', cursor:'pointer' }}>
+            add to collection
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DIRECTION A — ADDITIONAL SCREENS
+// ═══════════════════════════════════════════════════════════════════
+
+// Reusable status bar for A screens
+function AStatus() {
+  return (
+    <div style={{ height:44, display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0, fontFamily:HN }}>
+      <span style={{ fontSize:13, fontWeight:600, color:A.text }}>9:41</span>
+      <div style={{ display:'flex', gap:6 }}>{[...Array(3)].map((_,i)=><div key={i} style={{ width:4, height:4, borderRadius:'50%', background:A.text, opacity:0.2+i*0.3 }}/>)}</div>
+    </div>
+  );
+}
+
+// Minimal form field
+function AField({ label, value, placeholder, multiline }) {
+  return (
+    <div style={{ marginBottom:0 }}>
+      <p style={{ fontFamily:HN, fontSize:10, color:A.muted, marginBottom:5 }}>{label}</p>
+      <div style={{ borderBottom:'1px solid #E0E0E0', paddingBottom:10 }}>
+        <p style={{ fontFamily:HN, fontSize:15, color: value ? A.text : '#CCCCCC', lineHeight:1.5, minHeight: multiline ? 54 : 'auto' }}>{value || placeholder}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── COLLECTIONS ──────────────────────────────────────────────────
+const COLLECTIONS = [
+  { name:'japanese avant-garde', count:9,  pieces:[PIECES[0],PIECES[1],PIECES[4],PIECES[3]] },
+  { name:'90s coats',            count:12, pieces:[PIECES[0],PIECES[2],PIECES[3],PIECES[5]] },
+  { name:'footwear archive',     count:6,  pieces:[PIECES[5],PIECES[3],PIECES[1],PIECES[2]] },
+];
+
+function ACollections() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      <div style={{ padding:'4px 20px 0', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, letterSpacing:'-0.02em', color:A.text }}>collections</span>
+        <button style={{ background:'none', border:'none', cursor:'pointer', fontSize:13, color:A.accent, fontWeight:500 }}>new +</button>
+      </div>
+      <div style={{ height:1, background:'#EBEBEB', margin:'14px 0 0', flexShrink:0 }} />
+      <div style={{ flex:1, overflow:'hidden', padding:'6px 0' }}>
+        {COLLECTIONS.map((col, ci) => (
+          <div key={ci} style={{ padding:'16px 20px', borderBottom:'1px solid #F0F0F0' }}>
+            {/* Thumbnail strip */}
+            <div style={{ display:'flex', gap:4, marginBottom:10 }}>
+              {col.pieces.map((p,pi) => (
+                <Photo key={pi} piece={p} style={{ width:64, height:80, borderRadius:6, flex:'none' }} />
+              ))}
+              <div style={{ width:64, height:80, borderRadius:6, background:'#F5F5F5', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <span style={{ fontSize:11, color:A.muted }}>+{col.count-4}</span>
+              </div>
+            </div>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <div>
+                <p style={{ fontSize:14, fontWeight:500, color:A.text }}>{col.name}</p>
+                <p style={{ fontSize:11, color:A.muted, marginTop:2 }}>{col.count} pieces</p>
+              </div>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke={A.muted} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+          </div>
+        ))}
+        {/* Empty create prompt */}
+        <div style={{ padding:'20px', textAlign:'center' }}>
+          <p style={{ fontSize:12, color:A.muted }}>group your pieces into collections</p>
+        </div>
+      </div>
+      {/* FAB */}
+      <div style={{ position:'absolute', bottom:24, left:0, right:0, display:'flex', justifyContent:'center' }}>
+        <div style={{ background:'#1A1A1A', borderRadius:30, height:48, padding:'0 28px', display:'flex', alignItems:'center' }}>
+          <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:14, fontWeight:500, color:'white' }}>new collection +</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── PROFILE ──────────────────────────────────────────────────────
+function AProfile() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      <div style={{ padding:'4px 20px 0', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, letterSpacing:'-0.02em', color:A.text }}>profile</span>
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" stroke={A.muted} strokeWidth="1.8"/><circle cx="12" cy="12" r="3" stroke={A.muted} strokeWidth="1.8"/></svg>
+      </div>
+
+      {/* Avatar + name */}
+      <div style={{ padding:'28px 20px 0', display:'flex', flexDirection:'column', alignItems:'center', flexShrink:0 }}>
+        <div style={{ width:80, height:80, borderRadius:'50%', background:'#1A1A1A', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:12 }}>
+          <span style={{ color:'white', fontSize:28, fontWeight:500 }}>m</span>
+        </div>
+        <p style={{ fontSize:18, fontWeight:500, color:A.text, letterSpacing:'-0.01em' }}>mkollection</p>
+        <p style={{ fontSize:12, color:A.muted, marginTop:3 }}>collecting since 2018</p>
+
+        {/* Stats row */}
+        <div style={{ display:'flex', gap:0, marginTop:20, borderTop:'1px solid #EBEBEB', borderBottom:'1px solid #EBEBEB', width:'100%' }}>
+          {[['47','pieces'],['8','brands'],['\'91–\'03','era span']].map(([val,label],i,arr) => (
+            <div key={i} style={{ flex:1, padding:'14px 0', textAlign:'center', borderRight: i<arr.length-1 ? '1px solid #EBEBEB' : 'none' }}>
+              <p style={{ fontSize:18, fontWeight:600, color:A.text }}>{val}</p>
+              <p style={{ fontSize:10, color:A.muted, marginTop:2 }}>{label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Share vault */}
+        <div style={{ display:'flex', gap:10, marginTop:20, width:'100%' }}>
+          <button style={{ flex:1, background:'#1A1A1A', border:'none', borderRadius:10, padding:'12px', fontFamily:HN, fontSize:13, fontWeight:500, color:'white', cursor:'pointer' }}>share vault</button>
+          <button style={{ flex:1, background:'transparent', border:'1px solid #E0E0E0', borderRadius:10, padding:'12px', fontFamily:HN, fontSize:13, color:A.text, cursor:'pointer' }}>edit profile</button>
+        </div>
+      </div>
+
+      {/* Settings list */}
+      <div style={{ margin:'24px 0 0', borderTop:'1px solid #F0F0F0', flex:1, overflow:'hidden' }}>
+        {[
+          ['premium', '✦ upgrade for unlimited pieces', true],
+          ['account', null, false],
+          ['notifications', null, false],
+          ['privacy', null, false],
+          ['help & feedback', null, false],
+          ['sign out', null, false],
+        ].map(([label, sub, highlight], i) => (
+          <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 20px', borderBottom:'1px solid #F8F8F8', background: highlight ? '#F8FBF9' : 'transparent' }}>
+            <div>
+              <p style={{ fontSize:14, color: highlight ? A.accent : i===5 ? '#CC4444' : A.text, fontWeight: highlight ? 500 : 400 }}>{label}</p>
+              {sub && <p style={{ fontSize:11, color:A.accent, marginTop:2 }}>{sub}</p>}
+            </div>
+            {i < 5 && <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke={A.muted} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── ADD PIECE — STEP 1: PHOTO ────────────────────────────────────
+function AAddPhoto() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      {/* Header + progress */}
+      <div style={{ padding:'4px 20px 0', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:13, color:A.muted, padding:0, display:'flex', alignItems:'center', gap:6 }}>
+          <BackIcon color={A.muted} /> cancel
+        </button>
+        <div style={{ display:'flex', gap:5 }}>
+          {[true,false,false].map((a,i) => <div key={i} style={{ width:a?18:6, height:6, borderRadius:3, background:a?A.text:'#DEDEDE' }}/>)}
+        </div>
+      </div>
+
+      <div style={{ padding:'20px 20px 0', flexShrink:0 }}>
+        <p style={{ fontSize:22, fontWeight:500, letterSpacing:'-0.02em', color:A.text }}>add a piece</p>
+        <p style={{ fontSize:13, color:A.muted, marginTop:4 }}>start with a photo</p>
+      </div>
+
+      {/* Upload zone */}
+      <div style={{ flex:1, padding:'20px 20px 80px', display:'flex', flexDirection:'column', gap:12 }}>
+        {/* Camera option */}
+        <div style={{ flex:3, border:'1.5px dashed #DEDEDE', borderRadius:16, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:10, cursor:'pointer', background:'#FAFAFA' }}>
+          <div style={{ width:56, height:56, borderRadius:28, background:'#1A1A1A', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="13" r="4" stroke="white" strokeWidth="1.8"/></svg>
+          </div>
+          <p style={{ fontSize:14, fontWeight:500, color:A.text }}>take a photo</p>
+          <p style={{ fontSize:12, color:A.muted }}>use your camera</p>
+        </div>
+
+        {/* Library option */}
+        <div style={{ flex:2, border:'1.5px solid #EBEBEB', borderRadius:16, display:'flex', alignItems:'center', justifyContent:'center', gap:14, cursor:'pointer', padding:'0 20px' }}>
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke={A.muted} strokeWidth="1.8"/><circle cx="8.5" cy="8.5" r="1.5" fill={A.muted}/><path d="m21 15-5-5L5 21" stroke={A.muted} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <div>
+            <p style={{ fontSize:14, fontWeight:500, color:A.text }}>choose from library</p>
+            <p style={{ fontSize:12, color:A.muted }}>photos or files</p>
+          </div>
+        </div>
+
+        <p style={{ textAlign:'center', fontSize:11, color:A.muted }}>your photos are private by default</p>
+      </div>
+    </div>
+  );
+}
+
+// ── ADD PIECE — STEP 2: DETAILS ──────────────────────────────────
+function AAddDetails() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      {/* Header + progress */}
+      <div style={{ padding:'4px 20px 0', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:13, color:A.muted, padding:0, display:'flex', alignItems:'center', gap:6 }}>
+          <BackIcon color={A.muted} /> back
+        </button>
+        <div style={{ display:'flex', gap:5 }}>
+          {[true,true,false].map((a,i) => <div key={i} style={{ width:a?18:6, height:6, borderRadius:3, background:a?A.text:'#DEDEDE' }}/>)}
+        </div>
+      </div>
+
+      {/* Photo thumbnail + title */}
+      <div style={{ padding:'16px 20px 0', display:'flex', alignItems:'center', gap:14, flexShrink:0 }}>
+        <Photo piece={HERO} style={{ width:56, height:72, borderRadius:8, flexShrink:0 }} />
+        <div>
+          <p style={{ fontSize:22, fontWeight:500, letterSpacing:'-0.02em', color:A.text }}>the details</p>
+          <p style={{ fontSize:13, color:A.muted, marginTop:2 }}>tell us about this piece</p>
+        </div>
+      </div>
+
+      {/* Form */}
+      <div style={{ flex:1, overflow:'hidden', padding:'20px 20px 0', display:'flex', flexDirection:'column', gap:18 }}>
+        <AField label="name" placeholder="e.g. asymmetric wool coat" value="asymmetric wool coat" />
+        <AField label="brand" placeholder="e.g. comme des garçons" value="comme des garçons" />
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
+          <AField label="year" placeholder="e.g. 1994" value="1994" />
+          <AField label="type" placeholder="outerwear" value="outerwear" />
+        </div>
+        <AField label="condition" placeholder="excellent / good / fair" value="excellent" />
+        <AField label="story" placeholder="where did you find it? what does it mean to you?" multiline />
+      </div>
+
+      {/* Save CTA */}
+      <div style={{ padding:'16px 20px 32px', flexShrink:0 }}>
+        <button style={{ width:'100%', background:'#1A1A1A', border:'none', borderRadius:30, padding:'15px', fontFamily:HN, fontSize:14, fontWeight:500, color:'white', cursor:'pointer' }}>
+          save to vault →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── PUBLIC VAULT ─────────────────────────────────────────────────
+function APublicVault() {
+  const [active, setActive] = React.useState(0);
+
+  function getStyle(i) {
+    const off = i - active, abs = Math.abs(off);
+    if (abs > 2) return null;
+    return { rotY: off*-48, transX: off*118, scale: 1-abs*0.2, opacity: 1-abs*0.32, zIndex: 10-abs*2 };
+  }
+
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      {/* Public header — no user controls */}
+      <div style={{ padding:'4px 20px 0', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <div>
+          <p style={{ fontSize:11, color:A.muted }}>threadology</p>
+          <p style={{ fontSize:18, fontWeight:500, letterSpacing:'-0.02em', color:A.text }}>mkollection</p>
+        </div>
+        <button style={{ background:'#1A1A1A', border:'none', borderRadius:20, padding:'8px 16px', fontFamily:HN, fontSize:12, fontWeight:500, color:'white', cursor:'pointer' }}>follow</button>
+      </div>
+
+      {/* Stats */}
+      <div style={{ padding:'12px 20px 0', display:'flex', gap:16, flexShrink:0 }}>
+        {[['47 pieces'],['8 brands'],['\'91–\'03']].map((s,i) => (
+          <p key={i} style={{ fontSize:11, color:A.muted }}>{s}</p>
+        ))}
+      </div>
+
+      <div style={{ height:1, background:'#EBEBEB', margin:'12px 0 0', flexShrink:0 }} />
+
+      {/* Coverflow (same as vault) */}
+      <div style={{ flex:1, display:'flex', flexDirection:'column', overflow:'hidden', paddingBottom:70 }}>
+        <div style={{ flex:1, position:'relative', perspective:'1000px', perspectiveOrigin:'50% 50%', overflow:'hidden' }}>
+          {PIECES.map((p, i) => {
+            const s = getStyle(i);
+            if (!s) return null;
+            return (
+              <div key={p.id} onClick={()=>setActive(i)} style={{ position:'absolute', top:'calc(50% - 136px)', left:99, width:192, height:272, borderRadius:14, overflow:'hidden', cursor:i!==active?'pointer':'default', transform:`translateX(${s.transX}px) rotateY(${s.rotY}deg) scale(${s.scale})`, transformOrigin:'center center', transition:'transform 0.38s cubic-bezier(0.25,0.1,0.25,1), opacity 0.38s', zIndex:s.zIndex, opacity:s.opacity, boxShadow:i===active?'0 12px 40px rgba(0,0,0,0.18)':'none' }}>
+                <Photo piece={p} style={{ width:'100%', height:'100%' }} />
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ textAlign:'center', padding:'0 20px 12px', flexShrink:0 }}>
+          <p style={{ fontSize:16, fontWeight:500, color:A.text }}>{PIECES[active].name}</p>
+          <p style={{ fontSize:12, color:A.muted, marginTop:3 }}>{PIECES[active].brand} · {PIECES[active].year}</p>
+          <div style={{ display:'flex', justifyContent:'center', gap:6, marginTop:10 }}>
+            {PIECES.map((_,i) => <button key={i} onClick={()=>setActive(i)} style={{ width:i===active?18:6, height:6, borderRadius:3, background:i===active?A.text:'#DEDEDE', border:'none', cursor:'pointer', padding:0, transition:'width 0.2s' }} />)}
+          </div>
+        </div>
+      </div>
+
+      {/* Powered by */}
+      <div style={{ padding:'0 0 24px', textAlign:'center', flexShrink:0 }}>
+        <p style={{ fontSize:10, color:A.muted }}>vault by <span style={{ color:A.accent }}>threadology</span></p>
+      </div>
+    </div>
+  );
+}
+
+// ── ONBOARDING — WELCOME ─────────────────────────────────────────
+function AOnboardWelcome() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <div style={{ height:44, flexShrink:0 }} />
+      {/* Decorative coverflow preview (non-interactive) */}
+      <div style={{ flex:1, position:'relative', overflow:'hidden' }}>
+        {PIECES.map((p,i) => {
+          const off = i - 2, abs = Math.abs(off);
+          return (
+            <div key={p.id} style={{ position:'absolute', top:'calc(50% - 180px)', left:'calc(50% - 100px)', width:200, height:300, borderRadius:16, overflow:'hidden', transform:`translateX(${off*115}px) rotateY(${off*-42}deg) scale(${1-abs*0.18})`, transformOrigin:'center', opacity:1-abs*0.3, zIndex:10-abs*2, perspective:'1000px' }}>
+              <Photo piece={p} style={{ width:'100%', height:'100%' }} />
+            </div>
+          );
+        })}
+      </div>
+      {/* Bottom wordmark + CTA */}
+      <div style={{ padding:'0 28px 48px', flexShrink:0 }}>
+        <p style={{ fontSize:32, fontWeight:500, letterSpacing:'-0.03em', color:A.text, lineHeight:1.15, marginBottom:8 }}>Threadology</p>
+        <p style={{ fontSize:15, color:A.muted, marginBottom:32, lineHeight:1.5 }}>a vault for the things you love</p>
+        <button style={{ width:'100%', background:'#1A1A1A', border:'none', borderRadius:30, padding:'16px', fontFamily:HN, fontSize:15, fontWeight:500, color:'white', cursor:'pointer', marginBottom:14 }}>
+          create vault
+        </button>
+        <p style={{ textAlign:'center', fontSize:13, color:A.muted }}>already have an account? <span style={{ color:A.text, fontWeight:500 }}>sign in</span></p>
+      </div>
+    </div>
+  );
+}
+
+// ── ONBOARDING — SIGN UP ─────────────────────────────────────────
+function AOnboardSignup() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      <div style={{ flex:1, padding:'20px 28px 0', display:'flex', flexDirection:'column' }}>
+        <p style={{ fontSize:24, fontWeight:500, letterSpacing:'-0.02em', color:A.text, marginBottom:6 }}>create your vault</p>
+        <p style={{ fontSize:13, color:A.muted, marginBottom:36 }}>it's free to start</p>
+
+        {/* Form fields */}
+        <div style={{ display:'flex', flexDirection:'column', gap:24, flex:1 }}>
+          {[['email','you@example.com'],['password','at least 8 characters']].map(([label, ph]) => (
+            <div key={label}>
+              <p style={{ fontFamily:HN, fontSize:10, color:A.muted, marginBottom:8 }}>{label}</p>
+              <div style={{ borderBottom:`1.5px solid #1A1A1A`, paddingBottom:10 }}>
+                <p style={{ fontFamily:HN, fontSize:15, color:'#CCCCCC' }}>{ph}</p>
+              </div>
+            </div>
+          ))}
+
+          <button style={{ width:'100%', background:'#1A1A1A', border:'none', borderRadius:30, padding:'15px', fontFamily:HN, fontSize:14, fontWeight:500, color:'white', cursor:'pointer', marginTop:8 }}>
+            continue →
+          </button>
+
+          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+            <div style={{ flex:1, height:1, background:'#EBEBEB' }} />
+            <p style={{ fontSize:11, color:A.muted }}>or</p>
+            <div style={{ flex:1, height:1, background:'#EBEBEB' }} />
+          </div>
+
+          {[['Continue with Apple','#1A1A1A','white'],['Continue with Google','white','#111']].map(([label, bg, color], i) => (
+            <button key={i} style={{ width:'100%', background:bg, border:`1px solid ${i===1?'#E0E0E0':'transparent'}`, borderRadius:30, padding:'14px', fontFamily:HN, fontSize:13, fontWeight:500, color, cursor:'pointer' }}>
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <p style={{ textAlign:'center', fontSize:11, color:A.muted, padding:'20px 0 32px' }}>
+          by continuing you agree to our <span style={{ color:A.text }}>terms</span> and <span style={{ color:A.text }}>privacy policy</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── ONBOARDING — USERNAME ─────────────────────────────────────────
+function AOnboardUsername() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      {/* Progress */}
+      <div style={{ display:'flex', justifyContent:'flex-end', padding:'4px 20px 0', flexShrink:0 }}>
+        <div style={{ display:'flex', gap:5 }}>
+          {[true,true,false].map((a,i) => <div key={i} style={{ width:a?18:6, height:6, borderRadius:3, background:a?A.text:'#DEDEDE' }}/>)}
+        </div>
+      </div>
+
+      <div style={{ flex:1, padding:'28px 28px 0', display:'flex', flexDirection:'column' }}>
+        <p style={{ fontSize:24, fontWeight:500, letterSpacing:'-0.02em', color:A.text, marginBottom:6 }}>name your vault</p>
+        <p style={{ fontSize:13, color:A.muted, marginBottom:40, lineHeight:1.5 }}>this is your public address — pick something personal</p>
+
+        {/* Username input */}
+        <div style={{ marginBottom:10 }}>
+          <p style={{ fontFamily:HN, fontSize:10, color:A.muted, marginBottom:10 }}>username</p>
+          <div style={{ display:'flex', alignItems:'baseline', borderBottom:'1.5px solid #1A1A1A', paddingBottom:12 }}>
+            <p style={{ fontSize:22, color:A.muted, fontWeight:400, marginRight:4 }}>@</p>
+            <p style={{ fontSize:22, color:A.text, fontWeight:500, letterSpacing:'-0.01em' }}>mkollection</p>
+          </div>
+        </div>
+
+        {/* Preview URL */}
+        <div style={{ background:'#F5F5F5', borderRadius:8, padding:'10px 14px', marginBottom:32 }}>
+          <p style={{ fontSize:11, color:A.muted, marginBottom:3 }}>your vault will live at</p>
+          <p style={{ fontSize:13, color:A.text }}>threadology.com/<span style={{ color:A.accent, fontWeight:500 }}>mkollection</span></p>
+        </div>
+
+        <button style={{ width:'100%', background:'#1A1A1A', border:'none', borderRadius:30, padding:'15px', fontFamily:HN, fontSize:14, fontWeight:500, color:'white', cursor:'pointer' }}>
+          looks good →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── ONBOARDING — FIRST PIECE ─────────────────────────────────────
+function AOnboardFirstPiece() {
+  return (
+    <div style={{ width:390, height:844, background:A.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <AStatus />
+      <div style={{ padding:'4px 20px 0', display:'flex', justifyContent:'space-between', alignItems:'center', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, letterSpacing:'-0.02em', color:A.text }}>Threadology</span>
+        <div style={{ width:28, height:28, borderRadius:'50%', background:A.accent, display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <span style={{ color:'white', fontSize:11, fontWeight:600 }}>mk</span>
+        </div>
+      </div>
+      <div style={{ height:1, background:'#EBEBEB', margin:'14px 0 0', flexShrink:0 }} />
+
+      {/* Empty coverflow — ghost cards */}
+      <div style={{ flex:1, position:'relative', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center' }}>
+        {[0,1,2,3,4].map((i) => {
+          const off = i - 2, abs = Math.abs(off);
+          return (
+            <div key={i} style={{ position:'absolute', top:'calc(50% - 136px)', left:'calc(50% - 96px)', width:192, height:272, borderRadius:14, border:'1.5px dashed #DEDEDE', background:'#FAFAFA', transform:`translateX(${off*118}px) rotateY(${off*-48}deg) scale(${1-abs*0.2})`, transformOrigin:'center', opacity:1-abs*0.35, zIndex:10-abs*2, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              {abs === 0 && (
+                <div style={{ textAlign:'center' }}>
+                  <div style={{ width:40, height:40, borderRadius:20, border:'1.5px dashed #CCCCCC', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 8px' }}>
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="#CCCCCC" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </div>
+                  <p style={{ fontSize:11, color:'#CCCCCC' }}>your first piece</p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* CTA */}
+      <div style={{ padding:'0 28px 40px', flexShrink:0, textAlign:'center' }}>
+        <p style={{ fontSize:18, fontWeight:500, letterSpacing:'-0.01em', color:A.text, marginBottom:6 }}>your vault is empty</p>
+        <p style={{ fontSize:13, color:A.muted, marginBottom:28, lineHeight:1.5 }}>add your first piece to start building your archive</p>
+        <div style={{ display:'flex', justifyContent:'center' }}>
+          <div style={{ background:'#1A1A1A', borderRadius:30, height:52, padding:'0 32px', display:'flex', alignItems:'center' }}>
+            <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:15, fontWeight:500, color:'white' }}>add first piece +</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── TRADEOFFS ────────────────────────────────────────────────────
+function TradeCard({ title, sub, bg, text, muted, accent, border, pros, cons, flows }) {
+  const Ch = () => <svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none"/></svg>;
+  const Xx = () => <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 2l6 6M8 2L2 8" stroke="white" strokeWidth="1.8" strokeLinecap="round"/></svg>;
+  const Row = ({icon, color, t}) => (
+    <div style={{ display:'flex', gap:9, marginBottom:8, alignItems:'flex-start' }}>
+      <div style={{ width:16, height:16, borderRadius:'50%', background:color, flexShrink:0, marginTop:1, display:'flex', alignItems:'center', justifyContent:'center' }}>{icon}</div>
+      <p style={{ fontSize:12, lineHeight:1.6, color:text, fontFamily:HN }}>{t}</p>
+    </div>
+  );
+  return (
+    <div style={{ width:'100%', height:'100%', background:bg, padding:'22px 20px', overflow:'hidden', fontFamily:HN, color:text }}>
+      <div style={{ height:2, width:24, background:accent, marginBottom:16 }} />
+      <p style={{ fontSize:20, fontWeight:600, letterSpacing:'-0.02em', marginBottom:4 }}>{title}</p>
+      <p style={{ fontSize:12, color:accent, marginBottom:20 }}>{sub}</p>
+      <p style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', color:accent, marginBottom:10 }}>STRENGTHS</p>
+      {pros.map((p,i) => <Row key={i} icon={<Ch/>} color={accent} t={p} />)}
+      <p style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', color:'#C05050', marginBottom:10, marginTop:16 }}>WATCH OUT</p>
+      {cons.map((c,i) => <Row key={i} icon={<Xx/>} color="#C05050" t={c} />)}
+      <p style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', color:'#5A8A5A', marginBottom:10, marginTop:16 }}>FLOW NOTES</p>
+      {flows.map((f,i) => (
+        <div key={i} style={{ marginBottom:9, paddingLeft:10, borderLeft:`2px solid ${border||'#ddd'}` }}>
+          <p style={{ fontSize:11, lineHeight:1.65, color:muted, fontFamily:HN }}>{f}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── APP ──────────────────────────────────────────────────────────
+function App() {
+  return (
+    <DesignCanvas>
+
+      <DCSection id="dir-a-screens" title="A — Essential Screens" subtitle="Collections · Profile · Add Piece (photo → details) · Public Vault">
+        <DCArtboard id="a-col"  label="collections"   width={390} height={844}><ACollections /></DCArtboard>
+        <DCArtboard id="a-prof" label="profile"        width={390} height={844}><AProfile /></DCArtboard>
+        <DCArtboard id="a-add1" label="add piece · photo"   width={390} height={844}><AAddPhoto /></DCArtboard>
+        <DCArtboard id="a-add2" label="add piece · details" width={390} height={844}><AAddDetails /></DCArtboard>
+        <DCArtboard id="a-pub"  label="public vault"   width={390} height={844}><APublicVault /></DCArtboard>
+      </DCSection>
+
+      <DCSection id="dir-a-onboard" title="A — Onboarding" subtitle="Welcome · Sign up · Username · First piece">
+        <DCArtboard id="a-ob1" label="welcome"      width={390} height={844}><AOnboardWelcome /></DCArtboard>
+        <DCArtboard id="a-ob2" label="sign up"      width={390} height={844}><AOnboardSignup /></DCArtboard>
+        <DCArtboard id="a-ob3" label="username"     width={390} height={844}><AOnboardUsername /></DCArtboard>
+        <DCArtboard id="a-ob4" label="first piece"  width={390} height={844}><AOnboardFirstPiece /></DCArtboard>
+      </DCSection>
+
+      <DCSection id="dir-a" title="A — Minimal" subtitle="[untitled]-inspired · Photos float on white · Lowercase · Bracket header · Floating bar nav">
+        <DCArtboard id="a-v" label="vault"        width={390} height={844}><AMinimalVault /></DCArtboard>
+        <DCArtboard id="a-d" label="piece detail" width={390} height={844}><AMinimalDetail /></DCArtboard>
+        <DCArtboard id="a-n" label="notes"         width={310} height={844}>
+          <TradeCard title="Minimal" sub="the clothes are the UI."
+            bg="#FFFFFF" text="#111" muted="#777" accent="#2D5A45" border="#E0E0E0"
+            pros={[
+              'Most "sacred space" — chrome completely disappears',
+              'Floating bottom bar is a fresh pattern for the space',
+              'Bracket notation [vault] creates distinctive personal ownership',
+              'Lowercase throughout removes all corporate feeling',
+              'Borderless cards let every photo breathe — great for vintage pieces',
+            ]}
+            cons={[
+              'Less information density — users can\'t scan brand/year at a glance',
+              'Bracket notation may be too referential to [untitled]',
+              'Floating bar needs careful copy — overloads its small footprint',
+            ]}
+            flows={[
+              'FAB inside floating bar = one-thumb add. Keep it.',
+              'Tapping the floating bar = mini context panel (sort, filter). Elegant alternative to filter row.',
+              'Collection view: [vault] / outerwear — the slash hierarchy scales beautifully.',
+              'Story in lowercase feels like personal voice — reinforce this in the add flow copy.',
+            ]}
+          />
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

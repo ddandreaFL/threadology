@@ -6,6 +6,7 @@ import { createServerClient } from "@/lib/supabase-server";
 import { PhotoGallery } from "@/components/vault/photo-gallery";
 import { DeletePieceModal } from "@/components/vault/delete-piece-modal";
 import { PieceCollectionButton } from "@/components/collections/piece-collection-button";
+import { parseCropPositions } from "@/types";
 
 interface Props {
   params: { username: string; id: string };
@@ -13,8 +14,6 @@ interface Props {
 
 export default async function PublicPiecePage({ params }: Props) {
   const [supabase, viewer] = await Promise.all([createServerClient(), getUser()]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
 
   const { data: profile } = await supabase
     .from("users")
@@ -29,10 +28,10 @@ export default async function PublicPiecePage({ params }: Props) {
   const [pieceResult, collectionsResult, membershipResult] = await Promise.all([
     supabase.from("pieces").select("*").eq("id", params.id).eq("user_id", profile.id).single(),
     isOwner
-      ? db.from("collections").select("id, name").eq("user_id", profile.id).order("position")
+      ? supabase.from("collections").select("id, name").eq("user_id", profile.id).order("position")
       : Promise.resolve({ data: [] }),
     isOwner
-      ? db.from("collection_pieces").select("collection_id").eq("piece_id", params.id)
+      ? supabase.from("collection_pieces").select("collection_id").eq("piece_id", params.id)
       : Promise.resolve({ data: [] }),
   ]);
 
@@ -53,7 +52,7 @@ export default async function PublicPiecePage({ params }: Props) {
   ].filter((f) => f.value);
 
   const thumbPhoto = piece.photos?.[0] ?? null;
-  const cropPos = piece.crop_positions?.["0"];
+  const cropPos = parseCropPositions(piece.crop_positions)?.["0"];
 
   return (
     <div className="mx-auto max-w-4xl pb-28">
@@ -75,7 +74,7 @@ export default async function PublicPiecePage({ params }: Props) {
         <PhotoGallery
           photos={piece.photos}
           alt={displayName}
-          cropPositions={piece.crop_positions}
+          cropPositions={parseCropPositions(piece.crop_positions)}
           pieceId={piece.id}
           isOwner={isOwner}
         />

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Database } from "@/types/database";
+import type { Database } from "@/types/supabase";
 import { CopyLinkButton } from "./copy-link-button";
 import { FREE_PIECE_LIMIT } from "@/lib/subscription";
 

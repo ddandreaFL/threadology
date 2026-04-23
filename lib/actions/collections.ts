@@ -14,11 +14,10 @@ export async function createCollection(data: { name: string; description?: strin
     return { error: "Collection limit reached. Upgrade to Premium for unlimited collections." };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = (await createServerClient()) as any;
+  const supabase = await createServerClient();
   const slug = slugify(data.name);
 
-  const { data: collection, error } = await db
+  const { data: collection, error } = await supabase
     .from("collections")
     .insert({ user_id: user.id, name: data.name, slug, description: data.description })
     .select()
@@ -32,10 +31,9 @@ export async function createCollection(data: { name: string; description?: strin
 
 export async function deleteCollection(collectionId: string) {
   const user = await requireUser();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = (await createServerClient()) as any;
+  const supabase = await createServerClient();
 
-  const { error } = await db
+  const { error } = await supabase
     .from("collections")
     .delete()
     .eq("id", collectionId)
@@ -49,18 +47,17 @@ export async function deleteCollection(collectionId: string) {
 
 export async function addPieceToCollections(pieceId: string, collectionIds: string[]) {
   const user = await requireUser();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = (await createServerClient()) as any;
+  const supabase = await createServerClient();
 
-  const { data: userCollections } = await db
+  const { data: userCollections } = await supabase
     .from("collections")
     .select("id")
     .eq("user_id", user.id);
 
-  const userCollectionIds = (userCollections as { id: string }[] ?? []).map((c) => c.id);
+  const userCollectionIds = (userCollections ?? []).map((c) => c.id);
 
   if (userCollectionIds.length > 0) {
-    await db
+    await supabase
       .from("collection_pieces")
       .delete()
       .eq("piece_id", pieceId)
@@ -68,7 +65,7 @@ export async function addPieceToCollections(pieceId: string, collectionIds: stri
   }
 
   if (collectionIds.length > 0) {
-    await db.from("collection_pieces").insert(
+    await supabase.from("collection_pieces").insert(
       collectionIds.map((collection_id) => ({ collection_id, piece_id: pieceId }))
     );
   }
@@ -78,12 +75,11 @@ export async function addPieceToCollections(pieceId: string, collectionIds: stri
 }
 
 export async function getPieceCollections(pieceId: string): Promise<string[]> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = (await createServerClient()) as any;
-  const { data } = await db
+  const supabase = await createServerClient();
+  const { data } = await supabase
     .from("collection_pieces")
     .select("collection_id")
     .eq("piece_id", pieceId);
 
-  return (data as { collection_id: string }[] ?? []).map((cp) => cp.collection_id);
+  return (data ?? []).map((cp) => cp.collection_id);
 }

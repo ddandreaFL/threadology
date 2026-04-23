@@ -1,5 +1,5 @@
 import { PieceCard } from "@/components/vault/piece-card";
-import type { Database } from "@/types/database";
+import type { Database } from "@/types/supabase";
 
 type Piece = Pick<
   Database["public"]["Tables"]["pieces"]["Row"],

@@ -5,13 +5,10 @@ export const FREE_COLLECTION_LIMIT = 3;
 
 export async function getUserSubscription(userId: string) {
   const supabase = await createServerClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-
   const [userResult, pieceCountResult, collectionCountResult] = await Promise.all([
     supabase.from("users").select("is_premium").eq("id", userId).single(),
     supabase.from("pieces").select("*", { count: "exact", head: true }).eq("user_id", userId),
-    db.from("collections").select("*", { count: "exact", head: true }).eq("user_id", userId),
+    supabase.from("collections").select("*", { count: "exact", head: true }).eq("user_id", userId),
   ]);
 
   const isPremium = userResult.data?.is_premium ?? false;

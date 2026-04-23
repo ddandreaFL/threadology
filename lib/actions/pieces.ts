@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase-server";
 import { requireUser } from "@/lib/auth";
 import { getUserSubscription } from "@/lib/subscription";
-import type { Database } from "@/types/database";
+import type { Database } from "@/types/supabase";
 
 type PieceInsert = Database["public"]["Tables"]["pieces"]["Insert"];
 

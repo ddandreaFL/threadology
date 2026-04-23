@@ -1,3 +1,11 @@
+export type CropPos = { x: number; y: number };
+export type CropPositions = Record<string, CropPos>;
+
+export function parseCropPositions(raw: unknown): CropPositions | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  return raw as CropPositions;
+}
+
 export interface User {
   id: string;
   email: string;

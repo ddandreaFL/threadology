@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { PhotoUpload } from "@/components/vault/photo-upload";
 import { updatePiece } from "@/lib/actions/pieces";
-import type { Database } from "@/types/database";
+import type { Database } from "@/types/supabase";
 
 const PIECE_TYPES = [
   "jacket", "coat", "hoodie", "sweatshirt", "shirt", "t-shirt", "polo",

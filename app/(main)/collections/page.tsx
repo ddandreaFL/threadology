@@ -12,11 +12,8 @@ export default async function CollectionsPage() {
     createServerClient(),
   ]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-
   const [{ data: collections }, { data: userData }] = await Promise.all([
-    db.from("collections")
+    supabase.from("collections")
       .select("id, name, slug, description, collection_pieces(count)")
       .eq("user_id", user.id)
       .order("position"),

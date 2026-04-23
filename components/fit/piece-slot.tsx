@@ -1,9 +1,13 @@
-import type { Database } from "@/types/database";
+import { parseCropPositions } from "@/types";
 
-export type FitPiece = Pick<
-  Database["public"]["Tables"]["pieces"]["Row"],
-  "id" | "brand" | "type" | "name" | "photos" | "crop_positions"
->;
+export type FitPiece = {
+  id: string;
+  brand: string;
+  type: string;
+  name: string | null;
+  photos: string[];
+  crop_positions: unknown;
+};
 
 interface PieceSlotProps {
   piece: FitPiece | null;
@@ -30,7 +34,7 @@ export function PieceSlot({
 }: PieceSlotProps) {
   const label = piece?.name ?? piece?.type ?? "";
   const coverPhoto = piece?.photos[0];
-  const cropPos = piece?.crop_positions?.["0"];
+  const cropPos = parseCropPositions(piece?.crop_positions)?.["0"];
   const objectPosition = cropPos ? `${cropPos.x}% ${cropPos.y}%` : "50% 50%";
 
   if (!piece) {

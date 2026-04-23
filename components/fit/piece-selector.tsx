@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { FitPiece } from "./piece-slot";
+import { parseCropPositions } from "@/types";
 
 interface PieceSelectorProps {
   pieces: FitPiece[];
@@ -87,7 +88,7 @@ export function PieceSelector({
                 const isSelected = selectedIds.has(piece.id);
                 const label = piece.name ?? piece.type;
                 const coverPhoto = piece.photos[0];
-                const cropPos = piece.crop_positions?.["0"];
+                const cropPos = parseCropPositions(piece.crop_positions)?.["0"];
                 const objectPosition = cropPos
                   ? `${cropPos.x}% ${cropPos.y}%`
                   : "50% 50%";

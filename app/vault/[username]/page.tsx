@@ -36,24 +36,22 @@ async function getVaultData(username: string) {
 
   if (!profile) return null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
   const [piecesResult, collectionsResult, membershipsResult] = await Promise.all([
     supabase
       .from("pieces")
       .select("id, brand, type, name, year, photos, crop_positions, estimated_value, created_at, updated_at")
       .eq("user_id", profile.id)
       .order("created_at", { ascending: false }),
-    db.from("collections").select("id, name, slug").eq("user_id", profile.id).order("position"),
-    db.from("pieces").select("id, collection_pieces(collection_id)").eq("user_id", profile.id),
+    supabase.from("collections").select("id, name, slug").eq("user_id", profile.id).order("position"),
+    supabase.from("pieces").select("id, collection_pieces(collection_id)").eq("user_id", profile.id),
   ]);
 
   const membershipMap: Record<string, string[]> = {};
   for (const p of (membershipsResult.data ?? [])) {
-    membershipMap[p.id] = (p.collection_pieces ?? []).map((cp: { collection_id: string }) => cp.collection_id);
+    membershipMap[p.id] = (p.collection_pieces ?? []).map((cp) => cp.collection_id);
   }
 
-  const pieces = (piecesResult.data ?? []).map((p: Omit<Piece, "collectionIds">) => ({
+  const pieces = (piecesResult.data ?? []).map((p) => ({
     ...p,
     collectionIds: membershipMap[p.id] ?? [],
   })) as Piece[];

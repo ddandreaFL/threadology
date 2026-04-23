@@ -1,11 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import type { Database } from "@/types/database";
+import { parseCropPositions } from "@/types";
 
-type Piece = Pick<
-  Database["public"]["Tables"]["pieces"]["Row"],
-  "id" | "brand" | "type" | "name" | "year" | "photos" | "crop_positions"
->;
+type Piece = {
+  id: string;
+  brand: string;
+  type: string;
+  name: string | null;
+  year: string | null;
+  photos: string[];
+  crop_positions: unknown;
+};
 
 interface PieceCardProps {
   piece: Piece;
@@ -15,6 +20,7 @@ interface PieceCardProps {
 export function PieceCard({ piece, basePath }: PieceCardProps) {
   const label = piece.name ?? piece.type;
   const href = basePath ? `${basePath}/${piece.id}` : `/vault/${piece.id}`;
+  const cropPos = parseCropPositions(piece.crop_positions)?.["0"];
 
   return (
     <Link href={href} className="group block">
@@ -28,9 +34,7 @@ export function PieceCard({ piece, basePath }: PieceCardProps) {
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             style={{
-              objectPosition: piece.crop_positions?.["0"]
-                ? `${piece.crop_positions["0"].x}% ${piece.crop_positions["0"].y}%`
-                : "50% 50%",
+              objectPosition: cropPos ? `${cropPos.x}% ${cropPos.y}%` : "50% 50%",
             }}
           />
         ) : (
