@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { PhotoGallery } from "@/components/vault/photo-gallery";
@@ -25,10 +26,13 @@ export default async function PublicPiecePage({ params }: Props) {
 
   const isOwner = viewer?.id === profile.id;
 
-  const [pieceResult, collectionsResult] = await Promise.all([
+  const [pieceResult, collectionsResult, membershipResult] = await Promise.all([
     supabase.from("pieces").select("*").eq("id", params.id).eq("user_id", profile.id).single(),
     isOwner
       ? db.from("collections").select("id, name").eq("user_id", profile.id).order("position")
+      : Promise.resolve({ data: [] }),
+    isOwner
+      ? db.from("collection_pieces").select("collection_id").eq("piece_id", params.id)
       : Promise.resolve({ data: [] }),
   ]);
 
@@ -36,28 +40,33 @@ export default async function PublicPiecePage({ params }: Props) {
   if (!piece) notFound();
 
   const userCollections: { id: string; name: string }[] = collectionsResult.data ?? [];
+  const pieceCollectionIds = new Set(
+    (membershipResult.data ?? []).map((m: { collection_id: string }) => m.collection_id)
+  );
+  const pieceCollections = userCollections.filter((c) => pieceCollectionIds.has(c.id));
   const displayName = piece.name ?? piece.type;
 
   const metaFields = [
-    { label: "Type", value: piece.type },
-    { label: "Size", value: piece.size },
-    { label: "Condition", value: piece.condition },
-    { label: "Year", value: piece.year },
-    { label: "Season", value: piece.season },
+    { label: "type", value: piece.type },
+    { label: "size", value: piece.size },
+    { label: "condition", value: piece.condition },
   ].filter((f) => f.value);
 
+  const thumbPhoto = piece.photos?.[0] ?? null;
+  const cropPos = piece.crop_positions?.["0"];
+
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto max-w-4xl pb-28">
       {/* Back navigation */}
-      <div className="mb-8">
+      <div className="mb-6">
         <Link
           href={`/vault/${params.username}`}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-gray-700"
+          className="inline-flex items-center gap-1.5 text-[13px] text-[#999999] transition-colors hover:text-[#111111]"
         >
-          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to vault
+          vault
         </Link>
       </div>
 
@@ -72,68 +81,96 @@ export default async function PublicPiecePage({ params }: Props) {
         />
 
         {/* Details */}
-        <div className="flex flex-col">
-          <div>
-            <p className="font-mono-display text-xs uppercase tracking-widest text-gray-400">
-              {piece.brand}
+        <div>
+          <p className="text-[11px] text-[#999999]">{piece.brand}</p>
+          <h1 className="mt-1 text-[22px] font-medium leading-[1.2] tracking-[-0.02em] text-[#111111]">
+            {displayName}
+          </h1>
+          {(piece.year || piece.season) && (
+            <p className="mt-1.5 text-[12px] text-[#999999]">
+              {[piece.year, piece.season].filter(Boolean).join(" · ")}
             </p>
-            <h1 className="mt-1 text-2xl capitalize leading-tight text-gray-900">
-              {displayName}
-            </h1>
-            {(piece.year || piece.season) && (
-              <p className="mt-1.5 font-mono-display text-sm text-gray-400">
-                {[piece.year, piece.season].filter(Boolean).join(" · ")}
-              </p>
-            )}
-          </div>
-
-          {metaFields.length > 0 && (
-            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-[#E0D8CC] pt-8">
-              {metaFields.map((f) => (
-                <div key={f.label}>
-                  <dt className="font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
-                    {f.label}
-                  </dt>
-                  <dd className="mt-1 font-mono-display text-sm capitalize text-gray-700">{f.value}</dd>
-                </div>
-              ))}
-            </dl>
           )}
 
+          {/* Metadata rows */}
+          {metaFields.length > 0 && (
+            <div className="mt-5 border-t border-[#EBEBEB] pt-4">
+              {metaFields.map((f) => (
+                <div key={f.label} className="flex justify-between border-b border-[#F0F0F0] py-[9px]">
+                  <span className="text-[12px] text-[#999999]">{f.label}</span>
+                  <span className="text-[12px] capitalize text-[#111111]">{f.value}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Story */}
           {piece.story && (
-            <div className="mt-8 border-t border-[#E0D8CC] pt-8">
-              <p className="font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
-                Story
-              </p>
-              <blockquote className="mt-3 border-l-2 border-[#2D5A45] pl-4 text-base leading-relaxed text-gray-600">
+            <div className="mt-5 border-t border-[#EBEBEB] pt-5">
+              <p className="mb-[10px] text-[11px] text-[#999999]">story</p>
+              <blockquote className="border-l-2 border-[#2D5A45] pl-[14px] text-[14px] leading-[1.8] text-[#444444]">
                 {piece.story}
               </blockquote>
             </div>
           )}
 
-          <p className="mt-auto pt-8 text-xs text-gray-400">
-            Updated{" "}
-            {new Date(piece.updated_at).toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </p>
-
-          {isOwner && (
-            <div className="mt-4 flex items-center gap-3 border-t border-[#E0D8CC] pt-6">
-              <Link
-                href={`/vault/${params.username}/${piece.id}/edit`}
-                className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50"
-              >
-                Edit
-              </Link>
+          {/* Collection chips */}
+          {isOwner && (pieceCollections.length > 0 || userCollections.length > 0) && (
+            <div className="mt-[18px] flex flex-wrap gap-2">
+              {pieceCollections.map((c) => (
+                <span
+                  key={c.id}
+                  className="rounded-[4px] border border-[#E0E0E0] px-[10px] py-[5px] text-[11px] text-[#999999]"
+                >
+                  {c.name}
+                </span>
+              ))}
               <PieceCollectionButton pieceId={piece.id} collections={userCollections} />
-              <DeletePieceModal pieceId={piece.id} pieceName={displayName} />
+            </div>
+          )}
+
+          {/* Delete link */}
+          {isOwner && (
+            <div className="mt-8">
+              <DeletePieceModal
+                pieceId={piece.id}
+                pieceName={displayName}
+                buttonClassName="text-[11px] text-[#999999] transition-colors hover:text-red-500"
+                buttonLabel="delete piece"
+              />
             </div>
           )}
         </div>
       </div>
+
+      {/* Floating action bar — owner only */}
+      {isOwner && (
+        <div className="fixed bottom-5 left-1/2 flex h-[52px] w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center justify-between rounded-[30px] bg-[#1A1A1A] px-4 shadow-[0_4px_16px_rgba(45,90,69,0.30)]">
+          <div className="flex min-w-0 items-center gap-3">
+            {thumbPhoto ? (
+              <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-md">
+                <Image
+                  src={thumbPhoto}
+                  alt={displayName}
+                  fill
+                  sizes="32px"
+                  className="object-cover"
+                  style={cropPos ? { objectPosition: `${cropPos.x}% ${cropPos.y}%` } : undefined}
+                />
+              </div>
+            ) : (
+              <div className="h-8 w-8 flex-shrink-0 rounded-md bg-white/10" />
+            )}
+            <span className="truncate text-[12px] font-medium text-white">{displayName}</span>
+          </div>
+          <Link
+            href={`/vault/${params.username}/${piece.id}/edit`}
+            className="flex-shrink-0 text-[12px] font-medium text-white/70 transition-colors hover:text-white"
+          >
+            edit
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

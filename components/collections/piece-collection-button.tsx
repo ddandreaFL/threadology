@@ -15,9 +15,9 @@ export function PieceCollectionButton({ pieceId, collections }: PieceCollectionB
     <>
       <button
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50"
+        className="rounded-[4px] border border-dashed border-[#2D5A45] px-[10px] py-[5px] text-[11px] text-[#2D5A45] transition-colors hover:bg-[#2D5A45]/5"
       >
-        Collections
+        add +
       </button>
 
       {open && (

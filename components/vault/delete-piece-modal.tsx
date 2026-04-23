@@ -7,9 +7,11 @@ import { deletePiece } from "@/lib/actions/pieces";
 interface DeletePieceModalProps {
   pieceId: string;
   pieceName: string;
+  buttonClassName?: string;
+  buttonLabel?: string;
 }
 
-export function DeletePieceModal({ pieceId, pieceName }: DeletePieceModalProps) {
+export function DeletePieceModal({ pieceId, pieceName, buttonClassName, buttonLabel }: DeletePieceModalProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -33,9 +35,9 @@ export function DeletePieceModal({ pieceId, pieceName }: DeletePieceModalProps) 
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-red-200 bg-[#FDFCFA] px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"
+        className={buttonClassName ?? "rounded-lg border border-red-200 bg-[#FDFCFA] px-4 py-2 text-sm text-red-600 transition-colors hover:bg-red-50"}
       >
-        Delete
+        {buttonLabel ?? "Delete"}
       </button>
 
       {open && (

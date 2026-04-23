@@ -12,17 +12,17 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-lg pb-24">
-      <h1 className="font-mono-display text-2xl text-gray-900">Settings</h1>
-      <p className="mt-1 font-mono-display text-xs text-gray-400">
-        @{profile?.username} &middot; {user.email}
+      <h1 className="text-[22px] font-medium tracking-[-0.02em] text-[#111111]">settings</h1>
+      <p className="mt-1 text-[12px] text-[#999999]">
+        @{profile?.username} · {user.email}
       </p>
 
-      <BillingSection isPremium={subscription.isPremium} />
+      <div className="mt-6 border-t border-[#EBEBEB]">
+        <BillingSection isPremium={subscription.isPremium} />
+      </div>
 
-      <div className="mt-6 rounded-2xl border border-[#E0D8CC] bg-[#FDFCFA] p-6">
-        <p className="mb-5 font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
-          Profile
-        </p>
+      <div className="mt-8 border-t border-[#EBEBEB] pt-6">
+        <p className="mb-5 text-[10px] uppercase tracking-[0.12em] text-[#999999]">profile</p>
         <ProfileSettingsForm
           userId={user.id}
           currentBio={profile?.bio ?? null}

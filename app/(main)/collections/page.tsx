@@ -29,24 +29,32 @@ export default async function CollectionsPage() {
 
   return (
     <div className="mx-auto max-w-lg pb-24">
-      <h1 className="font-mono-display text-2xl text-gray-900">Collections</h1>
-      <p className="mt-1 font-mono-display text-xs text-gray-400">
-        @{profile?.username}
-      </p>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-[22px] font-medium tracking-[-0.02em] text-[#111111]">collections</h1>
+        {!atLimit && (
+          <CreateCollectionForm disabled={false} compact />
+        )}
+      </div>
 
       {!isPremium && (
-        <p className="mt-4 text-sm text-gray-500">
-          {collectionCount} of {FREE_COLLECTION_LIMIT} collections ·{" "}
-          <Link href="/upgrade" className="text-[#2D5A45] hover:underline">
-            Upgrade for unlimited →
+        <p className="mt-2 text-[12px] text-[#999999]">
+          {collectionCount} of {FREE_COLLECTION_LIMIT} ·{" "}
+          <Link href="/upgrade" className="text-[#2D5A45]">
+            upgrade for unlimited →
           </Link>
         </p>
       )}
 
-      <div className="mt-6">
-        <CreateCollectionForm disabled={atLimit} />
+      <div className="mt-5 border-t border-[#EBEBEB]">
         <CollectionList collections={collections ?? []} username={profile?.username ?? ""} />
       </div>
+
+      {atLimit && (
+        <div className="mt-4">
+          <CreateCollectionForm disabled={true} />
+        </div>
+      )}
     </div>
   );
 }

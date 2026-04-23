@@ -77,7 +77,7 @@ export function PhotoGallery({
     <div className="flex flex-col gap-3">
       {/* Primary image */}
       <div
-        className="group relative aspect-square overflow-hidden rounded-2xl border border-[#E0D8CC] bg-white"
+        className="group relative aspect-square overflow-hidden rounded-[8px] bg-white"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -151,8 +151,11 @@ export function PhotoGallery({
                 type="button"
                 onClick={() => goTo(i)}
                 aria-label={`Photo ${i + 1}`}
-                className="h-1.5 w-1.5 rounded-full transition-colors"
-                style={{ backgroundColor: i === selected ? "#2D5A45" : "#E0D8CC" }}
+                className="h-[4px] rounded-full transition-all duration-200"
+                style={{
+                  width: i === selected ? 20 : 5,
+                  backgroundColor: i === selected ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.4)",
+                }}
               />
             ))}
           </div>

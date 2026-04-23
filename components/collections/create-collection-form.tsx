@@ -5,9 +5,10 @@ import { createCollection } from "@/lib/actions/collections";
 
 interface CreateCollectionFormProps {
   disabled: boolean;
+  compact?: boolean;
 }
 
-export function CreateCollectionForm({ disabled }: CreateCollectionFormProps) {
+export function CreateCollectionForm({ disabled, compact }: CreateCollectionFormProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -31,6 +32,17 @@ export function CreateCollectionForm({ disabled }: CreateCollectionFormProps) {
   };
 
   if (!open) {
+    if (compact) {
+      return (
+        <button
+          onClick={() => !disabled && setOpen(true)}
+          disabled={disabled}
+          className="text-[13px] font-medium text-[#2D5A45] transition-opacity hover:opacity-70 disabled:opacity-30"
+        >
+          new +
+        </button>
+      );
+    }
     return (
       <button
         onClick={() => !disabled && setOpen(true)}

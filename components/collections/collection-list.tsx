@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { deleteCollection } from "@/lib/actions/collections";
 
 interface Collection {
@@ -17,7 +16,7 @@ interface CollectionListProps {
   username: string;
 }
 
-export function CollectionList({ collections, username }: CollectionListProps) {
+export function CollectionList({ collections }: CollectionListProps) {
   const [deleting, setDeleting] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
@@ -28,40 +27,40 @@ export function CollectionList({ collections, username }: CollectionListProps) {
 
   if (collections.length === 0) {
     return (
-      <p className="py-8 text-center text-sm text-gray-400">
-        No collections yet. Create one above.
+      <p className="py-10 text-center text-[12px] text-[#999999]">
+        group your pieces into collections
       </p>
     );
   }
 
   return (
-    <div className="space-y-3">
+    <div>
       {collections.map((c) => {
         const count = c.collection_pieces?.[0]?.count ?? 0;
         return (
           <div
             key={c.id}
-            className="flex items-center justify-between rounded-xl border border-[#E0D8CC] bg-white px-4 py-3"
+            className="flex items-center justify-between border-b border-[#F0F0F0] px-0 py-4"
           >
-            <div>
-              <Link
-                href={`/vault/${username}/c/${c.slug}`}
-                className="text-sm font-medium text-gray-800 hover:text-[#2D5A45]"
-              >
-                {c.name}
-              </Link>
-              <p className="mt-0.5 font-mono-display text-[10px] text-gray-400">
+            <div className="min-w-0">
+              <p className="text-[14px] font-medium text-[#111111]">{c.name}</p>
+              <p className="mt-0.5 text-[11px] text-[#999999]">
                 {count} {count === 1 ? "piece" : "pieces"}
                 {c.description && ` · ${c.description}`}
               </p>
             </div>
-            <button
-              onClick={() => handleDelete(c.id)}
-              disabled={deleting === c.id}
-              className="text-xs text-gray-400 hover:text-red-600 disabled:opacity-50 transition-colors"
-            >
-              {deleting === c.id ? "Deleting..." : "Delete"}
-            </button>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <svg className="h-4 w-4 text-[#999999]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+              </svg>
+              <button
+                onClick={() => handleDelete(c.id)}
+                disabled={deleting === c.id}
+                className="text-[11px] text-[#999999] transition-colors hover:text-red-500 disabled:opacity-40"
+              >
+                {deleting === c.id ? "…" : "delete"}
+              </button>
+            </div>
           </div>
         );
       })}
