@@ -22,9 +22,6 @@ export function PhotoGallery({
   isOwner = false,
 }: PhotoGalleryProps) {
   const [selected, setSelected] = useState(0);
-  const [prev, setPrev] = useState<number | null>(null);
-  const [direction, setDirection] = useState<"next" | "prev">("next");
-  const [transitioning, setTransitioning] = useState(false);
   const [adjustingIndex, setAdjustingIndex] = useState<number | null>(null);
   const [cropPositions, setCropPositions] = useState<CropPositions>(
     initialCropPositions ?? {}
@@ -39,21 +36,13 @@ export function PhotoGallery({
     );
   }
 
-  function goTo(index: number, dir?: "next" | "prev") {
-    if (transitioning || index === selected) return;
-    const d = dir ?? (index > selected ? "next" : "prev");
-    setPrev(selected);
-    setDirection(d);
-    setTransitioning(true);
+  function goTo(index: number) {
+    if (index === selected) return;
     setSelected(index);
-    setTimeout(() => {
-      setPrev(null);
-      setTransitioning(false);
-    }, 300);
   }
 
-  function goNext() { goTo((selected + 1) % photos.length, "next"); }
-  function goPrev() { goTo((selected - 1 + photos.length) % photos.length, "prev"); }
+  function goNext() { goTo((selected + 1) % photos.length); }
+  function goPrev() { goTo((selected - 1 + photos.length) % photos.length); }
 
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
@@ -81,40 +70,19 @@ export function PhotoGallery({
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Outgoing image — slides out */}
-        {transitioning && prev !== null && (
+        {/* All images mounted; crossfade via opacity to avoid remount flash */}
+        {photos.map((url, i) => (
           <Image
-            key={`out-${prev}`}
-            src={photos[prev]}
-            alt={alt}
+            key={url}
+            src={url}
+            alt={`${alt} ${i + 1}`}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className={`object-cover ${
-              direction === "next"
-                ? "animate-carousel-out-left"
-                : "animate-carousel-out-right"
-            }`}
-            style={cropStyle(prev)}
+            priority={i === 0}
+            className="object-cover transition-opacity duration-300"
+            style={{ ...cropStyle(i), opacity: i === selected ? 1 : 0 }}
           />
-        )}
-
-        {/* Current image — slides in */}
-        <Image
-          key={`in-${selected}`}
-          src={photos[selected]}
-          alt={alt}
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority
-          className={`object-cover ${
-            transitioning
-              ? direction === "next"
-                ? "animate-carousel-in-right"
-                : "animate-carousel-in-left"
-              : ""
-          }`}
-          style={cropStyle(selected)}
-        />
+        ))}
 
         {/* Desktop arrows — hover to reveal */}
         {photos.length > 1 && (

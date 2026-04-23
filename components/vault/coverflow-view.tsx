@@ -48,10 +48,10 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
   const dotOffset = Math.max(0, Math.min(safeIndex - 7, pieces.length - totalDots));
 
   return (
-    <div className="flex flex-col pb-8 pt-4" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      {/* 3D stage */}
+    <div className="flex h-full flex-col pb-24 pt-4" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      {/* 3D stage — flex-1 fills available height */}
       <div
-        className="relative h-[320px] overflow-hidden"
+        className="relative flex-1 overflow-hidden"
         style={{ perspective: "1000px" }}
       >
         {pieces.map((piece, index) => {

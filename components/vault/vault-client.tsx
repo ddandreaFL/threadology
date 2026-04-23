@@ -101,7 +101,7 @@ export function VaultClient({ pieces, collections, basePath, isOwner = false }: 
   const safeActiveIndex = Math.min(activeIndex, Math.max(0, filteredPieces.length - 1));
 
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${view === "coverflow" && !searchOpen ? "h-[calc(100dvh-56px)] overflow-hidden" : ""}`}>
       {/* Tabs + view toggle row */}
       <div className="flex items-end justify-between border-b border-[#EBEBEB]">
         {/* Collection tabs */}
@@ -193,12 +193,14 @@ export function VaultClient({ pieces, collections, basePath, isOwner = false }: 
             : "no pieces found"}
         </p>
       ) : view === "coverflow" ? (
-        <CoverflowView
-          pieces={filteredPieces}
-          basePath={basePath}
-          activeIndex={safeActiveIndex}
-          onActiveChange={setActiveIndex}
-        />
+        <div className="flex-1 overflow-hidden">
+          <CoverflowView
+            pieces={filteredPieces}
+            basePath={basePath}
+            activeIndex={safeActiveIndex}
+            onActiveChange={setActiveIndex}
+          />
+        </div>
       ) : (
         <div className="py-4">
           <VaultGrid pieces={filteredPieces} basePath={basePath} />
@@ -209,7 +211,7 @@ export function VaultClient({ pieces, collections, basePath, isOwner = false }: 
       {isOwner && (
         <Link
           href="/vault/add"
-          className="fixed bottom-6 left-1/2 flex h-12 -translate-x-1/2 items-center whitespace-nowrap rounded-[30px] bg-[#1A1A1A] px-7 text-[14px] font-medium text-white transition-opacity hover:opacity-80"
+          className="fixed bottom-6 left-1/2 flex h-14 -translate-x-1/2 items-center whitespace-nowrap rounded-[30px] bg-[#1A1A1A] px-9 text-[15px] font-medium text-white transition-opacity hover:opacity-80"
           style={{ boxShadow: "0 4px 16px rgba(45,90,69,0.30)" }}
         >
           add +
