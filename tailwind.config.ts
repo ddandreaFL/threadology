@@ -50,7 +50,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-dm-sans)", "sans-serif"],
         mono: ["var(--font-geist-mono)", "monospace"],
-        "mono-display": ["var(--font-ibm-plex-mono)", "monospace"],
+        "mono-display": ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
         serif: ["var(--font-cormorant)", "Georgia", "serif"],
       },
     },

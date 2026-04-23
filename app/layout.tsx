@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Cormorant_Garamond, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import { PageTransition } from "@/components/page-transition";
 import "./globals.css";
 
@@ -17,14 +17,6 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
-  display: "swap",
-});
-
-// Metadata / label mono
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-ibm-plex-mono",
   display: "swap",
 });
 
@@ -52,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${cormorant.variable} ${ibmPlexMono.variable} ${geistMono.variable} font-mono-display antialiased`}
+        className={`${dmSans.variable} ${cormorant.variable} ${geistMono.variable} antialiased`}
       >
         <PageTransition>{children}</PageTransition>
       </body>
