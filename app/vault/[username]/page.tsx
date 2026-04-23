@@ -5,7 +5,6 @@ import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { EmptyVault } from "@/components/vault/empty-vault";
 import { VaultClient } from "@/components/vault/vault-client";
-import { VaultFAB } from "@/components/vault/vault-fab";
 import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
 
 interface Props {
@@ -117,10 +116,9 @@ export default async function PublicVaultPage({ params }: Props) {
           pieces={pieces}
           collections={collections}
           basePath={`/vault/${profile.username}`}
+          isOwner={isOwner}
         />
       )}
-
-      {isOwner && <VaultFAB />}
     </div>
   );
 }

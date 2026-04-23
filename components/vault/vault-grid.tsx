@@ -13,7 +13,7 @@ interface VaultGridProps {
 
 export function VaultGrid({ pieces, basePath }: VaultGridProps) {
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-x-3 gap-y-[22px] md:grid-cols-3 lg:grid-cols-4">
       {pieces.map((piece) => (
         <PieceCard key={piece.id} piece={piece} basePath={basePath} />
       ))}

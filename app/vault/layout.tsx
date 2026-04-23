@@ -17,7 +17,7 @@ export default async function VaultPublicLayout({
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <Link
             href={user ? "/vault" : "/"}
-            className="font-sans text-lg font-semibold tracking-tight text-gray-900 transition-opacity hover:opacity-70"
+            className="text-[20px] font-medium tracking-[-0.02em] text-[#111111] transition-opacity hover:opacity-70"
           >
             Threadology
           </Link>
