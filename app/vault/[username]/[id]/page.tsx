@@ -94,9 +94,9 @@ export default async function PublicPiecePage({ params }: Props) {
 
           {/* Metadata rows */}
           {metaFields.length > 0 && (
-            <div className="mt-5 border-t border-[#EBEBEB] pt-4">
-              {metaFields.map((f) => (
-                <div key={f.label} className="flex justify-between border-b border-[#F0F0F0] py-[9px]">
+            <div className="mt-5">
+              {metaFields.map((f, i) => (
+                <div key={f.label} className={`flex justify-between py-[9px] ${i < metaFields.length - 1 ? "border-b border-[#F0F0F0]" : ""}`}>
                   <span className="text-[12px] text-[#999999]">{f.label}</span>
                   <span className="text-[12px] capitalize text-[#111111]">{f.value}</span>
                 </div>
@@ -106,7 +106,7 @@ export default async function PublicPiecePage({ params }: Props) {
 
           {/* Story */}
           {piece.story && (
-            <div className="mt-5 border-t border-[#EBEBEB] pt-5">
+            <div className="mt-5 pt-1">
               <p className="mb-[10px] text-[11px] text-[#999999]">story</p>
               <blockquote className="border-l-2 border-[#2D5A45] pl-[14px] text-[14px] leading-[1.8] text-[#444444]">
                 {piece.story}

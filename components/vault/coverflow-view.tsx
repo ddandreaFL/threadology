@@ -75,12 +75,13 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
       >
         {pieces.map((piece, index) => {
           const off = index - safeIndex;
-          if (Math.abs(off) > 2) return null;
+          if (Math.abs(off) > 4) return null;
 
+          const visible = Math.abs(off) <= 2;
           const rotateY = off * -48;
           const tx = off * translateX;
           const scale = 1 - Math.abs(off) * 0.2;
-          const opacity = 1 - Math.abs(off) * 0.32;
+          const opacity = visible ? 1 - Math.abs(off) * 0.32 : 0;
           const zIndex = 10 - Math.abs(off) * 2;
           const isActive = off === 0;
           const cropPos = piece.crop_positions?.["0"];
@@ -99,7 +100,8 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
             overflow: "hidden",
             transition: "transform 0.38s cubic-bezier(0.25,0.1,0.25,1), opacity 0.38s",
             boxShadow: isActive ? "0 12px 40px rgba(0,0,0,0.18)" : "none",
-            cursor: "pointer",
+            cursor: visible ? "pointer" : "default",
+            pointerEvents: visible ? "auto" : "none",
           };
 
           const content = piece.photos[0] ? (
