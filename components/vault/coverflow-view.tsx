@@ -48,7 +48,7 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
   const dotOffset = Math.max(0, Math.min(safeIndex - 7, pieces.length - totalDots));
 
   return (
-    <div className="flex h-full flex-col pb-24 pt-4" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <div className="flex h-full flex-col pb-20 pt-1" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       {/* 3D stage — flex-1 fills available height */}
       <div
         className="relative flex-1 overflow-hidden"
@@ -59,7 +59,7 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
           if (Math.abs(off) > 2) return null;
 
           const rotateY = off * -48;
-          const translateX = off * 118;
+          const translateX = off * 148;
           const scale = 1 - Math.abs(off) * 0.2;
           const opacity = 1 - Math.abs(off) * 0.32;
           const zIndex = 10 - Math.abs(off) * 2;
@@ -69,11 +69,11 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
 
           const cardStyle: React.CSSProperties = {
             position: "absolute",
-            width: 192,
-            height: 272,
+            width: 240,
+            height: 340,
             borderRadius: 14,
-            top: "calc(50% - 136px)",
-            left: "calc(50% - 96px)",
+            top: "calc(50% - 170px)",
+            left: "calc(50% - 120px)",
             transform: `translateX(${translateX}px) rotateY(${rotateY}deg) scale(${scale})`,
             opacity,
             zIndex,
@@ -88,7 +88,7 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
               src={piece.photos[0]}
               alt={label}
               fill
-              sizes="192px"
+              sizes="240px"
               className="object-cover"
               style={cropPos ? { objectPosition: `${cropPos.x}% ${cropPos.y}%` } : undefined}
             />
