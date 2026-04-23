@@ -101,7 +101,7 @@ export function VaultClient({ pieces, collections, basePath, isOwner = false }: 
   const safeActiveIndex = Math.min(activeIndex, Math.max(0, filteredPieces.length - 1));
 
   return (
-    <div className={`flex flex-col ${view === "coverflow" && !searchOpen ? "h-[calc(100dvh-56px)] overflow-hidden" : ""}`}>
+    <div className={`flex flex-col ${view === "coverflow" && !searchOpen ? "h-[calc(100dvh-144px)] max-h-[620px] overflow-hidden" : ""}`}>
       {/* Tabs + view toggle row */}
       <div className="flex items-end justify-between border-b border-[#EBEBEB]">
         {/* Collection tabs */}
