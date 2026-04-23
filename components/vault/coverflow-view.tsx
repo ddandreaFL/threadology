@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,12 +23,31 @@ interface CoverflowViewProps {
 
 export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }: CoverflowViewProps) {
   const touchStartX = useRef<number | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [stageH, setStageH] = useState(340);
+
+  // Measure stage height and update on resize
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const update = () => setStageH(el.clientHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const safeIndex = Math.min(activeIndex, pieces.length - 1);
   const activePiece = pieces[safeIndex];
   const displayName = activePiece ? (activePiece.name ?? activePiece.type) : "";
   const brandYear = activePiece
     ? [activePiece.brand, activePiece.year].filter(Boolean).join(" · ")
     : "";
+
+  // Cards scale to ~88% of stage height, capped at 440px, portrait 192:272 ratio
+  const cardH = Math.min(Math.round(stageH * 0.88), 440);
+  const cardW = Math.round(cardH * (192 / 272));
+  const translateX = Math.round(cardW * 0.65);
 
   function handleTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
@@ -43,14 +62,14 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
     else if (delta > 0 && safeIndex > 0) onActiveChange(safeIndex - 1);
   }
 
-  // Limit dots to 15 max; show a sliding window centered on active
   const totalDots = Math.min(pieces.length, 15);
   const dotOffset = Math.max(0, Math.min(safeIndex - 7, pieces.length - totalDots));
 
   return (
-    <div className="flex h-full flex-col pb-20 pt-1" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      {/* 3D stage — flex-1 fills available height */}
+    <div className="flex h-full flex-col py-2" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+      {/* 3D stage */}
       <div
+        ref={stageRef}
         className="relative flex-1 overflow-hidden"
         style={{ perspective: "1000px" }}
       >
@@ -59,7 +78,7 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
           if (Math.abs(off) > 2) return null;
 
           const rotateY = off * -48;
-          const translateX = off * 148;
+          const tx = off * translateX;
           const scale = 1 - Math.abs(off) * 0.2;
           const opacity = 1 - Math.abs(off) * 0.32;
           const zIndex = 10 - Math.abs(off) * 2;
@@ -69,12 +88,12 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
 
           const cardStyle: React.CSSProperties = {
             position: "absolute",
-            width: 240,
-            height: 340,
+            width: cardW,
+            height: cardH,
             borderRadius: 14,
-            top: "calc(50% - 170px)",
-            left: "calc(50% - 120px)",
-            transform: `translateX(${translateX}px) rotateY(${rotateY}deg) scale(${scale})`,
+            top: `calc(50% - ${cardH / 2}px)`,
+            left: `calc(50% - ${cardW / 2}px)`,
+            transform: `translateX(${tx}px) rotateY(${rotateY}deg) scale(${scale})`,
             opacity,
             zIndex,
             overflow: "hidden",
@@ -88,7 +107,7 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
               src={piece.photos[0]}
               alt={label}
               fill
-              sizes="240px"
+              sizes={`${cardW}px`}
               className="object-cover"
               style={cropPos ? { objectPosition: `${cropPos.x}% ${cropPos.y}%` } : undefined}
             />
@@ -118,14 +137,14 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
       </div>
 
       {/* Piece info */}
-      <div className="mt-5 text-center">
+      <div className="mt-4 shrink-0 text-center">
         <p className="text-[16px] font-medium text-[#111111]">{displayName}</p>
         <p className="mt-1 text-[12px] text-[#999999]">{brandYear}</p>
       </div>
 
       {/* Dot navigation */}
       {pieces.length > 1 && (
-        <div className="mt-3 flex items-center justify-center gap-[6px]">
+        <div className="mt-3 shrink-0 flex items-center justify-center gap-[6px]">
           {Array.from({ length: totalDots }, (_, i) => {
             const pieceIdx = dotOffset + i;
             const isActiveDot = pieceIdx === safeIndex;
