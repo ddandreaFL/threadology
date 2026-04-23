@@ -78,14 +78,15 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
           if (Math.abs(off) > 4) return null;
 
           const visible = Math.abs(off) <= 2;
-          const rotateY = off * -48;
+          const rotateY = off * -44;
           const tx = off * translateX;
-          const scale = 1 - Math.abs(off) * 0.2;
-          const opacity = visible ? 1 - Math.abs(off) * 0.32 : 0;
+          const scale = 1 - Math.abs(off) * 0.18;
+          const opacity = Math.max(0, 1 - Math.abs(off) * 0.32);
           const zIndex = 10 - Math.abs(off) * 2;
           const isActive = off === 0;
           const cropPos = piece.crop_positions?.["0"];
           const label = piece.name ?? piece.type;
+          const ease = "cubic-bezier(0.4, 0, 0.2, 1)";
 
           const cardStyle: React.CSSProperties = {
             position: "absolute",
@@ -98,10 +99,11 @@ export function CoverflowView({ pieces, basePath, activeIndex, onActiveChange }:
             opacity,
             zIndex,
             overflow: "hidden",
-            transition: "transform 0.38s cubic-bezier(0.25,0.1,0.25,1), opacity 0.38s",
-            boxShadow: isActive ? "0 12px 40px rgba(0,0,0,0.18)" : "none",
+            transition: `transform 0.42s ${ease}, opacity 0.42s ${ease}, box-shadow 0.42s ${ease}`,
+            boxShadow: isActive ? "0 12px 40px rgba(0,0,0,0.18)" : "0 0 0 rgba(0,0,0,0)",
             cursor: visible ? "pointer" : "default",
             pointerEvents: visible ? "auto" : "none",
+            willChange: "transform, opacity",
           };
 
           const content = piece.photos[0] ? (
