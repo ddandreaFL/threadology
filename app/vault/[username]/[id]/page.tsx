@@ -81,7 +81,7 @@ export default async function PublicPiecePage({ params }: Props) {
               {displayName}
             </h1>
             {(piece.year || piece.season) && (
-              <p className="mt-1.5 text-sm text-gray-400">
+              <p className="mt-1.5 font-mono-display text-sm text-gray-400">
                 {[piece.year, piece.season].filter(Boolean).join(" · ")}
               </p>
             )}
@@ -94,7 +94,7 @@ export default async function PublicPiecePage({ params }: Props) {
                   <dt className="font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
                     {f.label}
                   </dt>
-                  <dd className="mt-1 text-sm capitalize text-gray-700">{f.value}</dd>
+                  <dd className="mt-1 font-mono-display text-sm capitalize text-gray-700">{f.value}</dd>
                 </div>
               ))}
             </dl>
