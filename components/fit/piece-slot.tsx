@@ -43,9 +43,9 @@ export function PieceSlot({
         <button
           type="button"
           onClick={onSelect}
-          className="flex w-full items-center gap-3 rounded-xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] px-4 py-3 text-left transition-colors hover:border-[#2D5A45]/40 hover:bg-[#F5F1EA]"
+          className="flex w-full items-center gap-3 rounded-xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] px-4 py-3 text-left transition-colors hover:border-[#2D5A45]/40 hover:bg-gray-50"
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-dashed border-[#C8BFB0] bg-[#F5F1EA]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-dashed border-[#C8BFB0] bg-white">
             <svg className="h-4 w-4 text-[#C8BFB0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
             </svg>
@@ -70,7 +70,7 @@ export function PieceSlot({
       } ${draggable ? "cursor-grab active:cursor-grabbing active:opacity-70" : ""}`}
     >
       {/* Thumbnail */}
-      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-[#E0D8CC] bg-[#F5F1EA]">
+      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-[#E0D8CC] bg-white">
         {coverPhoto ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img

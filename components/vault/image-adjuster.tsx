@@ -163,7 +163,7 @@ export function ImageAdjuster({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] py-2 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
+            className="flex-1 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50"
           >
             Cancel
           </button>

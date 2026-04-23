@@ -205,7 +205,7 @@ export function PhotoUpload({
       <div className="flex flex-col gap-3">
         {/* Primary image */}
         {selectedEntry ? (
-          <div className="group relative aspect-square w-full overflow-hidden rounded-xl border border-[#E0D8CC] bg-[#F5F1EA]">
+          <div className="group relative aspect-square w-full overflow-hidden rounded-xl border border-[#E0D8CC] bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={selectedEntry.preview}
@@ -376,7 +376,7 @@ export function PhotoUpload({
               onDragLeave={handleThumbnailDragLeave}
               onDrop={(e) => handleThumbnailDrop(e, entry.id)}
               onDragEnd={handleDragEnd}
-              className={`group relative aspect-square cursor-grab overflow-hidden rounded-lg border bg-[#F5F1EA] transition-all active:cursor-grabbing active:opacity-50 ${
+              className={`group relative aspect-square cursor-grab overflow-hidden rounded-lg border bg-white transition-all active:cursor-grabbing active:opacity-50 ${
                 dragOverThumbnail === entry.id
                   ? "border-[#2D5A45] ring-2 ring-[#2D5A45]/40 scale-105"
                   : "border-[#E0D8CC]"

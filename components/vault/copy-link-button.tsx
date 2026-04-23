@@ -31,7 +31,7 @@ export function CopyLinkButton({ url, iconOnly = false }: CopyLinkButtonProps) {
         type="button"
         onClick={handleCopy}
         title={copied ? "Copied!" : "Copy link"}
-        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#F5F1EA] hover:text-gray-700"
+        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-700"
       >
         {copied ? (
           <svg className="h-4 w-4 text-[#2D5A45]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,7 +50,7 @@ export function CopyLinkButton({ url, iconOnly = false }: CopyLinkButtonProps) {
     <button
       type="button"
       onClick={handleCopy}
-      className="inline-flex items-center gap-1.5 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-50"
     >
       {copied ? (
         <>

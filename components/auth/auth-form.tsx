@@ -7,7 +7,7 @@ interface AuthFormProps {
 
 export function AuthForm({ title, children }: AuthFormProps) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F5F1EA] px-4">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm rounded-2xl border border-[#E0D8CC] bg-white px-8 py-10 shadow-sm">
         <h1 className="mb-6 text-center text-2xl font-semibold tracking-tight text-gray-900">
           {title}

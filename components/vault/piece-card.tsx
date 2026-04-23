@@ -22,7 +22,7 @@ export function PieceCard({ piece, basePath }: PieceCardProps) {
       className="group block overflow-hidden rounded-xl border border-[#E0D8CC] bg-[#FDFCFA] shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
     >
       {/* Photo */}
-      <div className="relative aspect-square overflow-hidden bg-[#F5F1EA]">
+      <div className="relative aspect-square overflow-hidden bg-white">
         {piece.photos[0] ? (
           <Image
             src={piece.photos[0]}

@@ -105,7 +105,7 @@ export function PieceSelector({
                     }`}
                   >
                     {/* Photo */}
-                    <div className="aspect-square overflow-hidden bg-[#F5F1EA]">
+                    <div className="aspect-square overflow-hidden bg-white">
                       {coverPhoto ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img

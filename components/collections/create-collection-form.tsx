@@ -67,7 +67,7 @@ export function CreateCollectionForm({ disabled }: CreateCollectionFormProps) {
         <button
           type="button"
           onClick={() => { setOpen(false); setError(null); }}
-          className="flex-1 rounded-lg border border-[#E0D8CC] py-2 text-sm text-gray-600 hover:bg-[#F5F1EA]"
+          className="flex-1 rounded-lg border border-[#E0D8CC] py-2 text-sm text-gray-600 hover:bg-gray-50"
         >
           Cancel
         </button>

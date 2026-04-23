@@ -185,7 +185,7 @@ export function FitForm({ userId, username, pieces }: FitFormProps) {
           <button
             type="button"
             onClick={handleAddSlot}
-            className="flex items-center gap-1.5 self-start rounded-md px-2 py-1.5 text-sm text-gray-400 transition-colors hover:bg-[#F5F1EA] hover:text-gray-600"
+            className="flex items-center gap-1.5 self-start rounded-md px-2 py-1.5 text-sm text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -249,7 +249,7 @@ export function FitForm({ userId, username, pieces }: FitFormProps) {
         {/* ── Preview URL ── */}
         <section className="flex flex-col gap-2">
           <p className="text-xs text-gray-400 uppercase tracking-widest font-mono-display">Your fit will be live at</p>
-          <p className="break-all rounded-lg border border-[#E0D8CC] bg-[#F5F1EA] px-3 py-2 font-mono-display text-xs text-gray-500">
+          <p className="break-all rounded-lg border border-[#E0D8CC] bg-white px-3 py-2 font-mono-display text-xs text-gray-500">
             threadology.vercel.app/fit/{username}/{slug}
           </p>
         </section>

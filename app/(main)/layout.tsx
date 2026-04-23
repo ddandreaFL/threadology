@@ -15,8 +15,8 @@ export default async function MainLayout({
   const isPremium = profile?.is_premium ?? false;
 
   return (
-    <div className="min-h-screen bg-[#F5F1EA]">
-      <header className="sticky top-0 z-40 bg-[#F5F1EA]/90 backdrop-blur-sm">
+    <div className="min-h-screen bg-white">
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
           <Link
             href="/vault"

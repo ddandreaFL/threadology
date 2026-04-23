@@ -29,14 +29,14 @@ export function VaultFAB() {
           <Link
             href="/vault/add"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2 rounded-full border border-[#E0D8CC] bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-[#F5F1EA]"
+            className="flex items-center gap-2 rounded-full border border-[#E0D8CC] bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-gray-50"
           >
             Add a piece
           </Link>
           <Link
             href="/collections"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2 rounded-full border border-[#E0D8CC] bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-[#F5F1EA]"
+            className="flex items-center gap-2 rounded-full border border-[#E0D8CC] bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-md transition-colors hover:bg-gray-50"
           >
             Create a collection
           </Link>

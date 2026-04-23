@@ -250,7 +250,7 @@ export function PhotoUploadWithCrop({
         <div className="flex flex-col gap-2">
           <div
             ref={cropRef}
-            className={`relative aspect-square w-full overflow-hidden rounded-xl border border-[#E0D8CC] bg-[#F5F1EA] ${
+            className={`relative aspect-square w-full overflow-hidden rounded-xl border border-[#E0D8CC] bg-white ${
               focused.uploading
                 ? "cursor-wait"
                 : "cursor-grab touch-none select-none active:cursor-grabbing"
@@ -322,7 +322,7 @@ export function PhotoUploadWithCrop({
               type="button"
               onClick={handleRecenter}
               disabled={focused.uploading}
-              className="flex items-center gap-1.5 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1.5 font-mono-display text-xs text-gray-500 transition-colors hover:bg-[#F5F1EA] disabled:opacity-40"
+              className="flex items-center gap-1.5 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1.5 font-mono-display text-xs text-gray-500 transition-colors hover:bg-gray-50 disabled:opacity-40"
             >
               <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path

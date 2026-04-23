@@ -79,28 +79,28 @@ export function UserMenu({ username, avatarUrl, isPremium }: UserMenuProps) {
             <Link
               href="/vault"
               onClick={() => setOpen(false)}
-              className="px-4 py-2 text-sm text-gray-700 hover:bg-[#F5F1EA]"
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
               Your Vault
             </Link>
             <Link
               href="/fit/new"
               onClick={() => setOpen(false)}
-              className="px-4 py-2 text-sm text-gray-700 hover:bg-[#F5F1EA]"
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
               Log a Fit
             </Link>
             <Link
               href="/collections"
               onClick={() => setOpen(false)}
-              className="px-4 py-2 text-sm text-gray-700 hover:bg-[#F5F1EA]"
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
               Collections
             </Link>
             <Link
               href="/settings"
               onClick={() => setOpen(false)}
-              className="px-4 py-2 text-sm text-gray-700 hover:bg-[#F5F1EA]"
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
               Settings
             </Link>
@@ -110,7 +110,7 @@ export function UserMenu({ username, avatarUrl, isPremium }: UserMenuProps) {
             <form action={signOut}>
               <button
                 type="submit"
-                className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-[#F5F1EA]"
+                className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
               >
                 Sign Out
               </button>

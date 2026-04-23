@@ -106,7 +106,7 @@ export function PublicVaultHeader({
             <Link
               href="/settings"
               title="Edit profile"
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-[#F5F1EA] hover:text-gray-700"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-700"
             >
               <svg
                 className="h-4 w-4"

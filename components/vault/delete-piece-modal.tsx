@@ -62,7 +62,7 @@ export function DeletePieceModal({ pieceId, pieceName }: DeletePieceModalProps) 
                 type="button"
                 onClick={() => setOpen(false)}
                 disabled={deleting}
-                className="flex-1 rounded-lg border border-[#E0D8CC] bg-white px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA] disabled:opacity-50"
+                className="flex-1 rounded-lg border border-[#E0D8CC] bg-white px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
               >
                 Cancel
               </button>

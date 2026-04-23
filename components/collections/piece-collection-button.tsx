@@ -15,7 +15,7 @@ export function PieceCollectionButton({ pieceId, collections }: PieceCollectionB
     <>
       <button
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
+        className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50"
       >
         Collections
       </button>

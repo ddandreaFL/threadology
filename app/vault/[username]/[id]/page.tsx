@@ -124,7 +124,7 @@ export default async function PublicPiecePage({ params }: Props) {
             <div className="mt-4 flex items-center gap-3 border-t border-[#E0D8CC] pt-6">
               <Link
                 href={`/vault/${params.username}/${piece.id}/edit`}
-                className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
+                className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50"
               >
                 Edit
               </Link>

@@ -240,7 +240,7 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
       <div className="flex gap-3">
         <Link
           href={backHref}
-          className="flex-1 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2.5 text-center text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
+          className="flex-1 rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-4 py-2.5 text-center text-sm text-gray-600 transition-colors hover:bg-gray-50"
         >
           Cancel
         </Link>

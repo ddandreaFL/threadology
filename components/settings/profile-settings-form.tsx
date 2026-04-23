@@ -121,7 +121,7 @@ export function ProfileSettingsForm({
               type="button"
               onClick={() => fileRef.current?.click()}
               disabled={uploading}
-              className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1.5 font-mono-display text-xs text-gray-600 transition-colors hover:bg-[#F5F1EA] disabled:opacity-50"
+              className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-1.5 font-mono-display text-xs text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
             >
               {uploading ? "Uploading…" : "Change photo"}
             </button>

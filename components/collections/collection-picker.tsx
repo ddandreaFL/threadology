@@ -65,7 +65,7 @@ export function CollectionPicker({ pieceId, collections, onClose }: CollectionPi
               <button
                 key={collection.id}
                 onClick={() => toggle(collection.id)}
-                className="flex w-full items-center justify-between rounded-lg border border-[#E0D8CC] bg-white px-3 py-2.5 text-sm text-gray-700 transition-colors hover:bg-[#F5F1EA]"
+                className="flex w-full items-center justify-between rounded-lg border border-[#E0D8CC] bg-white px-3 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
               >
                 <span>{collection.name}</span>
                 {selected.includes(collection.id) && (
@@ -79,7 +79,7 @@ export function CollectionPicker({ pieceId, collections, onClose }: CollectionPi
         <div className="mt-5 flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 rounded-lg border border-[#E0D8CC] bg-white px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-[#F5F1EA]"
+            className="flex-1 rounded-lg border border-[#E0D8CC] bg-white px-4 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50"
           >
             Cancel
           </button>

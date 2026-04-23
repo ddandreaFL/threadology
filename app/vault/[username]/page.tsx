@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
@@ -24,6 +23,7 @@ type Piece = {
   estimated_value: number | null;
   created_at: string;
   updated_at: string;
+  collectionIds: string[];
 };
 
 async function getVaultData(username: string) {
@@ -39,22 +39,29 @@ async function getVaultData(username: string) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any;
-  const [piecesResult, collectionsResult] = await Promise.all([
+  const [piecesResult, collectionsResult, membershipsResult] = await Promise.all([
     supabase
       .from("pieces")
       .select("id, brand, type, name, year, photos, crop_positions, estimated_value, created_at, updated_at")
       .eq("user_id", profile.id)
       .order("created_at", { ascending: false }),
-    db
-      .from("collections")
-      .select("id, name, slug")
-      .eq("user_id", profile.id)
-      .order("position"),
+    db.from("collections").select("id, name, slug").eq("user_id", profile.id).order("position"),
+    db.from("pieces").select("id, collection_pieces(collection_id)").eq("user_id", profile.id),
   ]);
+
+  const membershipMap: Record<string, string[]> = {};
+  for (const p of (membershipsResult.data ?? [])) {
+    membershipMap[p.id] = (p.collection_pieces ?? []).map((cp: { collection_id: string }) => cp.collection_id);
+  }
+
+  const pieces = (piecesResult.data ?? []).map((p: Omit<Piece, "collectionIds">) => ({
+    ...p,
+    collectionIds: membershipMap[p.id] ?? [],
+  })) as Piece[];
 
   return {
     profile,
-    pieces: (piecesResult.data ?? []) as Piece[],
+    pieces,
     collections: (collectionsResult.data ?? []) as { id: string; name: string; slug: string }[],
   };
 }
@@ -97,26 +104,6 @@ export default async function PublicVaultPage({ params }: Props) {
         <UpgradeSuccessToast />
       </Suspense>
 
-      {collections.length > 0 && (
-        <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
-          <Link
-            href={`/vault/${profile.username}`}
-            className="shrink-0 rounded-full bg-[#2D5A45] px-3 py-1 text-sm text-white"
-          >
-            All
-          </Link>
-          {collections.map((c) => (
-            <Link
-              key={c.id}
-              href={`/vault/${profile.username}/c/${c.slug}`}
-              className="shrink-0 rounded-full border border-[#E0D8CC] px-3 py-1 text-sm text-gray-600 hover:border-[#2D5A45] hover:text-[#2D5A45] transition-colors whitespace-nowrap"
-            >
-              {c.name}
-            </Link>
-          ))}
-        </div>
-      )}
-
       {pieces.length === 0 ? (
         isOwner ? (
           <EmptyVault />
@@ -126,7 +113,11 @@ export default async function PublicVaultPage({ params }: Props) {
           </div>
         )
       ) : (
-        <VaultClient pieces={pieces} basePath={`/vault/${profile.username}`} />
+        <VaultClient
+          pieces={pieces}
+          collections={collections}
+          basePath={`/vault/${profile.username}`}
+        />
       )}
 
       {isOwner && <VaultFAB />}
