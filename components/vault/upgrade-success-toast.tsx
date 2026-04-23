@@ -37,7 +37,7 @@ export function UpgradeSuccessToast() {
           </svg>
         </div>
 
-        <h2 className="font-serif text-2xl text-gray-900">Welcome to Premium</h2>
+        <h2 className="font-mono-display text-2xl text-gray-900">Welcome to Premium</h2>
         <p className="mt-2 text-sm text-gray-500">
           Your vault is now unlimited. Document your entire wardrobe with no ceiling.
         </p>

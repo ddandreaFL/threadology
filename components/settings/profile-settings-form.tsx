@@ -86,7 +86,7 @@ export function ProfileSettingsForm({
               />
             ) : (
               <div className="flex h-16 w-16 items-center justify-center rounded-full border border-[#E0D8CC] bg-[#2D5A45]/10">
-                <span className="font-serif text-xl text-[#2D5A45]">
+                <span className="font-mono-display text-xl text-[#2D5A45]">
                   {initial}
                 </span>
               </div>

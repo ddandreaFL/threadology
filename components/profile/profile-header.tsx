@@ -28,11 +28,11 @@ export function ProfileHeader({
         />
       ) : (
         <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-[#E0D8CC] bg-[#2D5A45]/10">
-          <span className="font-serif text-3xl text-[#2D5A45]">{initial}</span>
+          <span className="font-mono-display text-3xl text-[#2D5A45]">{initial}</span>
         </div>
       )}
 
-      <h1 className="font-serif text-2xl text-gray-900">@{username}</h1>
+      <h1 className="font-mono-display text-2xl text-gray-900">@{username}</h1>
       <p className="mt-1 font-mono-display text-xs text-gray-400">
         Joined {joinDate}
       </p>

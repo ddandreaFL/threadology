@@ -51,7 +51,7 @@ export function CollectionPicker({ pieceId, collections, onClose }: CollectionPi
         className="relative w-full max-w-sm rounded-2xl border border-[#E0D8CC] bg-[#FDFCFA] p-6 shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="font-serif text-lg text-gray-900">Add to Collection</h3>
+        <h3 className="font-mono-display text-lg text-gray-900">Add to Collection</h3>
 
         <div className="mt-4 space-y-2">
           {loading ? (

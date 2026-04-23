@@ -107,7 +107,7 @@ export function AddPieceForm({ userId, frequentBrands }: AddPieceFormProps) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
       {/* ── Section 1: Photos ── */}
       <section>
-        <h2 className="mb-4 font-serif text-xl text-gray-900">Photos</h2>
+        <h2 className="mb-4 font-mono-display text-xl text-gray-900">Photos</h2>
         <PhotoUploadWithCrop
           userId={userId}
           photos={form.photos}
@@ -121,7 +121,7 @@ export function AddPieceForm({ userId, frequentBrands }: AddPieceFormProps) {
 
       {/* ── Section 2: Metadata ── */}
       <section className="flex flex-col gap-5">
-        <h2 className="font-serif text-xl text-gray-900">Details</h2>
+        <h2 className="font-mono-display text-xl text-gray-900">Details</h2>
 
         {/* Brand with chips */}
         <BrandInput

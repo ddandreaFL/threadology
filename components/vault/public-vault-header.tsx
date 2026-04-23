@@ -81,7 +81,7 @@ export function PublicVaultHeader({
             />
           ) : (
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#E0D8CC] bg-[#2D5A45]/10">
-              <span className="font-serif text-base text-[#2D5A45]">
+              <span className="font-mono-display text-base text-[#2D5A45]">
                 {initial}
               </span>
             </div>
@@ -89,7 +89,7 @@ export function PublicVaultHeader({
 
           {/* Username + meta */}
           <div>
-            <p className="font-serif text-xl leading-tight text-gray-900">
+            <p className="font-mono-display text-xl leading-tight text-gray-900">
               @{profile.username}
             </p>
             <p className="mt-0.5 font-mono-display text-[11px] text-gray-400">

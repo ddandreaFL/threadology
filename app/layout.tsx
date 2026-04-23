@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${cormorant.variable} ${geistMono.variable} antialiased`}
+        className={`${dmSans.variable} ${cormorant.variable} ${geistMono.variable} font-mono-display antialiased`}
       >
         <PageTransition>{children}</PageTransition>
       </body>

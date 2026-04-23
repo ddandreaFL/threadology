@@ -105,7 +105,7 @@ export default async function PublicPiecePage({ params }: Props) {
               <p className="font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
                 Story
               </p>
-              <blockquote className="mt-3 border-l-2 border-[#2D5A45] pl-4 text-base italic leading-relaxed text-gray-600">
+              <blockquote className="mt-3 border-l-2 border-[#2D5A45] pl-4 text-base leading-relaxed text-gray-600">
                 {piece.story}
               </blockquote>
             </div>

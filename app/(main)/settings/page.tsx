@@ -12,7 +12,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-lg pb-24">
-      <h1 className="font-serif text-2xl text-gray-900">Settings</h1>
+      <h1 className="font-mono-display text-2xl text-gray-900">Settings</h1>
       <p className="mt-1 font-mono-display text-xs text-gray-400">
         @{profile?.username} &middot; {user.email}
       </p>

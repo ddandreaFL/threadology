@@ -61,7 +61,7 @@ export default async function CollectionPage({ params }: Props) {
       </Link>
 
       <div className="mb-6">
-        <h1 className="font-serif text-2xl text-gray-900">{collection.name}</h1>
+        <h1 className="font-mono-display text-2xl text-gray-900">{collection.name}</h1>
         {collection.description && (
           <p className="mt-1 text-sm text-gray-500">{collection.description}</p>
         )}

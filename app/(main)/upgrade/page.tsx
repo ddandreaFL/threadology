@@ -61,7 +61,7 @@ export default function UpgradePage() {
         <p className="font-mono-display text-xs uppercase tracking-widest text-[#2D5A45]">
           Threadology Premium
         </p>
-        <h1 className="mt-3 font-serif text-3xl text-gray-900">
+        <h1 className="mt-3 font-mono-display text-3xl text-gray-900">
           Upgrade your archive
         </h1>
         <p className="mt-3 text-sm text-gray-500">
