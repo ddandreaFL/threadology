@@ -32,9 +32,9 @@ export function SlideOverMenu({ open, onClose, username, userId }: SlideOverMenu
     if (!open || stats) return;
     async function load() {
       const [{ count: pieces }, { count: collections }, { data: userData }] = await Promise.all([
-        (supabase as any).from("pieces").select("id", { count: "exact", head: true }).eq("user_id", userId),
-        (supabase as any).from("collections").select("id", { count: "exact", head: true }).eq("user_id", userId),
-        (supabase as any).from("users").select("created_at").eq("id", userId).single(),
+        supabase.from("pieces").select("id", { count: "exact", head: true }).eq("user_id", userId),
+        supabase.from("collections").select("id", { count: "exact", head: true }).eq("user_id", userId),
+        supabase.from("users").select("created_at").eq("id", userId).single(),
       ]);
       setStats({
         pieceCount: pieces ?? 0,
