@@ -94,6 +94,7 @@ export default async function PublicVaultPage({ params }: Props) {
 
   const { profile, pieces, collections } = data;
   const isOwner = viewer?.id === profile.id;
+  const isGuest = !viewer;
 
   return (
     <div className="pb-24">
@@ -105,8 +106,8 @@ export default async function PublicVaultPage({ params }: Props) {
         isOwner ? (
           <EmptyVault />
         ) : (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-24 text-center">
-            <p className="text-lg text-gray-500">This vault is empty.</p>
+          <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#EBEBEB] py-24 text-center">
+            <p className="text-[13px] text-[#999999]">this vault is empty</p>
           </div>
         )
       ) : (
@@ -117,6 +118,37 @@ export default async function PublicVaultPage({ params }: Props) {
           isOwner={isOwner}
         />
       )}
+
+      {isGuest && <GuestCTA username={profile.username} pieceCount={pieces.length} />}
+    </div>
+  );
+}
+
+function GuestCTA({ username, pieceCount }: { username: string; pieceCount: number }) {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50">
+      {/* Fade gradient */}
+      <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+
+      <div className="bg-white px-4 pb-8 pt-2">
+        <div
+          className="mx-auto flex max-w-sm flex-col items-center gap-3 rounded-[24px] bg-[#1A1A1A] px-6 py-5"
+          style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.18)" }}
+        >
+          <p className="text-center text-[13px] text-white/60">
+            @{username} documents their wardrobe on threadology
+          </p>
+          <a
+            href="/signup"
+            className="w-full rounded-[30px] bg-white py-3 text-center text-[15px] font-medium text-[#1A1A1A] transition-opacity hover:opacity-80"
+          >
+            start your vault →
+          </a>
+          <a href="/login" className="text-[13px] text-white/40 hover:text-white/70 transition-colors">
+            log in
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
