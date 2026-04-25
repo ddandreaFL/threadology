@@ -30,6 +30,26 @@ export default async function SettingsPage() {
           username={profile?.username ?? user.email ?? "?"}
         />
       </div>
+
+      <div className="mt-8 border-t border-[#EBEBEB] pt-6">
+        <p className="mb-5 text-[10px] uppercase tracking-[0.12em] text-[#999999]">legal</p>
+        <div className="flex flex-col gap-1">
+          {[
+            { label: "privacy policy", href: "/legal/privacy" },
+            { label: "terms of service", href: "/legal/terms" },
+            { label: "security", href: "/legal/security" },
+          ].map(({ label, href }) => (
+            <a
+              key={href}
+              href={href}
+              className="flex items-center justify-between py-4 border-b border-[#EBEBEB] text-[15px] font-medium text-[#111111] hover:text-[#999999] transition-colors"
+            >
+              {label}
+              <span className="text-[18px] text-[#CCCCCC]">›</span>
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
