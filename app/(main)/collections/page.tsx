@@ -37,7 +37,7 @@ export default async function CollectionsPage() {
       {!isPremium && (
         <p className="mt-2 text-[12px] text-[#999999]">
           {collectionCount} of {FREE_COLLECTION_LIMIT} ·{" "}
-          <Link href="/upgrade" className="text-[#2D5A45]">
+          <Link href="/upgrade" className="text-[#111111] underline">
             upgrade for unlimited →
           </Link>
         </p>

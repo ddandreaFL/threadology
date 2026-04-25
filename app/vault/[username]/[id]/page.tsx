@@ -107,7 +107,7 @@ export default async function PublicPiecePage({ params }: Props) {
           {piece.story && (
             <div className="mt-5 pt-1">
               <p className="mb-[10px] text-[11px] text-[#999999]">story</p>
-              <blockquote className="border-l-2 border-[#2D5A45] pl-[14px] text-[14px] leading-[1.8] text-[#444444]">
+              <blockquote className="text-[14px] leading-[1.8] text-[#444444]">
                 {piece.story}
               </blockquote>
             </div>
@@ -144,7 +144,7 @@ export default async function PublicPiecePage({ params }: Props) {
 
       {/* Floating action bar — owner only */}
       {isOwner && (
-        <div className="fixed bottom-5 left-1/2 flex h-[52px] w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center justify-between rounded-[30px] bg-[#1A1A1A] px-4 shadow-[0_4px_16px_rgba(45,90,69,0.30)]">
+        <div className="fixed bottom-5 left-1/2 flex h-[52px] w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 items-center justify-between rounded-[30px] bg-[#1A1A1A] px-4 shadow-[0_4px_20px_rgba(0,0,0,0.18)]">
           <div className="flex min-w-0 items-center gap-3">
             {thumbPhoto ? (
               <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-md">

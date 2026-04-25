@@ -7,9 +7,9 @@ interface AuthFormProps {
 
 export function AuthForm({ title, children }: AuthFormProps) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-[#E0D8CC] bg-white px-8 py-10 shadow-sm">
-        <h1 className="mb-6 text-center text-2xl font-semibold tracking-tight text-gray-900">
+    <div className="flex min-h-screen items-center justify-center bg-white px-6">
+      <div className="w-full max-w-sm">
+        <h1 className="mb-8 text-[22px] font-medium tracking-[-0.02em] text-[#111111]">
           {title}
         </h1>
         {children}
@@ -41,8 +41,8 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium text-gray-700">
-        {label}
+      <label htmlFor={id} className="text-[11px] text-[#999999]">
+        {label.toLowerCase()}
       </label>
       <input
         id={id}
@@ -51,9 +51,9 @@ export function FormField({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className="rounded-lg border border-[#E0D8CC] bg-[#FDFCFA] px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-colors focus:border-[#2D5A45] focus:ring-2 focus:ring-[#2D5A45]/20"
+        className="w-full border-b border-[#E8E8E8] bg-transparent pb-2 pt-1 text-[15px] text-[#111111] outline-none placeholder:text-[#C8C8C8] transition-colors focus:border-[#111111]"
       />
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-[12px] text-red-500">{error}</p>}
     </div>
   );
 }
@@ -69,7 +69,7 @@ export function SubmitButton({ label, loadingLabel, isLoading }: SubmitButtonPro
     <button
       type="submit"
       disabled={isLoading}
-      className="w-full rounded-lg bg-[#2D5A45] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1E3D2F] disabled:cursor-not-allowed disabled:opacity-60"
+      className="w-full rounded-[30px] bg-[#1A1A1A] py-[17px] text-[15px] font-medium text-white transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
     >
       {isLoading ? loadingLabel : label}
     </button>

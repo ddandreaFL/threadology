@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threadology — Nav Concepts</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html,body { height:100%; overflow:hidden; }
+    ::-webkit-scrollbar { display:none; }
+    .slide-container { position:fixed; inset:0; display:flex; width:200%; transition:transform 0.55s cubic-bezier(0.77,0,0.18,1); }
+    .slide-container.entered { transform:translateX(-50%); }
+    .slide-panel { width:50%; height:100%; flex-shrink:0; }
+  </style>
+</head>
+<body>
+<div id="root" style="height:100vh"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+
+const HN = '"Helvetica Neue", Helvetica, Arial, sans-serif';
+const T = { bg:'#FFFFFF', text:'#111111', muted:'#999999', accent:'#2D5A45', dark:'#1A1A1A', border:'#EBEBEB', faint:'#F5F5F5' };
+
+// ── LANDING PAGE ───────────────────────────────────────────────
+const PIECE_COLORS = [
+  ['#8B7A65','#5C4E3A'], ['#4A6B8A','#2D4F6B'], ['#2E2C2A','#181614'],
+  ['#6B8A5E','#3D5C32'], ['#7A2F2F','#4F1A1A'],
+];
+function Landing({ onEnter }) {
+  const [hovered, setHovered] = React.useState(false);
+  return (
+    <div style={{ width:'100%', height:'100%', background:T.bg, display:'flex', flexDirection:'column', fontFamily:HN, position:'relative', overflow:'hidden' }}>
+      {/* Decorative piece grid — top right */}
+      <div style={{ position:'absolute', top:-30, right:-30, display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:6, opacity:0.12, transform:'rotate(8deg)', width:260 }}>
+        {[...Array(12)].map((_,i) => {
+          const [c1,c2] = PIECE_COLORS[i % PIECE_COLORS.length];
+          return <div key={i} style={{ height:100, borderRadius:8, background:`linear-gradient(150deg,${c1},${c2})` }} />;
+        })}
+      </div>
+      {/* Decorative piece grid — bottom left */}
+      <div style={{ position:'absolute', bottom:-40, left:-40, display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:6, opacity:0.08, transform:'rotate(-6deg)', width:240 }}>
+        {[...Array(9)].map((_,i) => {
+          const [c1,c2] = PIECE_COLORS[(i+2) % PIECE_COLORS.length];
+          return <div key={i} style={{ height:90, borderRadius:8, background:`linear-gradient(150deg,${c1},${c2})` }} />;
+        })}
+      </div>
+
+      {/* Content */}
+      <div style={{ flex:1, display:'flex', flexDirection:'column', justifyContent:'center', padding:'0 64px', maxWidth:680 }}>
+        {/* Eyebrow */}
+        <p style={{ fontSize:11, fontWeight:600, letterSpacing:'0.14em', textTransform:'uppercase', color:T.accent, marginBottom:20 }}>Threadology · Navigation Exploration</p>
+
+        {/* Title */}
+        <h1 style={{ fontSize:56, fontWeight:500, letterSpacing:'-0.03em', color:T.text, lineHeight:1.05, marginBottom:24 }}>
+          where does<br />navigation live<br />when the bottom<br />is sacred?
+        </h1>
+
+        {/* Description */}
+        <p style={{ fontSize:17, color:T.muted, lineHeight:1.75, maxWidth:460, marginBottom:48 }}>
+          Three concepts for moving vault, collections, profile, and settings out of the tab bar — keeping <span style={{ color:T.text, fontWeight:500 }}>add +</span> as the only persistent bottom action.
+        </p>
+
+        {/* CTA */}
+        <button
+          onClick={onEnter}
+          onMouseEnter={()=>setHovered(true)}
+          onMouseLeave={()=>setHovered(false)}
+          style={{ display:'inline-flex', alignItems:'center', gap:10, background:hovered?'#2a2a2a':T.dark, border:'none', borderRadius:30, padding:'16px 32px', fontFamily:HN, fontSize:15, fontWeight:500, color:'white', cursor:'pointer', transition:'background 0.15s, transform 0.15s', transform:hovered?'translateY(-1px)':'none', width:'fit-content' }}
+        >
+          view concepts
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      {/* Concept index — bottom right */}
+      <div style={{ position:'absolute', bottom:40, right:48, display:'flex', flexDirection:'column', gap:10, alignItems:'flex-end' }}>
+        {['01 · avatar sheet','02 · inline collections','03 · contextual overlay'].map((c,i) => (
+          <div key={i} style={{ display:'flex', alignItems:'center', gap:10 }}>
+            <p style={{ fontSize:12, color:T.muted }}>{c}</p>
+            <div style={{ width:24, height:1, background:T.border }} />
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom bar */}
+      <div style={{ position:'absolute', bottom:0, left:0, right:0, height:1, background:T.border }} />
+      <div style={{ position:'absolute', bottom:0, left:48, padding:'0 0 16px', display:'flex', gap:24 }}>
+        <p style={{ fontSize:11, color:T.muted }}>April 2026</p>
+        <p style={{ fontSize:11, color:T.muted }}>Direction A — Minimal</p>
+      </div>
+    </div>
+  );
+}
+
+function Root() {
+  const [entered, setEntered] = React.useState(false);
+  return (
+    <div className={`slide-container${entered?' entered':''}`}>
+      {/* Panel 1: Landing */}
+      <div className="slide-panel">
+        <Landing onEnter={()=>setEntered(true)} />
+      </div>
+      {/* Panel 2: Canvas */}
+      <div className="slide-panel" style={{ position:'relative' }}>
+        {/* Back button */}
+        {entered && (
+          <button onClick={()=>setEntered(false)} style={{ position:'absolute', top:20, left:20, zIndex:1000, background:'white', border:`1px solid ${T.border}`, borderRadius:20, padding:'7px 16px', fontFamily:HN, fontSize:12, color:T.muted, cursor:'pointer', display:'flex', alignItems:'center', gap:6, boxShadow:'0 2px 8px rgba(0,0,0,0.08)' }}>
+            <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M19 12H5M5 12l7-7M5 12l7 7" stroke={T.muted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            back
+          </button>
+        )}
+        <CanvasContent />
+      </div>
+    </div>
+  );
+}
+
+// ── SHARED PIECES DATA ─────────────────────────────────────────
+const PIECES = [
+  { id:1, brand:'timberland', name:'multicolored weathergear polo', year:'1994', c1:'#6B8A5E', c2:'#3D5C32' },
+  { id:2, brand:'comme des garçons', name:'asymmetric wool coat', year:'1994', c1:'#8B7A65', c2:'#5C4E3A' },
+  { id:3, brand:'helmut lang', name:'archive trousers', year:'1996', c1:'#2E2C2A', c2:'#181614' },
+  { id:4, brand:'issey miyake', name:'pleats please blouse', year:'1998', c1:'#4A6B8A', c2:'#2D4F6B' },
+  { id:5, brand:'yohji yamamoto', name:'draped linen dress', year:'2001', c1:'#4A4540', c2:'#28221E' },
+];
+const COLS = ['timberland tees', 'japanese avant-garde', '90s coats'];
+
+function Photo({ piece, style }) {
+  return <div style={{ background:`linear-gradient(150deg,${piece.c1} 20%,${piece.c2} 100%)`, ...style }} />;
+}
+
+// ── SHARED PRIMITIVES ──────────────────────────────────────────
+const SearchSvg = () => (
+  <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="7" stroke={T.muted} strokeWidth="1.8"/>
+    <path d="m16.5 16.5 3.5 3.5" stroke={T.muted} strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+const ChevronRight = ({ color=T.muted }) => (
+  <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+    <path d="M9 18l6-6-6-6" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const XIcon = () => (
+  <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+    <path d="M18 6L6 18M6 6l12 12" stroke={T.muted} strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
+
+function StatusBar() {
+  return (
+    <div style={{ height:50, display:'flex', alignItems:'flex-end', justifyContent:'space-between', padding:'0 20px 8px', flexShrink:0, fontFamily:HN }}>
+      <span style={{ fontSize:15, fontWeight:600, color:T.text }}>10:13</span>
+      <div style={{ display:'flex', gap:5, alignItems:'center' }}>
+        {[...Array(3)].map((_,i) => <div key={i} style={{ width:4, height:4, borderRadius:'50%', background:T.text, opacity:0.2+i*0.3 }}/>)}
+      </div>
+    </div>
+  );
+}
+
+function AddPill() {
+  return (
+    <div style={{ position:'absolute', bottom:28, left:0, right:0, display:'flex', justifyContent:'center', zIndex:20 }}>
+      <div style={{ background:T.dark, borderRadius:30, height:50, padding:'0 32px', display:'flex', alignItems:'center', boxShadow:'0 4px 20px rgba(0,0,0,0.18)' }}>
+        <span style={{ fontFamily:HN, fontSize:15, fontWeight:500, color:'white' }}>add +</span>
+      </div>
+    </div>
+  );
+}
+
+// Mini coverflow for vault screens
+function MiniCoverflow({ active, setActive }) {
+  const CW = 164, CH = 230, cx = 195;
+  function getS(i) {
+    const off = i - active, abs = Math.abs(off);
+    if (abs > 2) return null;
+    return { tx: off*102, ry: off*-44, sc: 1-abs*0.2, op: 1-abs*0.32, z: 10-abs*2 };
+  }
+  return (
+    <div style={{ flex:1, position:'relative', perspective:'900px', overflow:'hidden' }}>
+      {PIECES.map((p,i) => {
+        const s = getS(i); if(!s) return null;
+        return (
+          <div key={p.id} onClick={()=>setActive(i)} style={{ position:'absolute', top:`calc(50% - ${CH/2}px)`, left:cx-CW/2, width:CW, height:CH, borderRadius:12, overflow:'hidden', cursor:i!==active?'pointer':'default', transform:`translateX(${s.tx}px) rotateY(${s.ry}deg) scale(${s.sc})`, transition:'transform 0.35s cubic-bezier(0.25,0.1,0.25,1),opacity 0.35s', zIndex:s.z, opacity:s.op, boxShadow:i===active?'0 10px 32px rgba(0,0,0,0.16)':'none' }}>
+            <Photo piece={p} style={{ width:'100%', height:'100%' }} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function PieceMeta({ active }) {
+  const p = PIECES[active];
+  return (
+    <div style={{ textAlign:'center', padding:'0 20px 14px', flexShrink:0, fontFamily:HN }}>
+      <p style={{ fontSize:15, fontWeight:500, color:T.text }}>{p.name}</p>
+      <p style={{ fontSize:12, color:T.muted, marginTop:3 }}>{p.brand} · {p.year}</p>
+      <div style={{ display:'flex', justifyContent:'center', gap:5, marginTop:10 }}>
+        {PIECES.map((_,i) => <button key={i} onClick={()=>{}} style={{ width:i===active?16:5, height:5, borderRadius:3, background:i===active?T.text:'#DEDEDE', border:'none', cursor:'pointer', padding:0, transition:'width 0.2s' }}/>)}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONCEPT 1 — AVATAR SHEET
+// Avatar in top right → bottom sheet slides up with all secondary nav
+// Search icon stays in top bar
+// ═══════════════════════════════════════════════════════════════
+
+function C1Vault() {
+  const [active, setActive] = React.useState(0);
+  const [chip, setChip] = React.useState(0);
+  const chips = ['all', ...COLS];
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      {/* Top nav */}
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>vault</span>
+        <div style={{ display:'flex', gap:18, alignItems:'center' }}>
+          <SearchSvg />
+          {/* Avatar — the only gateway to secondary nav */}
+          <div style={{ width:30, height:30, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+            <span style={{ color:'white', fontSize:12, fontWeight:600 }}>d</span>
+          </div>
+        </div>
+      </div>
+      {/* Collection chips */}
+      <div style={{ display:'flex', gap:6, padding:'8px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {chips.map((c,i) => (
+          <button key={c} onClick={()=>setChip(i)} style={{ border:chip===i?'none':`1px solid ${T.border}`, background:chip===i?T.dark:'transparent', color:chip===i?'white':T.muted, fontFamily:HN, fontSize:12, padding:'5px 13px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>{c}</button>
+        ))}
+      </div>
+      <div style={{ height:1, background:T.border, margin:'10px 0 0', flexShrink:0 }} />
+      {/* Coverflow */}
+      <div style={{ flex:1, display:'flex', flexDirection:'column', paddingBottom:80 }}>
+        <MiniCoverflow active={active} setActive={setActive} />
+        <PieceMeta active={active} />
+      </div>
+      <AddPill />
+    </div>
+  );
+}
+
+function C1SheetOpen() {
+  const [active, setActive] = React.useState(0);
+  const [chip, setChip] = React.useState(0);
+  const chips = ['all', ...COLS];
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>vault</span>
+        <div style={{ display:'flex', gap:18, alignItems:'center' }}>
+          <SearchSvg />
+          <div style={{ width:30, height:30, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:'white', fontSize:12, fontWeight:600 }}>d</span>
+          </div>
+        </div>
+      </div>
+      <div style={{ display:'flex', gap:6, padding:'8px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {chips.map((c,i) => (
+          <button key={c} onClick={()=>setChip(i)} style={{ border:chip===i?'none':`1px solid ${T.border}`, background:chip===i?T.dark:'transparent', color:chip===i?'white':T.muted, fontFamily:HN, fontSize:12, padding:'5px 13px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>{c}</button>
+        ))}
+      </div>
+      <div style={{ height:1, background:T.border, margin:'10px 0 0', flexShrink:0 }} />
+      <div style={{ flex:1, display:'flex', flexDirection:'column', paddingBottom:80 }}>
+        <MiniCoverflow active={active} setActive={setActive} />
+        <PieceMeta active={active} />
+      </div>
+      <AddPill />
+
+      {/* Scrim */}
+      <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.24)', zIndex:30 }} />
+
+      {/* Bottom sheet */}
+      <div style={{ position:'absolute', bottom:0, left:0, right:0, background:T.bg, borderRadius:'20px 20px 0 0', zIndex:40, paddingBottom:36 }}>
+        {/* Handle */}
+        <div style={{ display:'flex', justifyContent:'center', padding:'12px 0 4px' }}>
+          <div style={{ width:36, height:4, borderRadius:2, background:'#E0E0E0' }} />
+        </div>
+        {/* Profile row */}
+        <div style={{ display:'flex', alignItems:'center', gap:12, padding:'14px 20px 16px', borderBottom:`1px solid ${T.border}` }}>
+          <div style={{ width:44, height:44, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <span style={{ color:'white', fontSize:18, fontWeight:500 }}>d</span>
+          </div>
+          <div>
+            <p style={{ fontSize:15, fontWeight:500, color:T.text }}>@dillon</p>
+            <p style={{ fontSize:12, color:T.muted }}>collecting since 2026 · 25 pieces</p>
+          </div>
+          <div style={{ marginLeft:'auto' }}><ChevronRight /></div>
+        </div>
+        {/* Nav items */}
+        {[
+          ['collections', '3 collections'],
+          ['profile', null],
+          ['settings', null],
+        ].map(([label, sub], i) => (
+          <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'16px 20px', borderBottom:`1px solid ${T.border}` }}>
+            <div>
+              <p style={{ fontSize:15, color:T.text }}>{label}</p>
+              {sub && <p style={{ fontSize:12, color:T.muted, marginTop:2 }}>{sub}</p>}
+            </div>
+            <ChevronRight />
+          </div>
+        ))}
+        {/* Sign out */}
+        <div style={{ padding:'16px 20px 0' }}>
+          <p style={{ fontSize:14, color:'#CC4444' }}>sign out</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function C1Collections() {
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      {/* Back nav */}
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <button style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:6, fontFamily:HN, fontSize:14, color:T.muted, padding:0 }}>
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M19 12H5M5 12l7-7M5 12l7 7" stroke={T.muted} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          back
+        </button>
+        <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:14, color:T.accent, fontWeight:500, padding:0 }}>new +</button>
+      </div>
+      <div style={{ padding:'4px 20px 0', flexShrink:0 }}>
+        <p style={{ fontSize:22, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>collections</p>
+      </div>
+      <div style={{ height:1, background:T.border, margin:'14px 0 0', flexShrink:0 }} />
+      <div style={{ flex:1, overflow:'hidden' }}>
+        {COLS.map((col, i) => (
+          <div key={i} style={{ padding:'16px 20px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+            <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+              {/* Micro thumbnail stack */}
+              {PIECES.slice(0,3).map((p,pi) => (
+                <Photo key={pi} piece={p} style={{ width:36, height:46, borderRadius:5, flexShrink:0 }} />
+              ))}
+              <div style={{ marginLeft:4 }}>
+                <p style={{ fontSize:14, color:T.text, fontWeight:500 }}>{col}</p>
+                <p style={{ fontSize:11, color:T.muted, marginTop:2 }}>{[1,4,7][i]} {[1,4,7][i]===1?'piece':'pieces'}</p>
+              </div>
+            </div>
+            <ChevronRight />
+          </div>
+        ))}
+        <div style={{ padding:'20px', textAlign:'center' }}>
+          <p style={{ fontSize:12, color:T.muted }}>tap a collection to browse</p>
+        </div>
+      </div>
+      <AddPill />
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONCEPT 2 — INLINE COLLECTIONS + AVATAR DROPDOWN
+// Collections live as tabs IN the vault, not a separate screen.
+// Avatar → small dropdown for profile + settings only.
+// ═══════════════════════════════════════════════════════════════
+
+function C2Vault() {
+  const [active, setActive] = React.useState(0);
+  const [tab, setTab] = React.useState(0);
+  const tabs = ['vault', 'collections'];
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      {/* Top nav — segmented left, icons right */}
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        {/* Segmented tabs */}
+        <div style={{ display:'flex', gap:0, borderBottom:'none' }}>
+          {tabs.map((t,i) => (
+            <button key={t} onClick={()=>setTab(i)} style={{ background:'none', border:'none', cursor:'pointer', padding:'0 0 0', marginRight:22, fontFamily:HN, fontSize:20, fontWeight:tab===i?500:400, color:tab===i?T.text:T.muted, letterSpacing:'-0.02em' }}>{t}</button>
+          ))}
+        </div>
+        <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+          <SearchSvg />
+          <div style={{ width:30, height:30, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+            <span style={{ color:'white', fontSize:12, fontWeight:600 }}>d</span>
+          </div>
+        </div>
+      </div>
+      {/* Underline indicator */}
+      <div style={{ position:'relative', height:1, background:T.border, flexShrink:0 }}>
+        <div style={{ position:'absolute', bottom:0, left: tab === 0 ? 20 : 20+77, width: tab === 0 ? 36 : 82, height:1.5, background:T.text, transition:'left 0.25s, width 0.25s' }} />
+      </div>
+      {/* Collection chips (only on vault tab) */}
+      {tab === 0 && (
+        <div style={{ display:'flex', gap:6, padding:'10px 20px 0', overflowX:'auto', flexShrink:0 }}>
+          {['all', ...COLS].map((c,i) => (
+            <button key={c} onClick={()=>{}} style={{ border:`1px solid ${T.border}`, background: i===0?T.dark:'transparent', color:i===0?'white':T.muted, fontFamily:HN, fontSize:12, padding:'5px 13px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>{c}</button>
+          ))}
+        </div>
+      )}
+      {tab === 0 ? (
+        <div style={{ flex:1, display:'flex', flexDirection:'column', paddingBottom:80, marginTop:tab===0?0:0 }}>
+          <MiniCoverflow active={active} setActive={setActive} />
+          <PieceMeta active={active} />
+        </div>
+      ) : (
+        /* Collections inline */
+        <div style={{ flex:1, overflow:'hidden', paddingBottom:80 }}>
+          <div style={{ padding:'14px 20px 0', display:'flex', justifyContent:'flex-end', flexShrink:0 }}>
+            <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:14, color:T.accent, fontWeight:500 }}>new +</button>
+          </div>
+          {COLS.map((col, i) => (
+            <div key={i} style={{ padding:'14px 20px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+              <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+                {PIECES.slice(0,3).map((p,pi) => (
+                  <Photo key={pi} piece={p} style={{ width:34, height:42, borderRadius:5 }} />
+                ))}
+                <div style={{ marginLeft:4 }}>
+                  <p style={{ fontSize:14, color:T.text, fontWeight:500 }}>{col}</p>
+                  <p style={{ fontSize:11, color:T.muted, marginTop:2 }}>{[1,4,7][i]} {[1,4,7][i]===1?'piece':'pieces'}</p>
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+                <span style={{ fontSize:12, color:T.muted }}>rename</span>
+                <span style={{ fontSize:12, color:'#CC4444' }}>delete</span>
+                <ChevronRight />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      <AddPill />
+    </div>
+  );
+}
+
+function C2DropdownOpen() {
+  const [active, setActive] = React.useState(0);
+  const [tab] = React.useState(0);
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <div style={{ display:'flex', gap:0 }}>
+          {['vault','collections'].map((t,i) => (
+            <button key={t} style={{ background:'none', border:'none', cursor:'pointer', padding:'0', marginRight:22, fontFamily:HN, fontSize:20, fontWeight:tab===i?500:400, color:tab===i?T.text:T.muted, letterSpacing:'-0.02em' }}>{t}</button>
+          ))}
+        </div>
+        <div style={{ display:'flex', gap:16, alignItems:'center' }}>
+          <SearchSvg />
+          <div style={{ width:30, height:30, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:'white', fontSize:12, fontWeight:600 }}>d</span>
+          </div>
+        </div>
+      </div>
+      <div style={{ height:1, background:T.border, flexShrink:0 }} />
+      <div style={{ display:'flex', gap:6, padding:'10px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {['all', ...COLS].map((c,i) => (
+          <button key={c} style={{ border:`1px solid ${T.border}`, background: i===0?T.dark:'transparent', color:i===0?'white':T.muted, fontFamily:HN, fontSize:12, padding:'5px 13px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>{c}</button>
+        ))}
+      </div>
+      <div style={{ flex:1, display:'flex', flexDirection:'column', paddingBottom:80 }}>
+        <MiniCoverflow active={active} setActive={setActive} />
+        <PieceMeta active={active} />
+      </div>
+      <AddPill />
+
+      {/* Small dropdown anchored to avatar */}
+      <div style={{ position:'absolute', top:88, right:16, background:'white', borderRadius:12, border:`1px solid ${T.border}`, boxShadow:'0 8px 32px rgba(0,0,0,0.12)', zIndex:50, width:200, overflow:'hidden' }}>
+        {/* Profile header */}
+        <div style={{ padding:'14px 16px 12px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ width:32, height:32, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <span style={{ color:'white', fontSize:13, fontWeight:500 }}>d</span>
+          </div>
+          <div>
+            <p style={{ fontSize:13, fontWeight:500, color:T.text }}>@dillon</p>
+            <p style={{ fontSize:11, color:T.muted }}>25 pieces</p>
+          </div>
+        </div>
+        {[['profile'],['settings'],['sign out']].map(([label],i) => (
+          <div key={i} style={{ padding:'13px 16px', borderBottom:i<2?`1px solid ${T.border}`:'none', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <span style={{ fontSize:14, color: i===2 ? '#CC4444' : T.text }}>{label}</span>
+            {i < 2 && <ChevronRight />}
+          </div>
+        ))}
+      </div>
+      {/* Invisible scrim to dismiss */}
+      <div style={{ position:'absolute', inset:0, zIndex:40 }} />
+      <div style={{ position:'absolute', top:88, right:16, background:'white', borderRadius:12, border:`1px solid ${T.border}`, boxShadow:'0 8px 32px rgba(0,0,0,0.12)', zIndex:50, width:200, overflow:'hidden' }}>
+        <div style={{ padding:'14px 16px 12px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ width:32, height:32, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <span style={{ color:'white', fontSize:13, fontWeight:500 }}>d</span>
+          </div>
+          <div>
+            <p style={{ fontSize:13, fontWeight:500, color:T.text }}>@dillon</p>
+            <p style={{ fontSize:11, color:T.muted }}>25 pieces</p>
+          </div>
+        </div>
+        {[['profile'],['settings'],['sign out']].map(([label],i) => (
+          <div key={i} style={{ padding:'13px 16px', borderBottom:i<2?`1px solid ${T.border}`:'none', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <span style={{ fontSize:14, color: i===2 ? '#CC4444' : T.text }}>{label}</span>
+            {i < 2 && <ChevronRight />}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function C2Profile() {
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN }}>
+      <StatusBar />
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <button style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:6, fontFamily:HN, fontSize:14, color:T.muted, padding:0 }}>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M19 12H5M5 12l7-7M5 12l7 7" stroke={T.muted} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          back
+        </button>
+      </div>
+      <div style={{ flex:1, padding:'20px 20px 0', display:'flex', flexDirection:'column', alignItems:'center' }}>
+        <div style={{ width:72, height:72, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:12 }}>
+          <span style={{ color:'white', fontSize:28, fontWeight:500 }}>d</span>
+        </div>
+        <p style={{ fontSize:18, fontWeight:500, color:T.text }}>@dillon</p>
+        <p style={{ fontSize:12, color:T.muted, marginTop:3 }}>collecting since 2026</p>
+        <div style={{ marginTop:20, borderTop:`1px solid ${T.border}`, borderBottom:`1px solid ${T.border}`, width:'100%', padding:'16px 0', textAlign:'center' }}>
+          <p style={{ fontSize:22, fontWeight:600, color:T.text }}>25</p>
+          <p style={{ fontSize:11, color:T.muted, marginTop:2 }}>pieces</p>
+        </div>
+        <div style={{ width:'100%', marginTop:16, display:'flex', gap:10 }}>
+          <button style={{ flex:1, background:T.dark, border:'none', borderRadius:10, padding:'12px', fontFamily:HN, fontSize:13, fontWeight:500, color:'white', cursor:'pointer' }}>share vault</button>
+          <button style={{ flex:1, background:'transparent', border:`1px solid ${T.border}`, borderRadius:10, padding:'12px', fontFamily:HN, fontSize:13, color:T.text, cursor:'pointer' }}>edit profile</button>
+        </div>
+        <div style={{ width:'100%', marginTop:20, borderTop:`1px solid ${T.border}` }}>
+          {[['settings'],['sign out']].map(([label],i) => (
+            <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'14px 0', borderBottom:`1px solid ${T.border}` }}>
+              <span style={{ fontSize:14, color:i===1?'#CC4444':T.text }}>{label}</span>
+              {i===0 && <ChevronRight />}
+            </div>
+          ))}
+        </div>
+      </div>
+      <AddPill />
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONCEPT 3 — CONTEXTUAL OVERLAY MENU
+// "…" in top right → floating text-link menu anchored top-right
+// Scales elegantly to any number of sections
+// Search slides in from top (replaces header inline)
+// ═══════════════════════════════════════════════════════════════
+
+function C3Vault() {
+  const [active, setActive] = React.useState(0);
+  const [chip, setChip] = React.useState(0);
+  const chips = ['all', ...COLS];
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>vault</span>
+        <div style={{ display:'flex', gap:20, alignItems:'center' }}>
+          <SearchSvg />
+          {/* Dot menu — 3 horizontal dots */}
+          <svg width="20" height="5" viewBox="0 0 20 5" fill={T.muted}>
+            <circle cx="2.5" cy="2.5" r="2"/>
+            <circle cx="10" cy="2.5" r="2"/>
+            <circle cx="17.5" cy="2.5" r="2"/>
+          </svg>
+        </div>
+      </div>
+      <div style={{ display:'flex', gap:6, padding:'8px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {chips.map((c,i) => (
+          <button key={c} onClick={()=>setChip(i)} style={{ border:chip===i?'none':`1px solid ${T.border}`, background:chip===i?T.dark:'transparent', color:chip===i?'white':T.muted, fontFamily:HN, fontSize:12, padding:'5px 13px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>{c}</button>
+        ))}
+      </div>
+      <div style={{ height:1, background:T.border, margin:'10px 0 0', flexShrink:0 }} />
+      <div style={{ flex:1, display:'flex', flexDirection:'column', paddingBottom:80 }}>
+        <MiniCoverflow active={active} setActive={setActive} />
+        <PieceMeta active={active} />
+      </div>
+      <AddPill />
+    </div>
+  );
+}
+
+function C3MenuOpen() {
+  const [active, setActive] = React.useState(0);
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+        <span style={{ fontSize:20, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>vault</span>
+        <div style={{ display:'flex', gap:20, alignItems:'center' }}>
+          <SearchSvg />
+          <XIcon />
+        </div>
+      </div>
+      <div style={{ display:'flex', gap:6, padding:'8px 20px 0', overflowX:'auto', flexShrink:0 }}>
+        {['all', ...COLS].map((c,i) => (
+          <button key={c} style={{ border:`1px solid ${T.border}`, background:i===0?T.dark:'transparent', color:i===0?'white':T.muted, fontFamily:HN, fontSize:12, padding:'5px 13px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>{c}</button>
+        ))}
+      </div>
+      <div style={{ height:1, background:T.border, margin:'10px 0 0', flexShrink:0 }} />
+      <div style={{ flex:1, display:'flex', flexDirection:'column', paddingBottom:80, opacity:0.3 }}>
+        <MiniCoverflow active={active} setActive={setActive} />
+        <PieceMeta active={active} />
+      </div>
+      <AddPill />
+
+      {/* Floating contextual menu — anchored top right */}
+      <div style={{ position:'absolute', top:92, right:16, background:'white', borderRadius:14, border:`1px solid ${T.border}`, boxShadow:'0 12px 40px rgba(0,0,0,0.13)', zIndex:50, width:220, overflow:'hidden' }}>
+        {/* User row */}
+        <div style={{ padding:'14px 18px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ width:32, height:32, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:'white', fontSize:13 }}>d</span>
+          </div>
+          <div>
+            <p style={{ fontSize:13, fontWeight:500, color:T.text }}>@dillon</p>
+            <p style={{ fontSize:11, color:T.muted }}>25 pieces</p>
+          </div>
+        </div>
+        {/* Nav links — simple, text-based */}
+        <div style={{ padding:'6px 0' }}>
+          {[
+            ['collections', '3'],
+            ['profile', null],
+            ['settings', null],
+          ].map(([label, badge], i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'11px 18px' }}>
+              <span style={{ fontSize:15, color:T.text }}>{label}</span>
+              {badge && <span style={{ fontSize:12, color:T.muted, background:T.faint, borderRadius:10, padding:'2px 8px' }}>{badge}</span>}
+            </div>
+          ))}
+        </div>
+        <div style={{ borderTop:`1px solid ${T.border}`, padding:'10px 18px 14px' }}>
+          <span style={{ fontSize:14, color:'#CC4444' }}>sign out</span>
+        </div>
+      </div>
+      <div style={{ position:'absolute', inset:0, zIndex:45 }} />
+      {/* Re-render menu on top of scrim */}
+      <div style={{ position:'absolute', top:92, right:16, background:'white', borderRadius:14, border:`1px solid ${T.border}`, boxShadow:'0 12px 40px rgba(0,0,0,0.13)', zIndex:55, width:220, overflow:'hidden' }}>
+        <div style={{ padding:'14px 18px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', gap:10 }}>
+          <div style={{ width:32, height:32, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ color:'white', fontSize:13 }}>d</span>
+          </div>
+          <div>
+            <p style={{ fontSize:13, fontWeight:500, color:T.text }}>@dillon</p>
+            <p style={{ fontSize:11, color:T.muted }}>25 pieces</p>
+          </div>
+        </div>
+        <div style={{ padding:'6px 0' }}>
+          {[['collections','3'],['profile',null],['settings',null]].map(([label,badge],i) => (
+            <div key={i} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'11px 18px' }}>
+              <span style={{ fontSize:15, color:T.text }}>{label}</span>
+              {badge && <span style={{ fontSize:12, color:T.muted, background:T.faint, borderRadius:10, padding:'2px 8px' }}>{badge}</span>}
+            </div>
+          ))}
+        </div>
+        <div style={{ borderTop:`1px solid ${T.border}`, padding:'10px 18px 14px' }}>
+          <span style={{ fontSize:14, color:'#CC4444' }}>sign out</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function C3Search() {
+  const [active, setActive] = React.useState(0);
+  const [q, setQ] = React.useState('helmut');
+  return (
+    <div style={{ width:390, height:844, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, position:'relative' }}>
+      <StatusBar />
+      {/* Search replaces the header */}
+      <div style={{ padding:'0 16px', height:44, display:'flex', alignItems:'center', gap:12, flexShrink:0 }}>
+        <div style={{ flex:1, background:T.faint, borderRadius:10, padding:'9px 12px', display:'flex', alignItems:'center', gap:8 }}>
+          <SearchSvg />
+          <span style={{ fontSize:15, color:T.text }}>{q}<span style={{ opacity:0.3 }}>|</span></span>
+        </div>
+        <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:14, color:T.muted, padding:0, flexShrink:0 }}>cancel</button>
+      </div>
+      <div style={{ height:1, background:T.border, flexShrink:0 }} />
+      {/* Search results */}
+      <div style={{ flex:1, overflow:'hidden', padding:'6px 0' }}>
+        <p style={{ fontSize:10, color:T.muted, padding:'10px 20px 6px', textTransform:'uppercase', letterSpacing:'0.1em' }}>1 result for "{q}"</p>
+        {PIECES.filter(p => p.brand.includes(q)||p.name.includes(q)).map((p,i) => (
+          <div key={i} style={{ display:'flex', gap:12, padding:'12px 20px', alignItems:'center', borderBottom:`1px solid ${T.border}` }}>
+            <Photo piece={p} style={{ width:44, height:56, borderRadius:6, flexShrink:0 }} />
+            <div>
+              <p style={{ fontSize:14, fontWeight:500, color:T.text }}>{p.name}</p>
+              <p style={{ fontSize:12, color:T.muted, marginTop:2 }}>{p.brand} · {p.year}</p>
+            </div>
+          </div>
+        ))}
+        <p style={{ fontSize:10, color:T.muted, padding:'20px 20px 6px', textTransform:'uppercase', letterSpacing:'0.1em' }}>all pieces</p>
+        {PIECES.map((p,i) => (
+          <div key={i} style={{ display:'flex', gap:12, padding:'10px 20px', alignItems:'center', borderBottom:`1px solid ${T.border}` }}>
+            <Photo piece={p} style={{ width:36, height:46, borderRadius:5, flexShrink:0 }} />
+            <div>
+              <p style={{ fontSize:13, color:T.text }}>{p.name}</p>
+              <p style={{ fontSize:11, color:T.muted, marginTop:1 }}>{p.brand}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONCEPT 4 — PUSH NAVIGATION (right to left slide)
+// Avatar tap → full screen slides in from right (iOS push style)
+// Back → slides back out to the right
+// No sheets, no dropdowns — clean nav stack
+// ═══════════════════════════════════════════════════════════════
+
+function PushScreen({ children, style }) {
+  return (
+    <div style={{ position:'absolute', inset:0, background:T.bg, display:'flex', flexDirection:'column', overflow:'hidden', fontFamily:HN, ...style }}>
+      {children}
+    </div>
+  );
+}
+
+function C4Interactive() {
+  const [stack, setStack] = React.useState(['vault']);
+  const [transitioning, setTransitioning] = React.useState(false);
+  const [slideIn, setSlideIn] = React.useState(false);
+  const [active, setActive] = React.useState(0);
+  const [chip, setChip] = React.useState(0);
+  const chips = ['all', ...COLS];
+
+  const current = stack[stack.length - 1];
+
+  function push(screen) {
+    if (transitioning) return;
+    setTransitioning(true);
+    setSlideIn(false);
+    setStack(s => [...s, screen]);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      setSlideIn(true);
+      setTimeout(() => setTransitioning(false), 380);
+    }));
+  }
+
+  function pop() {
+    if (transitioning || stack.length === 1) return;
+    setTransitioning(true);
+    setSlideIn(false);
+    setTimeout(() => {
+      setStack(s => s.slice(0, -1));
+      setSlideIn(true);
+      setTransitioning(false);
+    }, 350);
+  }
+
+  const BackBtn = ({ label='back' }) => (
+    <button onClick={pop} style={{ background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:5, fontFamily:HN, fontSize:14, color:T.muted, padding:0 }}>
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke={T.muted} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      {label}
+    </button>
+  );
+
+  const pushStyle = {
+    transform: slideIn ? 'translateX(0)' : 'translateX(100%)',
+    transition: 'transform 0.36s cubic-bezier(0.25,0.46,0.45,0.94)',
+    zIndex: 10,
+  };
+
+  function renderPushedScreen() {
+    const screen = stack[stack.length - 1];
+    if (screen === 'vault') return null;
+
+    if (screen === 'menu') return (
+      <PushScreen style={pushStyle}>
+        <StatusBar />
+        <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', flexShrink:0 }}>
+          <BackBtn label="vault" />
+        </div>
+        <div style={{ height:1, background:T.border, flexShrink:0 }} />
+        <div style={{ padding:'24px 20px 20px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', gap:14 }}>
+          <div style={{ width:56, height:56, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+            <span style={{ color:'white', fontSize:22, fontWeight:500 }}>d</span>
+          </div>
+          <div>
+            <p style={{ fontSize:17, fontWeight:500, color:T.text }}>@dillon</p>
+            <p style={{ fontSize:12, color:T.muted, marginTop:2 }}>collecting since 2026 · 25 pieces</p>
+          </div>
+          <div style={{ marginLeft:'auto' }}><ChevronRight /></div>
+        </div>
+        {[['collections','3 collections','collections'],['profile',null,'profile'],['settings',null,'settings']].map(([label,sub,target],i) => (
+          <div key={i} onClick={()=>push(target)} style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'18px 20px', borderBottom:`1px solid ${T.border}`, cursor:'pointer' }}>
+            <div>
+              <p style={{ fontSize:16, color:T.text }}>{label}</p>
+              {sub && <p style={{ fontSize:12, color:T.muted, marginTop:2 }}>{sub}</p>}
+            </div>
+            <ChevronRight />
+          </div>
+        ))}
+        <div style={{ padding:'18px 20px' }}>
+          <p style={{ fontSize:15, color:'#CC4444', cursor:'pointer' }}>sign out</p>
+        </div>
+      </PushScreen>
+    );
+
+    if (screen === 'collections') return (
+      <PushScreen style={pushStyle}>
+        <StatusBar />
+        <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+          <BackBtn />
+          <button style={{ background:'none', border:'none', cursor:'pointer', fontFamily:HN, fontSize:14, color:T.accent, fontWeight:500 }}>new +</button>
+        </div>
+        <div style={{ padding:'4px 20px 0', flexShrink:0 }}>
+          <p style={{ fontSize:22, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>collections</p>
+        </div>
+        <div style={{ height:1, background:T.border, margin:'14px 0 0', flexShrink:0 }} />
+        <div style={{ flex:1, overflow:'hidden' }}>
+          {COLS.map((col, i) => (
+            <div key={i} style={{ padding:'16px 20px', borderBottom:`1px solid ${T.border}`, display:'flex', alignItems:'center', justifyContent:'space-between', cursor:'pointer' }}>
+              <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+                {PIECES.slice(0,3).map((p,pi) => (
+                  <Photo key={pi} piece={p} style={{ width:36, height:46, borderRadius:5, flexShrink:0 }} />
+                ))}
+                <div style={{ marginLeft:4 }}>
+                  <p style={{ fontSize:14, color:T.text, fontWeight:500 }}>{col}</p>
+                  <p style={{ fontSize:11, color:T.muted, marginTop:2 }}>{[1,4,7][i]} {[1,4,7][i]===1?'piece':'pieces'}</p>
+                </div>
+              </div>
+              <ChevronRight />
+            </div>
+          ))}
+        </div>
+        <AddPill />
+      </PushScreen>
+    );
+
+    if (screen === 'profile') return (
+      <PushScreen style={pushStyle}>
+        <StatusBar />
+        <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', flexShrink:0 }}>
+          <BackBtn />
+        </div>
+        <div style={{ flex:1, padding:'20px 20px 0', display:'flex', flexDirection:'column', alignItems:'center' }}>
+          <div style={{ width:72, height:72, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:12 }}>
+            <span style={{ color:'white', fontSize:28, fontWeight:500 }}>d</span>
+          </div>
+          <p style={{ fontSize:18, fontWeight:500, color:T.text }}>@dillon</p>
+          <p style={{ fontSize:12, color:T.muted, marginTop:3 }}>collecting since 2026</p>
+          <div style={{ marginTop:20, borderTop:`1px solid ${T.border}`, borderBottom:`1px solid ${T.border}`, width:'100%', padding:'16px 0', textAlign:'center' }}>
+            <p style={{ fontSize:28, fontWeight:600, color:T.text }}>25</p>
+            <p style={{ fontSize:11, color:T.muted, marginTop:2 }}>pieces</p>
+          </div>
+          <div style={{ width:'100%', marginTop:14, display:'flex', gap:10 }}>
+            <button style={{ flex:1, background:T.dark, border:'none', borderRadius:10, padding:'12px', fontFamily:HN, fontSize:13, fontWeight:500, color:'white', cursor:'pointer' }}>share vault</button>
+            <button style={{ flex:1, background:'transparent', border:`1px solid ${T.border}`, borderRadius:10, padding:'12px', fontFamily:HN, fontSize:13, color:T.text, cursor:'pointer' }}>edit profile</button>
+          </div>
+        </div>
+        <AddPill />
+      </PushScreen>
+    );
+
+    if (screen === 'settings') return (
+      <PushScreen style={pushStyle}>
+        <StatusBar />
+        <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', flexShrink:0 }}>
+          <BackBtn />
+        </div>
+        <div style={{ padding:'4px 20px 0', flexShrink:0 }}>
+          <p style={{ fontSize:22, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>settings</p>
+        </div>
+        <div style={{ height:1, background:T.border, margin:'14px 0 0', flexShrink:0 }} />
+        <div style={{ flex:1 }}>
+          {[['account'],['notifications'],['privacy'],['legal']].map(([label],i) => (
+            <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'16px 20px', borderBottom:`1px solid ${T.border}` }}>
+              <span style={{ fontSize:15, color:T.text }}>{label}</span>
+              <ChevronRight />
+            </div>
+          ))}
+          <div style={{ padding:'16px 20px', borderBottom:`1px solid ${T.border}` }}>
+            <span style={{ fontSize:15, color:'#CC4444', cursor:'pointer' }}>sign out</span>
+          </div>
+        </div>
+        <AddPill />
+      </PushScreen>
+    );
+
+    return null;
+  }
+
+  return (
+    <div style={{ width:390, height:844, position:'relative', overflow:'hidden', background:T.bg, fontFamily:HN }}>
+      {/* Vault — always base */}
+      <PushScreen>
+        <StatusBar />
+        <div style={{ padding:'0 20px', height:44, display:'flex', alignItems:'center', justifyContent:'space-between', flexShrink:0 }}>
+          <span style={{ fontSize:20, fontWeight:500, color:T.text, letterSpacing:'-0.02em' }}>vault</span>
+          <div style={{ display:'flex', gap:18, alignItems:'center' }}>
+            <SearchSvg />
+            <div onClick={()=>push('menu')} style={{ width:30, height:30, borderRadius:'50%', background:T.dark, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+              <span style={{ color:'white', fontSize:12, fontWeight:600 }}>d</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ display:'flex', gap:6, padding:'8px 20px 0', overflowX:'auto', flexShrink:0 }}>
+          {chips.map((c,i) => (
+            <button key={c} onClick={()=>setChip(i)} style={{ border:chip===i?'none':`1px solid ${T.border}`, background:chip===i?T.dark:'transparent', color:chip===i?'white':T.muted, fontFamily:HN, fontSize:12, padding:'5px 13px', borderRadius:999, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0 }}>{c}</button>
+          ))}
+        </div>
+        <div style={{ height:1, background:T.border, margin:'10px 0 0', flexShrink:0 }} />
+        <div style={{ flex:1, display:'flex', flexDirection:'column', paddingBottom:80 }}>
+          <MiniCoverflow active={active} setActive={setActive} />
+          <PieceMeta active={active} />
+        </div>
+        <AddPill />
+      </PushScreen>
+
+      {/* Pushed screen */}
+      {stack.length > 1 && renderPushedScreen()}
+    </div>
+  );
+}
+
+
+function TradeCard({ title, sub, pros, cons, rec }) {
+  const Ch = () => <svg width="8" height="8" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5L8.5 2" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none"/></svg>;
+  const Xx = () => <svg width="8" height="8" viewBox="0 0 10 10"><path d="M2 2l6 6M8 2L2 8" stroke="white" strokeWidth="1.8" strokeLinecap="round"/></svg>;
+  const Row = ({icon, color, t}) => (
+    <div style={{ display:'flex', gap:8, marginBottom:8, alignItems:'flex-start' }}>
+      <div style={{ width:16, height:16, borderRadius:'50%', background:color, flexShrink:0, marginTop:1, display:'flex', alignItems:'center', justifyContent:'center' }}>{icon}</div>
+      <p style={{ fontSize:12, lineHeight:1.6, color:T.text, fontFamily:HN }}>{t}</p>
+    </div>
+  );
+  return (
+    <div style={{ width:'100%', height:'100%', background:T.bg, padding:'22px 20px', overflow:'hidden', fontFamily:HN }}>
+      <div style={{ height:2, width:24, background:T.accent, marginBottom:14 }} />
+      <p style={{ fontSize:20, fontWeight:600, letterSpacing:'-0.02em', color:T.text, marginBottom:3 }}>{title}</p>
+      <p style={{ fontSize:12, color:T.accent, marginBottom:20 }}>{sub}</p>
+      <p style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', color:T.accent, marginBottom:10 }}>STRENGTHS</p>
+      {pros.map((p,i) => <Row key={i} icon={<Ch/>} color={T.accent} t={p} />)}
+      <p style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', color:'#C05050', marginBottom:10, marginTop:16 }}>TRADE-OFFS</p>
+      {cons.map((c,i) => <Row key={i} icon={<Xx/>} color="#C05050" t={c} />)}
+      <div style={{ marginTop:18, padding:'12px 14px', background:'#F8FBF9', borderRadius:8, borderLeft:`3px solid ${T.accent}` }}>
+        <p style={{ fontSize:10, fontWeight:700, letterSpacing:'0.1em', color:T.accent, marginBottom:5 }}>RECOMMENDATION</p>
+        <p style={{ fontSize:12, lineHeight:1.65, color:T.text }}>{rec}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── CANVAS CONTENT (was App) ───────────────────────────────────
+function CanvasContent() {
+  return (
+    <DesignCanvas>
+
+      <DCSection id="c4" title="4 — Push Navigation (interactive)" subtitle="Tap the avatar → screen slides in from right · Back → slides out · Full iOS push stack · No sheets, no dropdowns">
+        <DCArtboard id="c4-i" label="try it ↓ tap the avatar" width={390} height={844}><C4Interactive /></DCArtboard>
+        <DCArtboard id="c4-n" label="notes" width={290} height={844}>
+          <TradeCard title="Push Navigation" sub="full-screen slides, no overlays"
+            pros={[
+              'Most familiar iOS pattern — zero learning curve',
+              'Each screen has full real estate — no competing chrome',
+              'Back button is always in the same place (top left)',
+              'Scales naturally: any screen can push another',
+              'add + pill persists through the entire stack',
+            ]}
+            cons={[
+              'Deeper navigation stack — 3 taps to reach settings',
+              'Menu screen is an extra step vs. a direct dropdown',
+              'Feels more "app" than the overlay concepts',
+            ]}
+            rec="The most intuitive and scalable pattern. Pair with the avatar as the single top-right trigger — tapping it always pushes the menu screen, which then pushes any secondary screen. Feels completely native on iOS."
+          />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="c1" title="1 — Avatar Sheet" subtitle="Avatar tap → full bottom sheet · All secondary nav in one place · Search stays in top bar · Lowest visual complexity">
+        <DCArtboard id="c1-v" label="vault" width={390} height={844}><C1Vault /></DCArtboard>
+        <DCArtboard id="c1-s" label="sheet open ↑" width={390} height={844}><C1SheetOpen /></DCArtboard>
+        <DCArtboard id="c1-c" label="collections →" width={390} height={844}><C1Collections /></DCArtboard>
+        <DCArtboard id="c1-n" label="notes" width={290} height={844}>
+          <TradeCard title="Avatar Sheet" sub="one tap → everything secondary"
+            pros={[
+              'Cleanest top bar — only 2 icons (search + avatar)',
+              'Sheet is a familiar iOS pattern — users know how it works',
+              'Profile is immediately contextual (avatar = you)',
+              'Scales to any number of secondary sections',
+              'Bottom of screen is kept sacred — add + is the only persistent action',
+            ]}
+            cons={[
+              'Collections hidden behind a tap — less discoverable than tabs',
+              'Sheet gesture conflicts with coverflow swiping if not handled',
+              'Two taps to reach collections (avatar → collections)',
+            ]}
+            rec="Best choice if collections are used occasionally. The profile-as-gateway framing feels personal and direct. Works especially well once you add more sections (wishlist, fits, etc.)."
+          />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="c2" title="2 — Inline Collections Tab" subtitle="vault · collections as top-level tabs · Avatar → small dropdown for profile + settings · No secondary screens for collections">
+        <DCArtboard id="c2-v" label="vault tab" width={390} height={844}><C2Vault /></DCArtboard>
+        <DCArtboard id="c2-d" label="avatar dropdown" width={390} height={844}><C2DropdownOpen /></DCArtboard>
+        <DCArtboard id="c2-p" label="profile →" width={390} height={844}><C2Profile /></DCArtboard>
+        <DCArtboard id="c2-n" label="notes" width={290} height={844}>
+          <TradeCard title="Inline Collections" sub="collections as a top tab, not a screen"
+            pros={[
+              'Collections always one tap from vault — most discoverable',
+              'Eliminates a full screen; feels lighter',
+              'Small avatar dropdown is fast for profile/settings access',
+              'Matches how power users already think (vault vs. grouped view)',
+              'Collections manage UI (rename/delete) stays inline',
+            ]}
+            cons={[
+              'Two prominent tabs may imply equal importance — vault is the star',
+              'Collections tab has limited space for actions (new +, manage)',
+              'Dropdown is less discoverable than a sheet',
+            ]}
+            rec="Best choice if users frequently switch between vault and collections. Makes collections feel like a first-class view rather than a management screen."
+          />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="c3" title="3 — Contextual Overlay + Search Takeover" subtitle="… menu → compact floating overlay · Search replaces header inline · Scales to any section count · Most [untitled]-coded">
+        <DCArtboard id="c3-v" label="vault" width={390} height={844}><C3Vault /></DCArtboard>
+        <DCArtboard id="c3-m" label="menu open" width={390} height={844}><C3MenuOpen /></DCArtboard>
+        <DCArtboard id="c3-s" label="search takeover" width={390} height={844}><C3Search /></DCArtboard>
+        <DCArtboard id="c3-n" label="notes" width={290} height={844}>
+          <TradeCard title="Contextual Overlay" sub="… menu + search takeover"
+            pros={[
+              'Most minimal — only search + … visible, nothing else',
+              'Floating overlay feels native and intentional, not like a nav system',
+              'Search takeover gives pieces maximum real estate',
+              'Scales perfectly: add sections to the overlay without changing the top bar',
+              'Most "sacred space" of the three — chrome is invisible until needed',
+            ]}
+            cons={[
+              '… menu icon has no obvious affordance — needs user education',
+              'Collections even less discoverable than Concept 1',
+              'Search as header replacement may feel jarring on first use',
+            ]}
+            rec="Best choice if you want the most distinctive, minimal feel. Pair with a one-time tooltip on first launch pointing to the … menu. This is the direction that grows best as the app adds features."
+          />
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Root />);
+</script>
+</body>
+</html>

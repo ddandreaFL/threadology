@@ -101,7 +101,7 @@ export default function SignupPage() {
   }
 
   return (
-    <AuthForm title="Create your account">
+    <AuthForm title="create your account">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <FormField
           id="username"
@@ -136,16 +136,16 @@ export default function SignupPage() {
         {formError && <p className="text-sm text-red-600">{formError}</p>}
 
         <SubmitButton
-          label="Create account"
-          loadingLabel="Creating account…"
+          label="create account →"
+          loadingLabel="creating account…"
           isLoading={isLoading}
         />
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-500">
-        Already have an account?{" "}
-        <Link href="/login" className="font-medium text-[#2D5A45] hover:underline">
-          Log in
+      <p className="mt-6 text-center text-[13px] text-[#999999]">
+        already have an account?{" "}
+        <Link href="/login" className="text-[#111111] underline">
+          log in
         </Link>
       </p>
     </AuthForm>

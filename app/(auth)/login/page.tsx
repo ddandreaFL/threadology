@@ -38,7 +38,7 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthForm title="Welcome back">
+    <AuthForm title="welcome back">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <FormField
           id="email"
@@ -61,13 +61,13 @@ export default function LoginPage() {
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <SubmitButton label="Log in" loadingLabel="Logging in…" isLoading={isLoading} />
+        <SubmitButton label="log in →" loadingLabel="logging in…" isLoading={isLoading} />
       </form>
 
-      <p className="mt-6 text-center text-sm text-gray-500">
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" className="font-medium text-[#2D5A45] hover:underline">
-          Sign up
+      <p className="mt-6 text-center text-[13px] text-[#999999]">
+        don&apos;t have an account?{" "}
+        <Link href="/signup" className="text-[#111111] underline">
+          sign up
         </Link>
       </p>
     </AuthForm>
