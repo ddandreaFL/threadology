@@ -5,6 +5,7 @@ import { getUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { EmptyVault } from "@/components/vault/empty-vault";
 import { VaultClient } from "@/components/vault/vault-client";
+import { PublicVaultHeader } from "@/components/vault/public-vault-header";
 import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
 
 interface Props {
@@ -30,7 +31,7 @@ async function getVaultData(username: string) {
 
   const { data: profile } = await supabase
     .from("users")
-    .select("id, username, avatar_url")
+    .select("id, username, avatar_url, bio, created_at, is_premium")
     .eq("username", username)
     .single();
 
@@ -96,11 +97,20 @@ export default async function PublicVaultPage({ params }: Props) {
   const isOwner = viewer?.id === profile.id;
   const isGuest = !viewer;
 
+  const vaultUrl = `https://threadology.co/vault/${profile.username}`;
+
   return (
     <div className="pb-24">
       <Suspense fallback={null}>
         <UpgradeSuccessToast />
       </Suspense>
+
+      <PublicVaultHeader
+        profile={profile}
+        pieces={pieces}
+        isOwner={isOwner}
+        vaultUrl={vaultUrl}
+      />
 
       {pieces.length === 0 ? (
         isOwner ? (
@@ -124,7 +134,7 @@ export default async function PublicVaultPage({ params }: Props) {
   );
 }
 
-function GuestCTA({ username, pieceCount }: { username: string; pieceCount: number }) {
+function GuestCTA({ username }: { username: string; pieceCount: number }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50">
       {/* Fade gradient */}

@@ -85,6 +85,15 @@ export function VaultClient({ pieces, collections, basePath, isOwner = false }: 
 
   const safeActiveIndex = Math.min(activeIndex, Math.max(0, filteredPieces.length - 1));
 
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  const isViewingAll = !query.trim() && !activeCollection;
+  const recentPieces = isViewingAll
+    ? filteredPieces.filter((p) => Date.now() - new Date(p.created_at).getTime() < SEVEN_DAYS_MS)
+    : [];
+  const olderPieces = isViewingAll
+    ? filteredPieces.filter((p) => Date.now() - new Date(p.created_at).getTime() >= SEVEN_DAYS_MS)
+    : filteredPieces;
+
   return (
     <div className={`flex flex-col ${view === "coverflow" && !searchOpen ? "h-[calc(100dvh-144px)] max-h-[620px] overflow-hidden" : ""}`}>
       {/* Collection chips */}
@@ -122,10 +131,10 @@ export function VaultClient({ pieces, collections, basePath, isOwner = false }: 
       {filteredPieces.length === 0 ? (
         <p className="py-16 text-center text-[13px] text-[#999999]">
           {query
-            ? `no pieces match "${query}"`
+            ? `no results for "${query}"`
             : activeCollection
-            ? `no pieces in ${activeCollection.name} yet`
-            : "no pieces found"}
+            ? "this collection is empty"
+            : "no pieces yet"}
         </p>
       ) : view === "coverflow" ? (
         <div className="flex-1 overflow-hidden">
@@ -138,7 +147,26 @@ export function VaultClient({ pieces, collections, basePath, isOwner = false }: 
         </div>
       ) : (
         <div className="py-4">
-          <VaultGrid pieces={filteredPieces} basePath={basePath} />
+          {recentPieces.length > 0 ? (
+            <>
+              <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.08em] text-[#999999]">
+                Just Archived
+              </p>
+              <VaultGrid pieces={recentPieces} basePath={basePath} />
+              {olderPieces.length > 0 && (
+                <>
+                  <div className="my-6 flex items-center gap-3">
+                    <div className="h-px flex-1 bg-[#EBEBEB]" />
+                    <span className="text-[11px] text-[#999999]">the rest</span>
+                    <div className="h-px flex-1 bg-[#EBEBEB]" />
+                  </div>
+                  <VaultGrid pieces={olderPieces} basePath={basePath} />
+                </>
+              )}
+            </>
+          ) : (
+            <VaultGrid pieces={olderPieces} basePath={basePath} />
+          )}
         </div>
       )}
 

@@ -19,14 +19,21 @@ export async function addPiece(
   }
 
   const supabase = await createServerClient();
-  const { error } = await supabase.from("pieces").insert({
-    ...data,
-    user_id: user.id,
-  });
+  const { data: inserted, error } = await supabase
+    .from("pieces")
+    .insert({ ...data, user_id: user.id })
+    .select("id")
+    .single();
 
   if (error) return { error: error.message };
 
-  redirect("/vault");
+  const { data: profile } = await supabase
+    .from("users")
+    .select("username")
+    .eq("id", user.id)
+    .single();
+
+  redirect(`/vault/${profile?.username ?? user.id}/${inserted.id}`);
 }
 
 export async function updatePiece(

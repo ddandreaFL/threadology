@@ -1,23 +1,23 @@
 import Link from "next/link";
-import { Shirt } from "lucide-react";
 
 export function EmptyVault() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-24 text-center">
-      <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white">
-        <Shirt className="h-7 w-7 text-[#C8BFB0]" strokeWidth={1.25} />
+    <div className="flex flex-col items-center justify-center rounded-[20px] border border-dashed border-[#EBEBEB] py-24 text-center">
+      <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#F5F5F5]">
+        <svg className="h-7 w-7 text-[#CCCCCC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.25}
+            d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" />
+        </svg>
       </div>
 
-      <p className="text-lg text-gray-700">Your vault is empty.</p>
-      <p className="mt-1.5 text-sm text-gray-400">
-        Start documenting your wardrobe.
-      </p>
+      <p className="text-[17px] font-medium tracking-[-0.01em] text-[#111111]">your vault awaits</p>
+      <p className="mt-1.5 text-[13px] text-[#999999]">start documenting your wardrobe</p>
 
       <Link
         href="/vault/add"
-        className="mt-6 rounded-lg bg-[#2D5A45] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1E3D2F]"
+        className="mt-7 rounded-[30px] bg-[#1A1A1A] px-6 py-3 text-[14px] font-medium text-white transition-opacity hover:opacity-80"
       >
-        Add Your First Piece
+        add your first piece →
       </Link>
     </div>
   );
