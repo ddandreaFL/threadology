@@ -12,18 +12,17 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { data: profile } = await supabase
-    .from("users")
-    .select("stripe_customer_id")
-    .eq("id", user.id)
-    .single();
+  // stripe_customer_id is not in the column grant on public.users (see
+  // security_fixes_2.sql); this SECURITY DEFINER function returns it for the
+  // caller's own row only.
+  const { data: customerId } = await supabase.rpc("my_stripe_customer_id");
 
-  if (!profile?.stripe_customer_id) {
+  if (!customerId) {
     return NextResponse.json({ error: "No billing account found" }, { status: 400 });
   }
 
   const session = await getStripe().billingPortal.sessions.create({
-    customer: profile.stripe_customer_id,
+    customer: customerId,
     return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
   });
 

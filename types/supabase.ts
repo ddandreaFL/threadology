@@ -286,7 +286,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      // Added by hand alongside supabase/migrations/security_fixes_2.sql.
+      // Regenerating this file after that migration is applied will produce
+      // the same entry; until then the RPC call would not typecheck.
+      my_stripe_customer_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string | null
+      }
     }
     Enums: {
       fit_visibility: "private" | "link_only" | "public"
