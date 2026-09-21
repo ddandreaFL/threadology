@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { addPiece } from "@/lib/actions/pieces";
-import { uploadImage } from "@/lib/storage";
+import { uploadImage, deleteImage } from "@/lib/storage";
 import { compressImage } from "@/lib/compress";
 
 interface AddPieceFormProps {
@@ -108,6 +108,10 @@ export function AddPieceForm({ userId }: AddPieceFormProps) {
     });
 
     if (result?.error) {
+      if (photoUrl) await deleteImage(photoUrl).catch(() => {});
+      setPhotoUrl(null);
+      setPhotoPreview(null);
+      setStep(1);
       setError(result.error);
       setSubmitting(false);
     }

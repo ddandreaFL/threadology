@@ -1,39 +1,25 @@
 import Link from "next/link";
-import type { Database } from "@/types/supabase";
 import { CopyLinkButton } from "./copy-link-button";
 import { FREE_PIECE_LIMIT } from "@/lib/subscription";
 
-type Profile = Database["public"]["Tables"]["users"]["Row"];
-type Piece = Pick<
-  Database["public"]["Tables"]["pieces"]["Row"],
-  "brand" | "year" | "type" | "estimated_value"
->;
+type Profile = {
+  username: string;
+  avatar_url: string | null;
+  bio: string | null;
+  created_at: string;
+  is_premium: boolean | null;
+};
+
+type Piece = {
+  brand: string;
+  year: string | null;
+};
 
 interface PublicVaultHeaderProps {
   profile: Profile;
   pieces: Piece[];
   isOwner: boolean;
   vaultUrl: string;
-  showVisitorCta: boolean;
-}
-
-function formatJoinDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    year: "numeric",
-  });
-}
-
-function getEraSpan(pieces: Piece[]): string | null {
-  const years = pieces.flatMap((p) => {
-    if (!p.year) return [];
-    const m = p.year.match(/\b(19|20)\d{2}\b/);
-    return m ? [parseInt(m[0])] : [];
-  });
-  if (years.length < 2) return null;
-  const min = Math.min(...years);
-  const max = Math.max(...years);
-  return min === max ? null : `${min}–${max}`;
 }
 
 function getTopBrands(pieces: Piece[], limit = 5): string[] {
@@ -48,174 +34,124 @@ function getTopBrands(pieces: Piece[], limit = 5): string[] {
     .map(([brand]) => brand);
 }
 
-export function PublicVaultHeader({
-  profile,
-  pieces,
-  isOwner,
-  vaultUrl,
-  showVisitorCta,
-}: PublicVaultHeaderProps) {
+function getEraSpan(pieces: Piece[]): string | null {
+  const years = pieces.flatMap((p) => {
+    const m = p.year?.match(/\b(19|20)\d{2}\b/);
+    return m ? [parseInt(m[0])] : [];
+  });
+  if (years.length < 2) return null;
+  const min = Math.min(...years);
+  const max = Math.max(...years);
+  return min === max ? null : `${min}–${max}`;
+}
+
+export function PublicVaultHeader({ profile, pieces, isOwner, vaultUrl }: PublicVaultHeaderProps) {
   const pieceCount = pieces.length;
   const brandCount = new Set(pieces.map((p) => p.brand.toLowerCase())).size;
   const eraSpan = getEraSpan(pieces);
   const topBrands = getTopBrands(pieces);
   const initial = profile.username[0].toUpperCase();
-  const limitPct = Math.min(
-    100,
-    Math.round((pieceCount / FREE_PIECE_LIMIT) * 100)
-  );
-  const atLimit = pieceCount >= FREE_PIECE_LIMIT;
+  const joinYear = new Date(profile.created_at).getFullYear();
+  const atLimit = !profile.is_premium && pieceCount >= FREE_PIECE_LIMIT;
 
   return (
-    <div className="space-y-4 border-b border-[#E0D8CC] pb-6">
-      {/* ── Row 1: Identity ── */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          {/* Avatar */}
+    <div className="mb-6 space-y-5">
+      {/* Identity row */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-4">
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profile.avatar_url}
               alt={profile.username}
-              className="h-10 w-10 shrink-0 rounded-full border border-[#E0D8CC] object-cover"
+              className="h-14 w-14 shrink-0 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#E0D8CC] bg-[#2D5A45]/10">
-              <span className="font-mono-display text-base text-[#2D5A45]">
-                {initial}
-              </span>
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#1A1A1A]">
+              <span className="text-[20px] font-medium text-white">{initial}</span>
             </div>
           )}
-
-          {/* Username + meta */}
           <div>
-            <p className="font-mono-display text-xl leading-tight text-gray-900">
+            <p className="text-[18px] font-medium tracking-[-0.02em] text-[#111111]">
               @{profile.username}
             </p>
-            <p className="mt-0.5 font-mono-display text-[11px] text-gray-400">
-              Joined {formatJoinDate(profile.created_at)}&nbsp;&middot;&nbsp;
-              {pieceCount} {pieceCount === 1 ? "piece" : "pieces"}
+            <p className="mt-0.5 text-[12px] text-[#999999]">
+              collecting since {joinYear}
             </p>
           </div>
         </div>
 
-        {/* Owner icon buttons */}
         {isOwner && (
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-center gap-1 pt-1">
             <CopyLinkButton url={vaultUrl} iconOnly />
             <Link
               href="/settings"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-[#999999] transition-colors hover:bg-[#F5F5F5] hover:text-[#111111]"
               title="Edit profile"
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-700"
             >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
               </svg>
             </Link>
           </div>
         )}
       </div>
 
-      {/* Bio (if set) */}
+      {/* Bio */}
       {profile.bio && (
-        <p className="text-sm text-gray-600">{profile.bio}</p>
+        <p className="text-[13px] leading-relaxed text-[#555555]">{profile.bio}</p>
       )}
 
-      {/* ── Row 2: Stats Grid ── */}
-      <div className="grid grid-cols-3 divide-x divide-[#E0D8CC] border-y border-[#E0D8CC]">
+      {/* Stats */}
+      <div className="flex divide-x divide-[#EBEBEB] border-y border-[#EBEBEB]">
         {[
-          { value: String(pieceCount), label: "Pieces" },
-          { value: String(brandCount), label: "Brands" },
-          { value: eraSpan ?? "—", label: "Era Span" },
+          { value: pieceCount, label: "pieces" },
+          { value: brandCount, label: "brands" },
+          { value: eraSpan ?? "—", label: "era" },
         ].map(({ value, label }) => (
-          <div key={label} className="py-3 text-center">
-            <p className="text-2xl font-semibold tabular-nums text-gray-900">
-              {value}
-            </p>
-            <p className="mt-0.5 font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
-              {label}
-            </p>
+          <div key={label} className="flex-1 py-3 text-center">
+            <p className="text-[18px] font-semibold text-[#111111]">{value}</p>
+            <p className="mt-0.5 text-[10px] uppercase tracking-wide text-[#999999]">{label}</p>
           </div>
         ))}
       </div>
 
-      {/* ── Row 3: Top Brands ── */}
+      {/* Top brands */}
       {topBrands.length >= 2 && (
-        <div>
-          <p className="mb-2 font-mono-display text-[10px] uppercase tracking-widest text-gray-400">
-            Top Brands
-          </p>
-          <div className="flex gap-2 overflow-x-auto pb-0.5">
-            {topBrands.map((brand) => (
-              <span
-                key={brand}
-                className="shrink-0 rounded-full border border-[#E0D8CC] px-3 py-1 font-mono-display text-[10px] uppercase tracking-widest text-[#2C2C2C]"
-              >
-                {brand}
-              </span>
-            ))}
-          </div>
+        <div className="flex gap-2 overflow-x-auto pb-0.5">
+          {topBrands.map((brand) => (
+            <span
+              key={brand}
+              className="shrink-0 rounded-full border border-[#EBEBEB] px-3 py-1 text-[11px] text-[#555555]"
+            >
+              {brand}
+            </span>
+          ))}
         </div>
       )}
 
-      {/* ── Row 4: Piece Limit (owner + free tier) or Premium badge ── */}
+      {/* Owner: piece limit or premium badge */}
       {isOwner && !profile.is_premium && (
         <div className="flex items-center gap-3">
-          <span className="shrink-0 font-mono-display text-[11px] text-gray-400">
+          <span className="shrink-0 text-[11px] text-[#999999]">
             {pieceCount} of {FREE_PIECE_LIMIT}
           </span>
-          <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-[#E0D8CC]">
+          <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-[#F0F0F0]">
             <div
-              className={`h-full rounded-full transition-all ${
-                atLimit ? "bg-amber-400" : "bg-[#2D5A45]"
-              }`}
-              style={{ width: `${limitPct}%` }}
+              className="h-full rounded-full bg-[#111111] transition-all"
+              style={{ width: `${Math.min(100, Math.round((pieceCount / FREE_PIECE_LIMIT) * 100))}%`,
+                       backgroundColor: atLimit ? "#CC4444" : "#111111" }}
             />
           </div>
-          <Link
-            href="/upgrade"
-            className="shrink-0 font-mono-display text-[11px] font-medium text-[#2D5A45] transition-colors hover:text-[#1E3D2F]"
-          >
-            Upgrade →
+          <Link href="/upgrade" className="shrink-0 text-[11px] text-[#999999] underline transition-colors hover:text-[#111111]">
+            upgrade
           </Link>
         </div>
       )}
 
       {isOwner && profile.is_premium && (
-        <div className="flex items-center gap-1.5">
-          <svg className="h-3 w-3 text-[#2D5A45]" viewBox="0 0 12 12" fill="currentColor">
-            <path d="M6 0l1.5 4h4l-3.25 2.5 1.25 4L6 8.25 2.5 10.5l1.25-4L.5 4h4z" />
-          </svg>
-          <span className="font-mono-display text-[11px] uppercase tracking-widest text-[#2D5A45]">
-            Premium
-          </span>
-        </div>
-      )}
-
-      {/* ── Row 5: Visitor CTA ── */}
-      {showVisitorCta && (
-        <Link
-          href="/signup"
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-[#2D5A45]/25 bg-[#2D5A45]/5 py-2.5 text-sm font-medium text-[#2D5A45] transition-colors hover:bg-[#2D5A45]/10"
-        >
-          Create your own vault →
-        </Link>
+        <p className="text-[11px] uppercase tracking-wide text-[#999999]">✦ premium</p>
       )}
     </div>
   );
