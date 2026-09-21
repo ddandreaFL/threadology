@@ -41,10 +41,12 @@ export function GET() {
           {
             appIDs: [`${TEAM_ID}.${BUNDLE_ID}`],
             components: [
-              // Shared fits and containers. A link without its ?k= token is
-              // not a share link, so it is left to the browser.
+              // Fits only, for now. The app can render a shared fit through
+              // shared_fit(); it has no viewer for someone else's vault or
+              // collection, and opening one would be worse than the browser.
+              // Paths are served from here, so /vault/* widens the day that
+              // viewer exists — no release needed.
               { "/": "/fit/*", comment: "a shared fit" },
-              { "/": "/vault/*", comment: "a shared vault or collection" },
             ],
           },
         ],
