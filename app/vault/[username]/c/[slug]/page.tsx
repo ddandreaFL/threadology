@@ -1,73 +1,77 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { createServerClient } from "@/lib/supabase-server";
-import { VaultGrid } from "@/components/vault/vault-grid";
+import type { Metadata } from "next";
+import { getSharedCollection } from "@/lib/shared";
+import { SharedHeader } from "@/components/shared/shared-header";
+import { SharedPieces } from "@/components/shared/shared-pieces";
+import { PasswordChallenge } from "@/components/shared/password-challenge";
+import { DeadLink } from "@/components/shared/dead-link";
+
+/**
+ * A shared collection — the page a link most often lands on, since the first
+ * thing anyone sends is a collection rather than a whole vault.
+ *
+ * Everything comes from shared_collection(), so this page cannot show what
+ * the token does not entitle the viewer to. It does not query collections or
+ * pieces directly, which is what the old version did and why it rendered
+ * nothing for a stranger once the blanket read policy was dropped.
+ */
 
 interface Props {
   params: { username: string; slug: string };
+  searchParams: { k?: string };
 }
 
-export default async function CollectionPage({ params }: Props) {
-  const supabase = await createServerClient();
+const WEB_ORIGIN =
+  process.env.NEXT_PUBLIC_APP_URL?.startsWith("https://")
+    ? process.env.NEXT_PUBLIC_APP_URL
+    : "https://threadology.vercel.app";
 
-  const { data: profile } = await supabase
-    .from("users")
-    .select("id, username")
-    .eq("username", params.username)
-    .single();
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const result = await getSharedCollection(searchParams.k);
 
-  if (!profile) notFound();
+  // Unlisted means unlisted. A shared link must never become a search result,
+  // and a dead or gated link gives the unfurl nothing to show.
+  const robots = { index: false, follow: false };
 
-  const { data: collection } = await supabase
-    .from("collections")
-    .select("id, name, slug, description")
-    .eq("user_id", profile.id)
-    .eq("slug", params.slug)
-    .single();
+  if (result.kind !== "ok") {
+    return { title: "threadology", robots };
+  }
 
-  if (!collection) notFound();
+  const { owner, collection, pieces } = result.data;
+  const title = `${collection?.name ?? "collection"} — @${owner.username}`;
+  const description = `${pieces.length} ${pieces.length === 1 ? "piece" : "pieces"} documented by @${owner.username}.`;
+  const image = `${WEB_ORIGIN}/og/collection/${searchParams.k}`;
 
-  const { data: collectionPieces } = await supabase
-    .from("collection_pieces")
-    .select("pieces(id, brand, type, name, year, photos, crop_positions)")
-    .eq("collection_id", collection.id)
-    .order("position");
+  return {
+    title,
+    description,
+    robots,
+    openGraph: { title, description, images: [image], type: "website" },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
+  };
+}
 
-  const pieces = (collectionPieces ?? [])
-    .map((cp) => cp.pieces)
-    .filter(Boolean) as NonNullable<typeof collectionPieces>[number]["pieces"][];
+export default async function SharedCollectionPage({ searchParams }: Props) {
+  const result = await getSharedCollection(searchParams.k);
+
+  if (result.kind === "unavailable") return <DeadLink />;
+
+  if (result.kind === "password") {
+    return (
+      <PasswordChallenge fn="shared_collection" token={searchParams.k!} kind="collection" />
+    );
+  }
+
+  const { owner, collection, pieces } = result.data;
 
   return (
-    <div className="pb-24">
-      <Link
-        href={`/vault/${params.username}`}
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-gray-700"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" />
-        Back to vault
-      </Link>
-
-      <div className="mb-6">
-        <h1 className="font-mono-display text-2xl text-gray-900">{collection.name}</h1>
-        {collection.description && (
-          <p className="mt-1 text-sm text-gray-500">{collection.description}</p>
-        )}
-        <p className="mt-2 font-mono-display text-xs text-gray-400">
-          {pieces.length} {pieces.length === 1 ? "piece" : "pieces"}
-        </p>
-      </div>
-
-      {pieces.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#C8BFB0] bg-[#FDFCFA] py-24 text-center">
-          <p className="text-gray-500">No pieces in this collection yet.</p>
-          <p className="mt-1 text-sm text-gray-400">
-            Open a piece and use &ldquo;Add to Collection&rdquo; to add it here.
-          </p>
-        </div>
-      ) : (
-        <VaultGrid pieces={pieces} basePath={`/vault/${params.username}`} />
-      )}
-    </div>
+    <>
+      <SharedHeader
+        owner={owner}
+        title={collection?.name ?? "collection"}
+        count={pieces.length}
+        kind="collection"
+      />
+      <SharedPieces pieces={pieces} />
+    </>
   );
 }
