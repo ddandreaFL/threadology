@@ -22,7 +22,9 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-static";
 
-const TEAM_ID = process.env.APPLE_TEAM_ID;
+// Not a secret: every AASA file on the internet publishes its team id, which
+// is why this is defaulted here rather than kept in an environment variable.
+const TEAM_ID = process.env.APPLE_TEAM_ID ?? "8SZST4B8CD";
 const BUNDLE_ID = "com.threadology.app";
 
 export function GET() {
