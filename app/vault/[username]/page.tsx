@@ -8,6 +8,18 @@ import { VaultClient } from "@/components/vault/vault-client";
 import { PublicVaultHeader } from "@/components/vault/public-vault-header";
 import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
 
+/**
+ * The origin serving public pages. No custom domain is registered yet, so this
+ * is the Vercel deployment; set NEXT_PUBLIC_APP_URL to override once one is.
+ * Two different origins were hardcoded in this file, and one of them
+ * (threadology.co) points at a domain that does not exist.
+ */
+const WEB_ORIGIN =
+  process.env.NEXT_PUBLIC_APP_URL?.startsWith("https://")
+    ? process.env.NEXT_PUBLIC_APP_URL
+    : "https://threadology.vercel.app";
+
+
 interface Props {
   params: { username: string };
 }
@@ -79,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `@${profile.username}'s Vault`,
       description: `${pieceCount} pieces across ${brandCount} brands.`,
       images: [profile.avatar_url ?? "/og-default.png"],
-      url: `https://threadology.vercel.app/vault/${profile.username}`,
+      url: `${WEB_ORIGIN}/vault/${profile.username}`,
     },
     twitter: { card: "summary_large_image" },
   };
@@ -97,7 +109,7 @@ export default async function PublicVaultPage({ params }: Props) {
   const isOwner = viewer?.id === profile.id;
   const isGuest = !viewer;
 
-  const vaultUrl = `https://threadology.co/vault/${profile.username}`;
+  const vaultUrl = `${WEB_ORIGIN}/vault/${profile.username}`;
 
   return (
     <div className="pb-24">
