@@ -9,6 +9,7 @@ function isProtectedRoute(pathname: string): boolean {
   if (pathname.startsWith("/settings")) return true;
   if (pathname.startsWith("/upgrade")) return true;
   if (pathname.startsWith("/profile")) return true;
+  if (pathname.startsWith("/collections")) return true;
   if (pathname === "/fit/new") return true;
   // /fit/[slug]/edit
   if (/^\/fit\/[^/]+\/edit$/.test(pathname)) return true;

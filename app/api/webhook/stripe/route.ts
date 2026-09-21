@@ -62,11 +62,7 @@ export async function POST(req: NextRequest) {
       .eq("stripe_customer_id", customerId);
   }
 
-  if (
-    event.type === "customer.subscription.deleted" ||
-    (event.type === "customer.subscription.updated" &&
-      event.data.object.cancel_at_period_end === true)
-  ) {
+  if (event.type === "customer.subscription.deleted") {
     const subscription = event.data.object;
     const customerId = subscription.customer as string;
 

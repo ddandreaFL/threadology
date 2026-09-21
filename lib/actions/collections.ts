@@ -75,11 +75,14 @@ export async function addPieceToCollections(pieceId: string, collectionIds: stri
 }
 
 export async function getPieceCollections(pieceId: string): Promise<string[]> {
+  const user = await requireUser();
   const supabase = await createServerClient();
+
   const { data } = await supabase
     .from("collection_pieces")
-    .select("collection_id")
-    .eq("piece_id", pieceId);
+    .select("collection_id, collections!inner(user_id)")
+    .eq("piece_id", pieceId)
+    .eq("collections.user_id", user.id);
 
   return (data ?? []).map((cp) => cp.collection_id);
 }

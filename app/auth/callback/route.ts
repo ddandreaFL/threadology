@@ -6,7 +6,8 @@ import type { NextRequest } from "next/server";
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/vault";
+  const raw = searchParams.get("next") ?? "/vault";
+  const next = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/vault";
 
   if (code) {
     const cookieStore = cookies();

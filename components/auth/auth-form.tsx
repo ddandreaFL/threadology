@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 interface AuthFormProps {
   title: string;
   children: React.ReactNode;
@@ -13,6 +15,11 @@ export function AuthForm({ title, children }: AuthFormProps) {
           {title}
         </h1>
         {children}
+        <div className="mt-12 flex justify-center gap-5">
+          <Link href="/privacy" className="text-[11px] text-[#BBBBBB] transition-colors hover:text-[#999999]">privacy</Link>
+          <Link href="/terms" className="text-[11px] text-[#BBBBBB] transition-colors hover:text-[#999999]">terms</Link>
+          <Link href="/security" className="text-[11px] text-[#BBBBBB] transition-colors hover:text-[#999999]">security</Link>
+        </div>
       </div>
     </div>
   );
