@@ -50,7 +50,7 @@ export type SharedResult =
   | { kind: "unavailable" };
 
 async function callShared(
-  fn: "shared_vault" | "shared_collection",
+  fn: "shared_vault" | "shared_collection" | "shared_fit",
   token: string | undefined,
   password?: string
 ): Promise<SharedResult> {
@@ -85,4 +85,42 @@ export function getSharedVault(token?: string, password?: string) {
 
 export function getSharedCollection(token?: string, password?: string) {
   return callShared("shared_collection", token, password);
+}
+
+export type SharedFitPiece = {
+  id: string;
+  brand: string;
+  type: string;
+  name: string | null;
+  year: string | null;
+  size: string | null;
+  photos: string[];
+  layer_order: number;
+};
+
+export type SharedFitData = {
+  owner: SharedOwner;
+  fit: {
+    id: string;
+    slug: string;
+    title: string | null;
+    caption: string | null;
+    date: string | null;
+    photos: string[];
+  };
+  pieces: SharedFitPiece[];
+};
+
+export type SharedFitResult =
+  | { kind: "ok"; data: SharedFitData }
+  | { kind: "password" }
+  | { kind: "unavailable" };
+
+export async function getSharedFit(
+  token?: string,
+  password?: string
+): Promise<SharedFitResult> {
+  const r = await callShared("shared_fit", token, password);
+  if (r.kind !== "ok") return r;
+  return { kind: "ok", data: r.data as unknown as SharedFitData };
 }

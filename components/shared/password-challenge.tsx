@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { SharedPieces, type SharedPiece } from "@/components/shared/shared-pieces";
 import { SharedHeader } from "@/components/shared/shared-header";
+import { SharedFitBody } from "@/components/shared/shared-fit-body";
+import type { SharedFitData } from "@/lib/shared";
 
 /**
  * The challenge replaces the page. Nothing about the container, the owner or
@@ -17,9 +19,9 @@ export function PasswordChallenge({
   token,
   kind,
 }: {
-  fn: "shared_vault" | "shared_collection";
+  fn: "shared_vault" | "shared_collection" | "shared_fit";
   token: string;
-  kind: "vault" | "collection";
+  kind: "vault" | "collection" | "fit";
 }) {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -59,6 +61,9 @@ export function PasswordChallenge({
   }
 
   if (data) {
+    if (kind === "fit") {
+      return <SharedFitBody data={data as unknown as SharedFitData} />;
+    }
     return (
       <>
         <SharedHeader
