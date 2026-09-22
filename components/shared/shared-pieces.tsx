@@ -149,25 +149,30 @@ function PieceOverlay({ piece, onClose }: { piece: SharedPiece; onClose: () => v
           </p>
 
           {facts.length > 0 && (
-            <div className="mt-5 flex flex-wrap gap-2">
-              {facts.map(([label, value]) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-[#E8E5DE] bg-[#FAFAFA] px-3 py-1.5"
-                >
-                  <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#BBBBBB]">
-                    {label}
+            <div className="mt-7">
+              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#6B6358]">
+                details
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {facts.map(([label, value]) => (
+                  <span
+                    key={label}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#E8E5DE] bg-[#FAFAFA] px-3 py-1.5"
+                  >
+                    <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#BBBBBB]">
+                      {label}
+                    </span>
+                    <span className="text-[12px] font-semibold capitalize text-[#1B1A17]">{value}</span>
                   </span>
-                  <span className="text-[12px] font-semibold text-[#1B1A17]">{value}</span>
-                </span>
-              ))}
+                ))}
+              </div>
             </div>
           )}
 
           {/* Where it came from crosses the boundary; what was paid never
               does, and is not in the data this page receives. */}
           {provenance && (
-            <div className="mt-8">
+            <div className="mt-9">
               <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#6B6358]">
                 acquired
               </p>
@@ -176,7 +181,7 @@ function PieceOverlay({ piece, onClose }: { piece: SharedPiece; onClose: () => v
           )}
 
           {piece.story && (
-            <div className="mt-8 border-l-2 border-[#2D5A45] pl-5">
+            <div className="mt-9 border-l-2 border-[#2D5A45] pl-5">
               <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#2D5A45]">
                 story
               </p>

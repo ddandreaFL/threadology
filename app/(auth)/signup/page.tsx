@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { safeNext } from "@/lib/next-path";
 import { AuthForm, FormField, SubmitButton } from "@/components/auth/auth-form";
 
 interface FieldErrors {
@@ -12,8 +13,11 @@ interface FieldErrors {
   password?: string;
 }
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
+  // A visitor sent here from a share link comes back to that link, with the
+  // save they were trying to make still attached.
+  const next = safeNext(useSearchParams().get("next"));
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -97,7 +101,7 @@ export default function SignupPage() {
         .eq("id", data.user.id);
     }
 
-    router.push("/vault");
+    router.push(next);
   }
 
   return (
@@ -144,10 +148,22 @@ export default function SignupPage() {
 
       <p className="mt-6 text-center text-[13px] text-[#999999]">
         already have an account?{" "}
-        <Link href="/login" className="text-[#111111] underline">
+        <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="text-[#111111] underline">
           log in
         </Link>
       </p>
     </AuthForm>
+  );
+}
+
+/**
+ * useSearchParams needs a boundary or the whole route opts out of static
+ * rendering at build time.
+ */
+export default function SignupPage() {
+  return (
+    <Suspense>
+      <SignupForm />
+    </Suspense>
   );
 }

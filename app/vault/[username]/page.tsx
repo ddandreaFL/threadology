@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getSharedVault } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
 import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
+import { SaveButton } from "@/components/shared/save-button";
 import { SharedHeader } from "@/components/shared/shared-header";
 import { SharedSegments } from "@/components/shared/shared-segments";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
@@ -91,6 +92,10 @@ export default async function SharedVaultPage({ params, searchParams }: Props) {
         count={pieces.length}
         kind="vault"
       />
+
+      <div className="mb-10 flex justify-center">
+        <SaveButton containerType="vault" token={searchParams.k} label="save this vault" />
+      </div>
 
       {pieces.length === 0 && collections.length === 0 && fits.length === 0 ? (
         <p className="py-24 text-center text-sm text-[#6B6358]">Nothing here yet.</p>

@@ -6,7 +6,15 @@ import { FitReactions } from "@/components/shared/fit-reactions";
  * The body of a shared fit, shared by the page and by the view that appears
  * once a password challenge is answered, so the two cannot drift.
  */
-export function SharedFitBody({ data, token }: { data: SharedFitData; token?: string }) {
+export function SharedFitBody({
+  data,
+  token,
+  save,
+}: {
+  data: SharedFitData;
+  token?: string;
+  save?: React.ReactNode;
+}) {
   const { owner, fit, pieces } = data;
   const hero = fit.photos?.[0];
   const dateLabel = fit.date
@@ -69,6 +77,8 @@ export function SharedFitBody({ data, token }: { data: SharedFitData; token?: st
           </ul>
         </section>
       )}
+
+      {save && <div className="mt-7">{save}</div>}
 
       <FitReactions
         token={token}

@@ -21,6 +21,8 @@ interface Stats {
 const NAV_ROWS = [
   { label: "vault", href: "/vault" },
   { label: "collections", href: "/collections" },
+  { label: "saved", href: "/saved" },
+  { label: "notifications", href: "/notifications" },
   { label: "profile", href: "/profile" },
   { label: "settings", href: "/settings" },
 ] as const;

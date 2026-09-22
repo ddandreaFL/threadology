@@ -1,13 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { safeNext } from "@/lib/next-path";
 import { AuthForm, FormField, SubmitButton } from "@/components/auth/auth-form";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  // A visitor sent here from a share link comes back to that link, with the
+  // save they were trying to make still attached.
+  const next = safeNext(useSearchParams().get("next"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +38,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/vault");
+    router.push(next);
   }
 
   return (
@@ -66,10 +70,22 @@ export default function LoginPage() {
 
       <p className="mt-6 text-center text-[13px] text-[#999999]">
         don&apos;t have an account?{" "}
-        <Link href="/signup" className="text-[#111111] underline">
+        <Link href={next === "/vault" ? "/signup" : `/signup?next=${encodeURIComponent(next)}`} className="text-[#111111] underline">
           sign up
         </Link>
       </p>
     </AuthForm>
+  );
+}
+
+/**
+ * useSearchParams needs a boundary or the whole route opts out of static
+ * rendering at build time.
+ */
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

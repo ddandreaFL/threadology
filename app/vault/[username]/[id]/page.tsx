@@ -16,13 +16,18 @@ interface Props {
 type PillVariant = "neutral" | "green" | "gold";
 
 function MetaPill({ label, value, variant = "neutral" }: { label: string; value: string; variant?: PillVariant }) {
-  const bg = { neutral: "bg-[#F5F5F5]", green: "bg-[#EDF6F1]", gold: "bg-[#FBF7EE]" }[variant];
-  const color = { neutral: "text-[#555555]", green: "text-[#2D5A45]", gold: "text-[#8B6930]" }[variant];
+  // The fit page has one voice for a fact. A green pill next to a gold one
+  // read as a ranking of the facts, which is not something the archive says.
+  const isValue = variant === "gold";
   return (
-    <div className={`flex flex-col rounded-[10px] px-[14px] py-[10px] ${bg}`}>
-      <span className={`text-[9px] font-medium uppercase tracking-[0.08em] ${color} opacity-75`}>{label}</span>
-      <span className={`mt-0.5 text-[13px] font-medium capitalize ${color}`}>{value}</span>
-    </div>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 ${
+        isValue ? "border-[#E4D9B8] bg-[#FDFAF0]" : "border-[#E8E5DE] bg-[#FAFAFA]"
+      }`}
+    >
+      <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#BBBBBB]">{label}</span>
+      <span className="text-[12px] font-semibold capitalize text-[#1B1A17]">{value}</span>
+    </span>
   );
 }
 
@@ -108,42 +113,55 @@ export default async function PublicPiecePage({ params }: Props) {
         />
       </div>
 
-      {/* Content card — overlaps hero */}
-      <div className="-mt-[72px] rounded-t-[28px] bg-white px-5 pt-7 shadow-[0_-4px_24px_rgba(0,0,0,0.06)]">
-        {/* Brand + name */}
-        <p className="text-[11px] uppercase tracking-[0.08em] text-[#999999]">{piece.brand}</p>
-        <h1 className="mt-1 text-[24px] font-semibold leading-[1.2] tracking-[-0.02em] text-[#111111]">
+      {/* Below the photo, the fit page's rhythm: attribution line, title,
+          the piece's own line, then labelled sections separated by space
+          rather than by a card edge. Nothing the zoned version showed has
+          been dropped — condition, year, season, size, estimated value,
+          collections and story are all still here. */}
+      <div className="px-5 pt-7">
+        <p className="font-mono text-[11px] uppercase tracking-[0.11em] text-[#2D5A45]">
+          {piece.brand}
+        </p>
+        <h1 className="mt-2 text-[28px] font-bold leading-tight tracking-[-0.02em] text-[#1B1A17]">
           {displayName}
         </h1>
+        <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.11em] text-[#6B6358]">
+          {piece.type}
+        </p>
 
-        {/* Metadata pills */}
         {pills.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-2">
-            {pills.map((p) => (
-              <MetaPill key={p.label} label={p.label} value={p.value} variant={p.variant} />
-            ))}
+          <div className="mt-7">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#6B6358]">
+              details
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {pills.map((p) => (
+                <MetaPill key={p.label} label={p.label} value={p.value} variant={p.variant} />
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Collections */}
         {isOwner && (pieceCollections.length > 0 || userCollections.length > 0) && (
-          <div className="mt-8">
-            <div className="mb-3 flex items-center justify-between">
-              <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-[#999999]">Collections</p>
+          <div className="mt-9">
+            <div className="flex items-center justify-between">
+              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#6B6358]">
+                collections
+              </p>
               <Link
                 href="/collections"
-                className="text-[11px] text-[#999999] transition-colors hover:text-[#111111]"
+                className="text-[12px] text-[#999999] transition-colors hover:text-[#111111]"
               >
-                Manage
+                manage
               </Link>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {pieceCollections.map((c) => (
                 <span
                   key={c.id}
-                  className="rounded-[6px] border border-[#E0E0E0] px-[10px] py-[5px] text-[11px] text-[#999999]"
+                  className="rounded-full border border-[#2D5A45] px-3.5 py-1.5 text-[13px] text-[#2D5A45]"
                 >
-                  {c.name}
+                  {c.name.toLowerCase()}
                 </span>
               ))}
               <PieceCollectionButton pieceId={piece.id} collections={userCollections} />
@@ -151,14 +169,15 @@ export default async function PublicPiecePage({ params }: Props) {
           </div>
         )}
 
-        {/* Story */}
         {storyParagraphs.length > 0 && (
-          <div className="mt-8 border-l-2 border-[#2D5A45] pl-[14px]">
-            <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.1em] text-[#999999]">Story</p>
+          <div className="mt-9 border-l-2 border-[#2D5A45] pl-5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#2D5A45]">
+              story
+            </p>
             {storyParagraphs.map((para: string, i: number) => (
               <p
                 key={i}
-                className={`text-[14px] leading-[1.8] text-[#444444]${i > 0 ? " mt-3" : ""}`}
+                className={`whitespace-pre-wrap text-[16px] leading-[1.7] text-[#1B1A17]${i > 0 ? " mt-4" : " mt-3"}`}
               >
                 {para}
               </p>
@@ -166,13 +185,12 @@ export default async function PublicPiecePage({ params }: Props) {
           </div>
         )}
 
-        {/* Delete */}
         {isOwner && (
-          <div className="mt-10">
+          <div className="mt-12">
             <DeletePieceModal
               pieceId={piece.id}
               pieceName={displayName}
-              buttonClassName="text-[11px] text-[#999999] transition-colors hover:text-red-500"
+              buttonClassName="text-[12px] text-[#999999] transition-colors hover:text-red-500"
               buttonLabel="delete piece"
             />
           </div>

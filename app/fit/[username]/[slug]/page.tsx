@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getSharedFit } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
 import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
+import { SaveButton } from "@/components/shared/save-button";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
 import { DeadLink } from "@/components/shared/dead-link";
 import { SharedFitBody } from "@/components/shared/shared-fit-body";
@@ -74,7 +75,11 @@ export default async function SharedFitPage({ params, searchParams }: Props) {
   return (
     <SharedChrome>
       {isOwner && <OwnerPreviewBanner />}
-      <SharedFitBody data={result.data} token={searchParams.k} />
+      <SharedFitBody
+        data={result.data}
+        token={searchParams.k}
+        save={<SaveButton containerType="fit" token={searchParams.k} label="save this fit" />}
+      />
     </SharedChrome>
   );
 }

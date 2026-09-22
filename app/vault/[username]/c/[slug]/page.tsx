@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getSharedCollection } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
 import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
+import { SaveButton } from "@/components/shared/save-button";
 import { SharedHeader } from "@/components/shared/shared-header";
 import { SharedPieces } from "@/components/shared/shared-pieces";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
@@ -88,6 +89,11 @@ export default async function SharedCollectionPage({ params, searchParams }: Pro
         count={pieces.length}
         kind="collection"
       />
+
+      <div className="mb-10 flex justify-center">
+        <SaveButton containerType="collection" token={searchParams.k} label="save this collection" />
+      </div>
+
       <SharedPieces pieces={pieces} />
     </SharedChrome>
   );
