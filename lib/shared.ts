@@ -50,7 +50,7 @@ export type SharedResult =
   | { kind: "unavailable" };
 
 async function callShared(
-  fn: "shared_vault" | "shared_collection" | "shared_fit",
+  fn: "shared_vault" | "shared_collection" | "shared_fit" | "shared_piece",
   token: string | undefined,
   password?: string
 ): Promise<SharedResult> {
@@ -114,6 +114,42 @@ export type SharedFitData = {
   };
   pieces: SharedFitPiece[];
 };
+
+export type SharedPieceData = {
+  owner: SharedOwner;
+  viewer?: { signed_in: boolean; is_owner: boolean };
+  piece: {
+    id: string;
+    slug: string;
+    brand: string;
+    type: string;
+    name: string | null;
+    year: string | null;
+    season: string | null;
+    size: string | null;
+    condition: string | null;
+    story: string | null;
+    photos: string[];
+    materials: string | null;
+    acquired_where: string | null;
+    acquired_at: string | null;
+  };
+};
+
+export type SharedPieceResult =
+  | { kind: "ok"; data: SharedPieceData }
+  | { kind: "password" }
+  | { kind: "unavailable" };
+
+/** One piece, shared on its own — the thing people actually send each other. */
+export async function getSharedPiece(
+  token?: string,
+  password?: string
+): Promise<SharedPieceResult> {
+  const r = await callShared("shared_piece", token, password);
+  if (r.kind !== "ok") return r;
+  return { kind: "ok", data: r.data as unknown as SharedPieceData };
+}
 
 export type SharedFitResult =
   | { kind: "ok"; data: SharedFitData }

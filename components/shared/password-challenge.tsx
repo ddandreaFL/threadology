@@ -4,7 +4,8 @@ import { useState } from "react";
 import { SharedPieces, type SharedPiece } from "@/components/shared/shared-pieces";
 import { SharedHeader } from "@/components/shared/shared-header";
 import { SharedFitBody } from "@/components/shared/shared-fit-body";
-import type { SharedFitData } from "@/lib/shared";
+import { SharedPieceBody } from "@/components/shared/shared-piece-body";
+import type { SharedFitData, SharedPieceData } from "@/lib/shared";
 
 /**
  * The challenge replaces the page. Nothing about the container, the owner or
@@ -19,9 +20,9 @@ export function PasswordChallenge({
   token,
   kind,
 }: {
-  fn: "shared_vault" | "shared_collection" | "shared_fit";
+  fn: "shared_vault" | "shared_collection" | "shared_fit" | "shared_piece";
   token: string;
-  kind: "vault" | "collection" | "fit";
+  kind: "vault" | "collection" | "fit" | "piece";
 }) {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -64,13 +65,16 @@ export function PasswordChallenge({
     if (kind === "fit") {
       return <SharedFitBody data={data as unknown as SharedFitData} token={token} />;
     }
+    if (kind === "piece") {
+      return <SharedPieceBody data={data as unknown as SharedPieceData} />;
+    }
     return (
       <>
         <SharedHeader
           owner={data.owner}
           title={data.collection?.name ?? "vault"}
           count={data.pieces.length}
-          kind={kind}
+          kind={kind as "vault" | "collection"}
         />
         <SharedPieces pieces={data.pieces} />
       </>
