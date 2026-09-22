@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getSharedCollection } from "@/lib/shared";
+import { viewerIsOwner } from "@/lib/shared-viewer";
+import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
 import { SharedHeader } from "@/components/shared/shared-header";
 import { SharedPieces } from "@/components/shared/shared-pieces";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
@@ -17,7 +20,7 @@ import { DeadLink } from "@/components/shared/dead-link";
 
 interface Props {
   params: { username: string; slug: string };
-  searchParams: { k?: string };
+  searchParams: { k?: string; preview?: string };
 }
 
 const WEB_ORIGIN =
@@ -50,21 +53,35 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 }
 
-export default async function SharedCollectionPage({ searchParams }: Props) {
+export default async function SharedCollectionPage({ params, searchParams }: Props) {
   const result = await getSharedCollection(searchParams.k);
 
-  if (result.kind === "unavailable") return <DeadLink />;
+  if (result.kind === "unavailable") {
+    return (
+      <SharedChrome>
+        <DeadLink />
+      </SharedChrome>
+    );
+  }
 
   if (result.kind === "password") {
     return (
-      <PasswordChallenge fn="shared_collection" token={searchParams.k!} kind="collection" />
+      <SharedChrome>
+        <PasswordChallenge fn="shared_collection" token={searchParams.k!} kind="collection" />
+      </SharedChrome>
     );
   }
 
   const { owner, collection, pieces } = result.data;
 
+  // Same rule as the vault: your own link opens your own view of it.
+  const isOwner = await viewerIsOwner(params.username);
+  if (isOwner && searchParams.preview !== "1") redirect("/collections");
+
   return (
-    <>
+    <SharedChrome>
+      {isOwner && <OwnerPreviewBanner href="/collections" />}
+
       <SharedHeader
         owner={owner}
         title={collection?.name ?? "collection"}
@@ -72,6 +89,6 @@ export default async function SharedCollectionPage({ searchParams }: Props) {
         kind="collection"
       />
       <SharedPieces pieces={pieces} />
-    </>
+    </SharedChrome>
   );
 }

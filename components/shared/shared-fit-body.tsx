@@ -1,11 +1,12 @@
 import Image from "next/image";
 import type { SharedFitData } from "@/lib/shared";
+import { FitReactions } from "@/components/shared/fit-reactions";
 
 /**
  * The body of a shared fit, shared by the page and by the view that appears
  * once a password challenge is answered, so the two cannot drift.
  */
-export function SharedFitBody({ data }: { data: SharedFitData }) {
+export function SharedFitBody({ data, token }: { data: SharedFitData; token?: string }) {
   const { owner, fit, pieces } = data;
   const hero = fit.photos?.[0];
   const dateLabel = fit.date
@@ -68,6 +69,12 @@ export function SharedFitBody({ data }: { data: SharedFitData }) {
           </ul>
         </section>
       )}
+
+      <FitReactions
+        token={token}
+        initial={data.reactions ?? []}
+        signedIn={!!data.viewer?.signed_in}
+      />
 
       {fit.caption && (
         <section className="mt-9 border-l-2 border-[#2D5A45] pl-5">

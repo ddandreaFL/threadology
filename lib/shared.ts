@@ -100,6 +100,10 @@ export type SharedFitPiece = {
 
 export type SharedFitData = {
   owner: SharedOwner;
+  // Who is looking, as the database sees them: enough for a client to send an
+  // owner to their own screen and to know whether reacting is possible.
+  viewer?: { signed_in: boolean; is_owner: boolean };
+  reactions?: { emoji: string; count: number; mine: boolean }[];
   fit: {
     id: string;
     slug: string;

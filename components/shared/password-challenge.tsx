@@ -62,7 +62,7 @@ export function PasswordChallenge({
 
   if (data) {
     if (kind === "fit") {
-      return <SharedFitBody data={data as unknown as SharedFitData} />;
+      return <SharedFitBody data={data as unknown as SharedFitData} token={token} />;
     }
     return (
       <>

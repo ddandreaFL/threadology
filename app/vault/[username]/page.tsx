@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getSharedVault } from "@/lib/shared";
-import { createServerClient } from "@/lib/supabase-server";
+import { viewerIsOwner } from "@/lib/shared-viewer";
+import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
 import { SharedHeader } from "@/components/shared/shared-header";
 import { SharedSegments } from "@/components/shared/shared-segments";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
@@ -18,7 +20,7 @@ import { DeadLink } from "@/components/shared/dead-link";
 
 interface Props {
   params: { username: string };
-  searchParams: { k?: string };
+  searchParams: { k?: string; preview?: string };
 }
 
 const WEB_ORIGIN =
@@ -54,21 +56,35 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function SharedVaultPage({ params, searchParams }: Props) {
   const result = await getSharedVault(searchParams.k);
 
-  if (result.kind === "unavailable") return <DeadLink />;
+  if (result.kind === "unavailable") {
+    return (
+      <SharedChrome>
+        <DeadLink />
+      </SharedChrome>
+    );
+  }
 
   if (result.kind === "password") {
-    return <PasswordChallenge fn="shared_vault" token={searchParams.k!} kind="vault" />;
+    return (
+      <SharedChrome>
+        <PasswordChallenge fn="shared_vault" token={searchParams.k!} kind="vault" />
+      </SharedChrome>
+    );
   }
 
   const { owner, pieces, collections = [], fits = [] } = result.data;
 
-  // The empty state reads differently depending on who is looking: a prompt
-  // if it is your own vault, a neutral line if it is not. Nobody else's empty
-  // archive should feel like a failure being shown to them.
+  // An owner following their own link lands on their own vault, not on the
+  // visitor view of it. ?preview=1 is the deliberate exception — the way to
+  // check what the link actually shows.
   const isOwner = await viewerIsOwner(params.username);
+  const previewing = searchParams.preview === "1";
+  if (isOwner && !previewing) redirect("/vault");
 
   return (
-    <>
+    <SharedChrome>
+      {isOwner && <OwnerPreviewBanner href="/vault" />}
+
       <SharedHeader
         owner={owner}
         title={`${owner.username}'s vault`}
@@ -77,11 +93,7 @@ export default async function SharedVaultPage({ params, searchParams }: Props) {
       />
 
       {pieces.length === 0 && collections.length === 0 && fits.length === 0 ? (
-        <p className="py-24 text-center text-sm text-[#6B6358]">
-          {isOwner
-            ? "Nothing here yet — add a piece and it will show up on this link."
-            : "Nothing here yet."}
-        </p>
+        <p className="py-24 text-center text-sm text-[#6B6358]">Nothing here yet.</p>
       ) : (
         <SharedSegments
           username={params.username}
@@ -90,24 +102,6 @@ export default async function SharedVaultPage({ params, searchParams }: Props) {
           fits={fits}
         />
       )}
-    </>
+    </SharedChrome>
   );
-}
-
-async function viewerIsOwner(username: string): Promise<boolean> {
-  try {
-    const supabase = await createServerClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return false;
-    const { data } = await supabase
-      .from("users")
-      .select("username")
-      .eq("id", user.id)
-      .single();
-    return (data as { username: string } | null)?.username === username;
-  } catch {
-    return false;
-  }
 }

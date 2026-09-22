@@ -7,6 +7,7 @@ import { PieceHero } from "@/components/vault/piece-hero";
 import { DeletePieceModal } from "@/components/vault/delete-piece-modal";
 import { PieceCollectionButton } from "@/components/collections/piece-collection-button";
 import { parseCropPositions } from "@/types";
+import { OwnerPageShell } from "@/components/layout/owner-page-shell";
 
 interface Props {
   params: { username: string; id: string };
@@ -83,12 +84,13 @@ export default async function PublicPiecePage({ params }: Props) {
     : [];
 
   return (
-    <div className="pb-28">
+    <OwnerPageShell>
+      <div className="pb-28">
       {/* Hero — breaks out of AppShell px-4 */}
       <div className="relative -mx-4">
         {/* Back nav overlay */}
         <Link
-          href={`/vault/${params.username}`}
+          href={isOwner ? "/vault" : `/vault/${params.username}`}
           className="absolute left-4 top-4 z-10 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1.5 text-[12px] font-medium text-white backdrop-blur-sm transition-opacity hover:opacity-80"
         >
           <svg className="h-2.5 w-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,5 +208,6 @@ export default async function PublicPiecePage({ params }: Props) {
         </div>
       )}
     </div>
+    </OwnerPageShell>
   );
 }

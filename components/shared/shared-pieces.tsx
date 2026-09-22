@@ -100,13 +100,13 @@ function PieceOverlay({ piece, onClose }: { piece: SharedPiece; onClose: () => v
         type="button"
         onClick={onClose}
         aria-label="close"
-        className="fixed right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#F2F0EC]/92 text-[#1B1A17] backdrop-blur"
+        className="fixed right-5 top-[calc(env(safe-area-inset-top)+1.25rem)] z-10 flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#F2F0EC]/92 text-[#1B1A17] backdrop-blur"
       >
         <span className="text-lg leading-none">×</span>
       </button>
 
-      <div className="mx-auto max-w-2xl pb-24">
-        <div className="relative aspect-[4/5] w-full bg-[#111111]">
+      <div className="mx-auto max-w-2xl px-5 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-[calc(env(safe-area-inset-top)+1.25rem)]">
+        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#111111]">
           {piece.photos?.[photo] && (
             <Image
               src={piece.photos[photo]}
@@ -120,7 +120,7 @@ function PieceOverlay({ piece, onClose }: { piece: SharedPiece; onClose: () => v
         </div>
 
         {piece.photos?.length > 1 && (
-          <div className="flex gap-2 px-5 pt-3">
+          <div className="flex gap-2 pt-3">
             {piece.photos.map((src, i) => (
               <button
                 key={src}
@@ -137,7 +137,7 @@ function PieceOverlay({ piece, onClose }: { piece: SharedPiece; onClose: () => v
           </div>
         )}
 
-        <div className="px-5 pt-6">
+        <div className="pt-6">
           <p className="font-mono text-[11px] uppercase tracking-[0.11em] text-[#2D5A45]">
             {piece.brand}
           </p>

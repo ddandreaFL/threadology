@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { EditPieceForm } from "@/components/vault/edit-piece-form";
+import { OwnerPageShell } from "@/components/layout/owner-page-shell";
 
 interface Props {
   params: { username: string; id: string };
@@ -34,7 +35,8 @@ export default async function EditPiecePage({ params }: Props) {
   const backHref = `/vault/${params.username}/${params.id}`;
 
   return (
-    <div className="mx-auto max-w-2xl">
+    <OwnerPageShell>
+      <div className="mx-auto max-w-2xl">
       <div className="mb-8">
         <Link
           href={backHref}
@@ -53,5 +55,6 @@ export default async function EditPiecePage({ params }: Props) {
 
       <EditPieceForm piece={piece} userId={user.id} backHref={backHref} />
     </div>
+    </OwnerPageShell>
   );
 }
