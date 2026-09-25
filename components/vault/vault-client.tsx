@@ -15,7 +15,6 @@ type Piece = {
   year: string | null;
   photos: string[];
   crop_positions: Record<string, { x: number; y: number }> | null;
-  estimated_value: number | null;
   created_at: string;
   updated_at: string;
   collectionIds: string[];

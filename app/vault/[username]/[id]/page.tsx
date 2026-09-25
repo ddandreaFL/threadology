@@ -44,7 +44,7 @@ export default async function PublicPiecePage({ params }: Props) {
 
   const isOwner = viewer?.id === profile.id;
 
-  const [pieceResult, collectionsResult, membershipResult] = await Promise.all([
+  const [pieceResult, collectionsResult, membershipResult, privateResult] = await Promise.all([
     supabase.from("pieces").select("*").eq("id", params.id).eq("user_id", profile.id).single(),
     isOwner
       ? supabase.from("collections").select("id, name").eq("user_id", profile.id).order("position")
@@ -52,6 +52,11 @@ export default async function PublicPiecePage({ params }: Props) {
     isOwner
       ? supabase.from("collection_pieces").select("collection_id").eq("piece_id", params.id)
       : Promise.resolve({ data: [] }),
+    // Estimated value is the owner's alone. RLS on piece_private already
+    // returns nothing to anyone else; not asking keeps that obvious here.
+    isOwner
+      ? supabase.from("piece_private").select("estimated_value").eq("piece_id", params.id).maybeSingle()
+      : Promise.resolve({ data: null }),
   ]);
 
   const piece = pieceResult.data;
@@ -69,8 +74,7 @@ export default async function PublicPiecePage({ params }: Props) {
   const thumbPhoto = photos[0] ?? null;
   const thumbCrop = cropPositions?.["0"];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const estimatedValue = (piece as any).estimated_value as number | null;
+  const estimatedValue = privateResult.data?.estimated_value ?? null;
 
   const pills: Array<{ label: string; value: string; variant: PillVariant }> = (
     [

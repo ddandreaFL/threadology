@@ -101,7 +101,6 @@ export function AddPieceForm({ userId }: AddPieceFormProps) {
       size: null,
       condition: condition.trim() || null,
       story: story.trim() || null,
-      estimated_value: null,
       acquisition_method: null,
       photos: photoUrl ? [photoUrl] : [],
       crop_positions: null,

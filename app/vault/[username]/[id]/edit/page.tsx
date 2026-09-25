@@ -31,6 +31,13 @@ export default async function EditPiecePage({ params }: Props) {
 
   if (!piece) notFound();
 
+  const { data: piecePrivate } = await supabase
+    .from("piece_private")
+    .select("estimated_value")
+    .eq("piece_id", params.id)
+    .maybeSingle();
+  const estimatedValue = piecePrivate?.estimated_value ?? null;
+
   const displayName = piece.name ?? piece.type;
   const backHref = `/vault/${params.username}/${params.id}`;
 
@@ -53,7 +60,7 @@ export default async function EditPiecePage({ params }: Props) {
         </h1>
       </div>
 
-      <EditPieceForm piece={piece} userId={user.id} backHref={backHref} />
+      <EditPieceForm piece={piece} estimatedValue={estimatedValue} userId={user.id} backHref={backHref} />
     </div>
     </OwnerPageShell>
   );

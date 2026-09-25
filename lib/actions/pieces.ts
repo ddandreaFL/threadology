@@ -40,8 +40,9 @@ export async function updatePiece(
   pieceId: string,
   data: Pick<
     PieceInsert,
-    "brand" | "type" | "name" | "year" | "season" | "size" | "condition" | "story" | "photos" | "estimated_value" | "acquisition_method"
-  >
+    "brand" | "type" | "name" | "year" | "season" | "size" | "condition" | "made_in" | "story" | "photos" | "acquisition_method"
+  >,
+  estimatedValue: number | null
 ) {
   const user = await requireUser();
   const supabase = await createServerClient();
@@ -53,6 +54,14 @@ export async function updatePiece(
     .eq("user_id", user.id);
 
   if (error) throw new Error(error.message);
+
+  // Owner-only, so it lives in piece_private rather than on the piece — the
+  // same place the app writes it. RLS scopes the row to the piece's owner.
+  const { error: privateError } = await supabase
+    .from("piece_private")
+    .upsert({ piece_id: pieceId, estimated_value: estimatedValue }, { onConflict: "piece_id" });
+
+  if (privateError) throw new Error(privateError.message);
 
   const { data: profile } = await supabase
     .from("users")

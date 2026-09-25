@@ -2,15 +2,17 @@ import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase-server";
 import type { Database } from "@/types/supabase";
 
-// stripe_customer_id is deliberately absent: it is not in the column grant on
-// public.users (supabase/migrations/security_fixes_2.sql), so selecting it as
-// the `authenticated` role fails. Server code that needs it calls the
-// my_stripe_customer_id() RPC, which returns it for the caller's own row only.
+// Exactly the columns in the public grant on public.users
+// (supabase/migrations/users_column_grants.sql); selecting anything else as
+// `authenticated` fails. The billing id and vault share settings are read
+// through my_stripe_customer_id() / my_vault_share(), scoped to the caller.
 const PROFILE_COLUMNS = "id, username, avatar_url, bio, is_premium, created_at";
 
-type UserProfile = Omit<
+// Picked, not omitted: a column added to users is private until granted, and
+// the type should not claim it either.
+type UserProfile = Pick<
   Database["public"]["Tables"]["users"]["Row"],
-  "stripe_customer_id"
+  "id" | "username" | "avatar_url" | "bio" | "is_premium" | "created_at"
 >;
 
 // Returns the authenticated auth.users record, or null if not signed in.

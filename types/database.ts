@@ -46,7 +46,6 @@ export type Database = {
           story: string | null;
           photos: string[];
           crop_positions: Record<string, { x: number; y: number }> | null;
-          estimated_value: number | null;
           acquisition_method: string | null;
           created_at: string;
           updated_at: string;
@@ -65,7 +64,6 @@ export type Database = {
           story?: string | null;
           photos?: string[];
           crop_positions?: Record<string, { x: number; y: number }> | null;
-          estimated_value?: number | null;
           acquisition_method?: string | null;
           created_at?: string;
           updated_at?: string;
@@ -84,7 +82,6 @@ export type Database = {
           story?: string | null;
           photos?: string[];
           crop_positions?: Record<string, { x: number; y: number }> | null;
-          estimated_value?: number | null;
           acquisition_method?: string | null;
           created_at?: string;
           updated_at?: string;

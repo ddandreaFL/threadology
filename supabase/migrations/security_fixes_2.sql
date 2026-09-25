@@ -1,3 +1,6 @@
+-- SUPERSEDED by users_column_grants.sql (2026-09-25). This file was never
+-- run, and running it now would break vault sharing. Run that one instead.
+
 -- ============================================================
 -- Security fixes 2 — run in Supabase SQL Editor
 -- ============================================================

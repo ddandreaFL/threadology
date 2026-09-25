@@ -27,11 +27,13 @@ type Piece = Database["public"]["Tables"]["pieces"]["Row"];
 
 interface EditPieceFormProps {
   piece: Piece;
+  /** From piece_private — owner-only, so it is not on the piece row. */
+  estimatedValue: number | null;
   userId: string;
   backHref: string;
 }
 
-export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
+export function EditPieceForm({ piece, estimatedValue, userId, backHref }: EditPieceFormProps) {
   const [form, setForm] = useState({
     brand: piece.brand,
     type: piece.type,
@@ -40,8 +42,9 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
     season: piece.season ?? "",
     size: piece.size ?? "",
     condition: piece.condition ?? "",
+    madeIn: piece.made_in ?? "",
     story: piece.story ?? "",
-    estimatedValue: piece.estimated_value != null ? String(piece.estimated_value) : "",
+    estimatedValue: estimatedValue != null ? String(estimatedValue) : "",
     acquisitionMethod: piece.acquisition_method ?? "",
     photos: piece.photos,
   });
@@ -63,19 +66,23 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
 
     setSubmitting(true);
     try {
-      await updatePiece(piece.id, {
-        brand: form.brand.trim(),
-        type: form.type,
-        name: form.name.trim() || null,
-        year: form.year.trim() || null,
-        season: form.season.trim() || null,
-        size: form.size.trim() || null,
-        condition: form.condition || null,
-        story: form.story.trim() || null,
-        estimated_value: form.estimatedValue ? parseInt(form.estimatedValue, 10) : null,
-        acquisition_method: form.acquisitionMethod || null,
-        photos: form.photos,
-      });
+      await updatePiece(
+        piece.id,
+        {
+          brand: form.brand.trim(),
+          type: form.type,
+          name: form.name.trim() || null,
+          year: form.year.trim() || null,
+          season: form.season.trim() || null,
+          size: form.size.trim() || null,
+          condition: form.condition || null,
+          made_in: form.madeIn.trim() || null,
+          story: form.story.trim() || null,
+          acquisition_method: form.acquisitionMethod || null,
+          photos: form.photos,
+        },
+        form.estimatedValue ? parseFloat(form.estimatedValue) : null
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save.");
       setSubmitting(false);
@@ -178,6 +185,16 @@ export function EditPieceForm({ piece, userId, backHref }: EditPieceFormProps) {
               </option>
             ))}
           </select>
+        </Field>
+
+        <Field label="Made in">
+          <input
+            type="text"
+            value={form.madeIn}
+            onChange={(e) => set("madeIn", e.target.value)}
+            placeholder="e.g. USA, Italy, Japan"
+            className={inputCls}
+          />
         </Field>
 
         <Field label="Est. Value ($)">
