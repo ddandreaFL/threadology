@@ -335,7 +335,6 @@ export type Database = {
           condition: string | null
           created_at: string
           crop_positions: Json | null
-          estimated_value: number | null
           id: string
           is_private: boolean
           made_in: string | null
@@ -362,7 +361,6 @@ export type Database = {
           condition?: string | null
           created_at?: string
           crop_positions?: Json | null
-          estimated_value?: number | null
           id?: string
           is_private?: boolean
           made_in?: string | null
@@ -389,7 +387,6 @@ export type Database = {
           condition?: string | null
           created_at?: string
           crop_positions?: Json | null
-          estimated_value?: number | null
           id?: string
           is_private?: boolean
           made_in?: string | null
