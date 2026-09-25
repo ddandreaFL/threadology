@@ -23,6 +23,7 @@ export function SharedPieceBody({ data }: { data: SharedPieceData }) {
       ["size", piece.size],
       ["year", piece.year],
       ["season", piece.season],
+      ["made in", piece.made_in],
       ["materials", piece.materials],
     ] as [string, string | null][]
   ).filter(([, v]) => !!v) as [string, string][];

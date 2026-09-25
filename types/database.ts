@@ -40,6 +40,7 @@ export type Database = {
           name: string | null;
           year: string | null;
           season: string | null;
+          made_in: string | null;
           size: string | null;
           condition: string | null;
           story: string | null;
@@ -58,6 +59,7 @@ export type Database = {
           name?: string | null;
           year?: string | null;
           season?: string | null;
+          made_in?: string | null;
           size?: string | null;
           condition?: string | null;
           story?: string | null;
@@ -76,6 +78,7 @@ export type Database = {
           name?: string | null;
           year?: string | null;
           season?: string | null;
+          made_in?: string | null;
           size?: string | null;
           condition?: string | null;
           story?: string | null;

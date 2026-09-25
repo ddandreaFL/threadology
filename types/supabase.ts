@@ -198,6 +198,7 @@ export type Database = {
           name: string | null
           photos: string[]
           season: string | null
+          made_in: string | null
           size: string | null
           story: string | null
           type: string
@@ -216,6 +217,7 @@ export type Database = {
           name?: string | null
           photos?: string[]
           season?: string | null
+          made_in?: string | null
           size?: string | null
           story?: string | null
           type: string
@@ -234,6 +236,7 @@ export type Database = {
           name?: string | null
           photos?: string[]
           season?: string | null
+          made_in?: string | null
           size?: string | null
           story?: string | null
           type?: string

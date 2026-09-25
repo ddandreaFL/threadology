@@ -78,6 +78,7 @@ export default async function PublicPiecePage({ params }: Props) {
       piece.year ? { label: "YEAR", value: piece.year, variant: "neutral" as PillVariant } : null,
       piece.season ? { label: "SEASON", value: piece.season, variant: "neutral" as PillVariant } : null,
       piece.size ? { label: "SIZE", value: piece.size, variant: "neutral" as PillVariant } : null,
+      piece.made_in ? { label: "MADE IN", value: piece.made_in, variant: "neutral" as PillVariant } : null,
       estimatedValue != null
         ? { label: "EST VALUE", value: `$${estimatedValue.toLocaleString()}`, variant: "gold" as PillVariant }
         : null,

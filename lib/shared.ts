@@ -128,6 +128,7 @@ export type SharedPieceData = {
     season: string | null;
     size: string | null;
     condition: string | null;
+    made_in: string | null;
     story: string | null;
     photos: string[];
     materials: string | null;

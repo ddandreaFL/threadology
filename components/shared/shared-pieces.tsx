@@ -21,6 +21,7 @@ export type SharedPiece = {
   season: string | null;
   size: string | null;
   condition: string | null;
+  made_in: string | null;
   story: string | null;
   photos: string[];
   materials: string | null;
@@ -82,6 +83,7 @@ function PieceOverlay({ piece, onClose }: { piece: SharedPiece; onClose: () => v
     ["size", piece.size],
     ["year", piece.year],
     ["season", piece.season],
+    ["made in", piece.made_in],
     ["materials", piece.materials],
   ].filter(([, v]) => !!v) as [string, string][];
 
