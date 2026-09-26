@@ -151,3 +151,12 @@
     font-size: max(16px, 1em);
   }
 }
+/* The app's sheet and fade motion, for components/ui. */
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
