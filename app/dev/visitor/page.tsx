@@ -7,6 +7,9 @@ import { SharedVault } from "@/components/visitor/SharedVault";
  * phase 2 without a live link. Preview and local builds only.
  */
 export const metadata = { robots: { index: false, follow: false } };
+// Rendered per request, like the real pages: it checks the environment,
+// and the save button reads the URL.
+export const dynamic = "force-dynamic";
 
 const swatch = (hue: number) =>
   `data:image/svg+xml;utf8,${encodeURIComponent(

@@ -7,6 +7,9 @@ import { FoundationDemo } from "./demo";
  * side by side with the app. Preview and local builds only.
  */
 export const metadata = { robots: { index: false, follow: false } };
+// Rendered per request, like the real pages: it checks the environment,
+// and the save button reads the URL.
+export const dynamic = "force-dynamic";
 
 export default function FoundationPage() {
   if (process.env.VERCEL_ENV === "production") notFound();
