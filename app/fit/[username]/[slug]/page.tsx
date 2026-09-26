@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getSharedFit } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
-import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
+import { getUser } from "@/lib/auth";
+import { VisitorFrame, OwnerPreview } from "@/components/visitor/VisitorFrame";
+import { SharedFit } from "@/components/visitor/SharedFit";
+import { AppNudge } from "@/components/visitor/GetTheApp";
 import { SaveButton } from "@/components/shared/save-button";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
 import { DeadLink } from "@/components/shared/dead-link";
-import { SharedFitBody } from "@/components/shared/shared-fit-body";
 
 /**
  * A shared fit on the web.
@@ -17,7 +20,7 @@ import { SharedFitBody } from "@/components/shared/shared-fit-body";
 
 interface Props {
   params: { username: string; slug: string };
-  searchParams: { k?: string };
+  searchParams: { k?: string; preview?: string };
 }
 
 const WEB_ORIGIN =
@@ -49,37 +52,39 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function SharedFitPage({ params, searchParams }: Props) {
-  const result = await getSharedFit(searchParams.k);
+  const [result, viewer] = await Promise.all([getSharedFit(searchParams.k), getUser()]);
+  const signedIn = !!viewer;
 
   if (result.kind === "unavailable") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <DeadLink />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
   if (result.kind === "password") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <PasswordChallenge fn="shared_fit" token={searchParams.k!} kind="fit" />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
-  // A fit has no owner page on the web — the app is where you look at your
-  // own — so an owner who lands here is told what they are looking at rather
-  // than redirected somewhere that is not their fit.
+  // The web has an owner fit page now, so an owner following their own link
+  // goes there — ?preview=1 still shows the visitor view.
   const isOwner = await viewerIsOwner(params.username);
+  const ownHref = `/fits/${result.data.fit.id}`;
+  if (isOwner && searchParams.preview !== "1") redirect(ownHref);
 
   return (
-    <SharedChrome>
-      {isOwner && <OwnerPreviewBanner />}
-      <SharedFitBody
+    <VisitorFrame signedIn={signedIn} banner={isOwner ? <OwnerPreview href={ownHref} /> : undefined}>
+      <SharedFit
         data={result.data}
-        token={searchParams.k}
+        token={searchParams.k!}
         save={<SaveButton containerType="fit" token={searchParams.k} label="save this fit" />}
+        nudge={signedIn ? null : <AppNudge line="Log what you wear, in the app." />}
       />
-    </SharedChrome>
+    </VisitorFrame>
   );
 }

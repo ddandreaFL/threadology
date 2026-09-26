@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSharedCollection } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
-import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
-import { SaveButton } from "@/components/shared/save-button";
-import { SharedHeader } from "@/components/shared/shared-header";
-import { SharedPieces } from "@/components/shared/shared-pieces";
+import { getUser } from "@/lib/auth";
+import { VisitorFrame, OwnerPreview } from "@/components/visitor/VisitorFrame";
+import { SharedBrowser } from "@/components/visitor/SharedBrowser";
+import { AppNudge } from "@/components/visitor/GetTheApp";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
 import { DeadLink } from "@/components/shared/dead-link";
 
@@ -55,46 +55,44 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function SharedCollectionPage({ params, searchParams }: Props) {
-  const result = await getSharedCollection(searchParams.k);
+  const [result, viewer] = await Promise.all([getSharedCollection(searchParams.k), getUser()]);
+  const signedIn = !!viewer;
 
   if (result.kind === "unavailable") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <DeadLink />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
   if (result.kind === "password") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <PasswordChallenge fn="shared_collection" token={searchParams.k!} kind="collection" />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
-  const { owner, collection, pieces } = result.data;
+  const { owner, pieces, collection } = result.data;
 
-  // Same rule as the vault: your own link opens your own view of it.
+  // The owner lands on the collection itself, not the collections list.
   const isOwner = await viewerIsOwner(params.username);
-  if (isOwner && searchParams.preview !== "1") redirect("/collections");
+  const ownHref = collection ? `/collections/${collection.id}` : "/collections";
+  if (isOwner && searchParams.preview !== "1") redirect(ownHref);
 
+  const name = collection?.name ?? "collection";
   return (
-    <SharedChrome>
-      {isOwner && <OwnerPreviewBanner href="/collections" />}
-
-      <SharedHeader
-        owner={owner}
-        title={collection?.name ?? "collection"}
-        count={pieces.length}
-        kind="collection"
+    <VisitorFrame signedIn={signedIn} banner={isOwner ? <OwnerPreview href={ownHref} /> : undefined}>
+      <SharedBrowser
+        title={name}
+        subtitle={`@${owner.username} · ${pieces.length} ${pieces.length === 1 ? "piece" : "pieces"}`}
+        owner={owner.username}
+        pieces={pieces}
+        save={{ type: "collection", token: searchParams.k!, label: "save this collection" }}
+        galleryLabel={`@${owner.username} · ${name}`}
+        footer={signedIn ? null : <div className="px-5"><AppNudge line={`Collections like "${name}" live in the app.`} /></div>}
       />
-
-      <div className="mb-10 flex justify-center">
-        <SaveButton containerType="collection" token={searchParams.k} label="save this collection" />
-      </div>
-
-      <SharedPieces pieces={pieces} />
-    </SharedChrome>
+    </VisitorFrame>
   );
 }

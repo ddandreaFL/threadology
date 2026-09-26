@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSharedVault } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
-import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
-import { SaveButton } from "@/components/shared/save-button";
-import { SharedHeader } from "@/components/shared/shared-header";
-import { SharedSegments } from "@/components/shared/shared-segments";
+import { getUser } from "@/lib/auth";
+import { VisitorFrame, OwnerPreview } from "@/components/visitor/VisitorFrame";
+import { SharedVault } from "@/components/visitor/SharedVault";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
 import { DeadLink } from "@/components/shared/dead-link";
 
@@ -55,21 +54,22 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function SharedVaultPage({ params, searchParams }: Props) {
-  const result = await getSharedVault(searchParams.k);
+  const [result, viewer] = await Promise.all([getSharedVault(searchParams.k), getUser()]);
+  const signedIn = !!viewer;
 
   if (result.kind === "unavailable") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <DeadLink />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
   if (result.kind === "password") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <PasswordChallenge fn="shared_vault" token={searchParams.k!} kind="vault" />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
@@ -83,30 +83,15 @@ export default async function SharedVaultPage({ params, searchParams }: Props) {
   if (isOwner && !previewing) redirect("/vault");
 
   return (
-    <SharedChrome>
-      {isOwner && <OwnerPreviewBanner href="/vault" />}
-
-      <SharedHeader
-        owner={owner}
-        title={`${owner.username}'s vault`}
-        count={pieces.length}
-        kind="vault"
+    <VisitorFrame signedIn={signedIn} banner={isOwner ? <OwnerPreview href="/vault" /> : undefined}>
+      <SharedVault
+        username={owner.username}
+        token={searchParams.k!}
+        pieces={pieces}
+        collections={collections}
+        fits={fits}
+        signedIn={signedIn}
       />
-
-      <div className="mb-10 flex justify-center">
-        <SaveButton containerType="vault" token={searchParams.k} label="save this vault" />
-      </div>
-
-      {pieces.length === 0 && collections.length === 0 && fits.length === 0 ? (
-        <p className="py-24 text-center text-sm text-[#6B6358]">Nothing here yet.</p>
-      ) : (
-        <SharedSegments
-          username={params.username}
-          pieces={pieces}
-          collections={collections}
-          fits={fits}
-        />
-      )}
-    </SharedChrome>
+    </VisitorFrame>
   );
 }

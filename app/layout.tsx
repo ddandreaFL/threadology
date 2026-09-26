@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Cormorant_Garamond, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { PageTransition } from "@/components/page-transition";
 import "./globals.css";
+import { APP_STORE_ID } from "@/lib/app-store";
 
 // Body / UI sans-serif
 const dmSans = DM_Sans({
@@ -38,6 +39,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Threadology",
   description: "Your personal wardrobe vault",
+  // Safari's Smart App Banner, once the app has an App Store ID. Until then
+  // the visitor pages' own get-the-app banner does the job.
+  ...(APP_STORE_ID ? { itunes: { appId: APP_STORE_ID } } : {}),
 };
 
 export const viewport = {

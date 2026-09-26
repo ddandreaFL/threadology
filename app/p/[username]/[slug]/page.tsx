@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getSharedPiece } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
-import { SharedChrome, OwnerPreviewBanner } from "@/components/shared/shared-chrome";
-import { SharedPieceBody } from "@/components/shared/shared-piece-body";
+import { getUser } from "@/lib/auth";
+import { VisitorFrame, OwnerPreview } from "@/components/visitor/VisitorFrame";
+import { PieceSheet } from "@/components/visitor/PieceSheet";
+import { AppNudge } from "@/components/visitor/GetTheApp";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
 import { DeadLink } from "@/components/shared/dead-link";
 
@@ -16,7 +19,7 @@ import { DeadLink } from "@/components/shared/dead-link";
 
 interface Props {
   params: { username: string; slug: string };
-  searchParams: { k?: string };
+  searchParams: { k?: string; preview?: string };
 }
 
 const WEB_ORIGIN =
@@ -45,32 +48,38 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function SharedPiecePage({ params, searchParams }: Props) {
-  const result = await getSharedPiece(searchParams.k);
+  const [result, viewer] = await Promise.all([getSharedPiece(searchParams.k), getUser()]);
+  const signedIn = !!viewer;
 
   if (result.kind === "unavailable") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <DeadLink />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
   if (result.kind === "password") {
     return (
-      <SharedChrome>
+      <VisitorFrame signedIn={signedIn}>
         <PasswordChallenge fn="shared_piece" token={searchParams.k!} kind="piece" />
-      </SharedChrome>
+      </VisitorFrame>
     );
   }
 
-  // The owner's own view of a piece is the app, or their vault on the web, so
-  // they are told what they are looking at rather than sent somewhere else.
+  const { owner, piece } = result.data;
   const isOwner = await viewerIsOwner(params.username);
+  const ownHref = `/vault/${owner.username}/${piece.id}`;
+  if (isOwner && searchParams.preview !== "1") redirect(ownHref);
 
   return (
-    <SharedChrome>
-      {isOwner && <OwnerPreviewBanner href="/vault" />}
-      <SharedPieceBody data={result.data} />
-    </SharedChrome>
+    <VisitorFrame signedIn={signedIn} banner={isOwner ? <OwnerPreview href={ownHref} /> : undefined}>
+      <PieceSheet piece={piece} owner={owner.username} inline />
+      {!signedIn && (
+        <div className="px-5">
+          <AppNudge line={`@${owner.username} keeps their archive on threadology.`} />
+        </div>
+      )}
+    </VisitorFrame>
   );
 }
