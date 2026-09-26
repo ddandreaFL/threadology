@@ -17,7 +17,7 @@ The web was built first and the app became the product. Decisions made in the ap
 
 - **One design system.** Web tokens are a direct port of the app's `lib/theme.ts`: colors, radius family, type scale, DM Sans + IBM Plex Mono (via `next/font`), and the icon set. Nothing is restyled by eye.
 - **Screens, not pages.** Each web screen is the app screen: same header (title, subtitle, at most two chips), same pill tab bar, same sheets, same empty states and wording.
-- **Mobile-first; desktop is the phone column.** On a wide screen the app sits in a centered column (with grids allowed wider), so it stays one product rather than becoming a second desktop design.
+- **Mobile matches the app; desktop has its own layout.** Below the desktop breakpoint the web is the app's screens. Above it, the same components arrange into a desktop layout: side navigation, wider grids, two-column detail. One product, two arrangements.
 - **Same data paths.** The web calls the same tables, RPCs and share URL shapes as the app. No web-only schema.
 - **Share URLs never change.** `/vault/<u>?k=`, `/vault/<u>/c/<slug>?k=`, `/fit/<u>/<slug>?k=`, `/p/<u>/<slug>?k=` are in messages people have already sent.
 
@@ -40,8 +40,8 @@ Each phase ships to a Vercel preview for review before it merges.
 5. **Account** — auth screens (welcome, login, signup, username) as in the app, saved, notifications, settings.
 6. **Retire and verify** — delete the old components, add redirects, and walk every flow signed out, as a visitor, and as an owner.
 
-## Open questions
+## Answered (2026-09-26)
 
-1. **App download link.** The app is on TestFlight, not the App Store. Until it is, should visitors be pointed to a public TestFlight link, a waitlist, or only to the web?
-2. **Sign in with Apple on the web.** The app offers it; the web has only email. Parity means adding it (a Supabase + Apple Services ID setup).
-3. **Desktop.** The plan keeps the phone column on desktop. A distinct desktop layout would be a separate design.
+1. **App download link:** build as if the app is public. The get-the-app layer uses a single placeholder URL (`NEXT_PUBLIC_APP_STORE_URL`) and the Smart App Banner takes an App Store ID from config; both switch on when the listing exists.
+2. **Sign in with Apple on the web:** yes — part of phase 5 (needs a Supabase Apple provider and an Apple Services ID).
+3. **Desktop:** a distinct desktop layout, with mobile web matching the app. Phones get the app's screens; wide screens get a layout of their own — persistent side navigation in place of the pill, wider grids, a larger cover flow, and two-column piece and fit detail — built on the same components and tokens. Phase 1 builds both breakpoints of every foundation part.
