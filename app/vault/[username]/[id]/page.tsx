@@ -8,6 +8,8 @@ import { DeletePieceModal } from "@/components/vault/delete-piece-modal";
 import { PieceCollectionButton } from "@/components/collections/piece-collection-button";
 import { parseCropPositions } from "@/types";
 import { OwnerPageShell } from "@/components/layout/owner-page-shell";
+import { getShareState } from "@/lib/share-state";
+import { ShareControl } from "@/components/sharing/share-control";
 
 interface Props {
   params: { username: string; id: string };
@@ -74,6 +76,7 @@ export default async function PublicPiecePage({ params }: Props) {
   const thumbPhoto = photos[0] ?? null;
   const thumbCrop = cropPositions?.["0"];
 
+  const share = isOwner ? await getShareState(supabase, "piece", piece.id) : null;
   const estimatedValue = privateResult.data?.estimated_value ?? null;
 
   const pills: Array<{ label: string; value: string; variant: PillVariant }> = (
@@ -187,6 +190,12 @@ export default async function PublicPiecePage({ params }: Props) {
                 {para}
               </p>
             ))}
+          </div>
+        )}
+
+        {isOwner && share && (
+          <div className="mt-12">
+            <ShareControl type="piece" id={piece.id} username={params.username} initial={share} />
           </div>
         )}
 

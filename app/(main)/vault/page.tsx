@@ -5,6 +5,8 @@ import { EmptyVault } from "@/components/vault/empty-vault";
 import { VaultClient } from "@/components/vault/vault-client";
 import { PublicVaultHeader } from "@/components/vault/public-vault-header";
 import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
+import { getShareState } from "@/lib/share-state";
+import { ShareControl } from "@/components/sharing/share-control";
 
 /**
  * Your vault, signed in.
@@ -66,6 +68,7 @@ export default async function OwnerVaultPage() {
   // The copy-link button copies the vault's real share link, and only when
   // the vault is shared.
   const share = (shareResult.data ?? null) as { visibility?: string; token?: string | null } | null;
+  const vaultShare = await getShareState(supabase, "vault", user.id);
   const vaultUrl =
     share?.visibility === "link_only" && share.token ? `${WEB_ORIGIN}/vault/${profile.username}?k=${share.token}` : null;
 
@@ -76,6 +79,10 @@ export default async function OwnerVaultPage() {
       </Suspense>
 
       <PublicVaultHeader profile={profile} pieces={pieces} isOwner vaultUrl={vaultUrl} />
+
+      <div className="mx-auto mb-8 max-w-2xl">
+        <ShareControl type="vault" id={user.id} username={profile.username} initial={vaultShare} />
+      </div>
 
       {pieces.length === 0 ? (
         <EmptyVault />

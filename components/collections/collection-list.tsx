@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { deleteCollection } from "@/lib/actions/collections";
 
 interface Collection {
@@ -19,7 +20,10 @@ interface CollectionListProps {
 export function CollectionList({ collections }: CollectionListProps) {
   const [deleting, setDeleting] = useState<string | null>(null);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, name: string) => {
+    // One click used to delete it outright. Pieces survive; the grouping
+    // doesn't, and there is no undo.
+    if (!window.confirm(`Delete "${name}"? The pieces stay in your vault.`)) return;
     setDeleting(id);
     await deleteCollection(id);
     setDeleting(null);
@@ -42,19 +46,19 @@ export function CollectionList({ collections }: CollectionListProps) {
             key={c.id}
             className="flex items-center justify-between border-b border-[#F0F0F0] px-0 py-4"
           >
-            <div className="min-w-0">
+            <Link href={`/collections/${c.id}`} className="min-w-0 flex-1">
               <p className="text-[14px] font-medium text-[#111111]">{c.name}</p>
               <p className="mt-0.5 text-[11px] text-[#999999]">
                 {count} {count === 1 ? "piece" : "pieces"}
                 {c.description && ` · ${c.description}`}
               </p>
-            </div>
+            </Link>
             <div className="flex items-center gap-3 flex-shrink-0">
               <svg className="h-4 w-4 text-[#999999]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
               </svg>
               <button
-                onClick={() => handleDelete(c.id)}
+                onClick={() => handleDelete(c.id, c.name)}
                 disabled={deleting === c.id}
                 className="text-[11px] text-[#999999] transition-colors hover:text-red-500 disabled:opacity-40"
               >

@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { requireUser, getUserProfile } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
+import { getShareState } from "@/lib/share-state";
+import { ShareControl } from "@/components/sharing/share-control";
 
 /**
  * One of your fits, signed in: the photos, the pieces worn, and what came
@@ -22,10 +24,11 @@ export default async function OwnerFitPage({ params }: { params: { id: string } 
     .single();
   if (!fit) notFound();
 
-  const [{ data: counts }, { data: who }] = await Promise.all([
+  const [{ data: counts }, { data: who }, share] = await Promise.all([
     supabase.rpc("fit_reactions_for_owner", { p_fit_id: fit.id }),
     // Deployed with stage_four_reactors.sql; a failed call just leaves the counts.
     supabase.rpc("fit_reactors_for_owner" as never, { p_fit_id: fit.id } as never),
+    getShareState(supabase, "fit", fit.id),
   ]);
   const reactions = (Array.isArray(counts) ? counts : []) as { emoji: string; count: number }[];
   const reactors = (Array.isArray(who) ? who : []) as { emoji: string; username: string; created_at: string }[];
@@ -47,6 +50,12 @@ export default async function OwnerFitPage({ params }: { params: { id: string } 
 
       <h1 className="mt-6 text-[22px] font-medium tracking-[-0.02em] text-[#111111]">{fit.title || "untitled fit"}</h1>
       <p className="mt-1 text-[12px] text-[#999999]">{[date, fit.location].filter(Boolean).join("  ·  ")}</p>
+
+      {profile && (
+        <div className="mt-6">
+          <ShareControl type="fit" id={fit.id} username={profile.username} initial={share} />
+        </div>
+      )}
 
       <div className="mt-6 grid gap-3">
         {(fit.photos ?? []).map((src: string) => (

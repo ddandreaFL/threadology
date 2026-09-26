@@ -37,3 +37,10 @@ Method: every route read end to end; the live site probed signed out; signup, co
 ## Verification
 
 Signed-in flows need a signed-in session to test end to end. Options: the owner tests each pass in a browser, or a dedicated test account (created by the owner) is used for automated checks. Supabase dashboard settings (Site URL, Redirect URLs, email template) can only be checked by the owner.
+
+## Status
+
+- **Pass 1 — shipped 2026-09-26** (main 132a41e): items 1–5.
+- **Pass 2 — on `web-shakedown`**: owner collection page and linked list rows (7), owner fits list and page (8, with pass 1), sharing controls on vault, collections, fits and pieces (9), fits private by default (10, pass 1), login error (6, pass 1), matching 8-character passwords (11, native signup), landing page (13). Item 12 stays as it is by choice: the web asks for a username at signup, the app right after first sign-in — both end with the same account. Collection delete now asks first.
+- **Pass 3 — pending**: design parity (14, 15).
+
