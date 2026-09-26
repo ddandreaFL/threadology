@@ -58,3 +58,7 @@ Status: **prep, 2026-09-26.** Followers/friends are tabled (`following-scope.md`
 - **Where:** vault only. Fits and collection cover flows keep a plain caption and no controls.
 - **My calls, unless told otherwise:** title 16 → 14pt, brand 12 → 11pt; controls as an icon row (no labels), play as the larger center button; prev/next at the ends wrap around, matching play; a light haptic per step.
 
+### 2. Gallery mode — built 2026-09-26 (native `stage-4`: e9ceec3, 8740d7d)
+
+Superseded idea 1's player controls. The vault keeps its centered caption and pen; one "enter gallery" CTA replaces the controls. Gallery: no chrome, cards at 0.78 width, wall label, controls pill (shuffle · prev · play · next · gear) that fades after 3s, gear sheet for motion (step / drift / off), pace, and wall (ink / stone / paper / blur). Opens paused; closing stops everything. Open: landscape for AirPlay needs expo-screen-orientation and a native build.
+
