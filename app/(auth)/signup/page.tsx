@@ -25,6 +25,7 @@ function SignupForm() {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [sentTo, setSentTo] = useState<string | null>(null);
 
   function validate(): boolean {
     const errors: FieldErrors = {};
@@ -64,11 +65,14 @@ function SignupForm() {
 
     // Sign up — the handle_new_user trigger will create the users row.
     // We pass username in metadata so the trigger uses it directly.
+    // The confirmation link comes back here, not to wherever the Supabase
+    // dashboard's Site URL happens to point, and carries `next` through.
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { username: username.trim() },
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
 
@@ -91,9 +95,17 @@ function SignupForm() {
       return;
     }
 
-    // If email confirmation is required, the trigger fires on confirmation.
-    // If auto-confirm is on, update the username row now in case the trigger
-    // used the email prefix instead of metadata.
+    // Confirmation required: there is no session yet, so going to the vault
+    // only bounced the new account to the login page with no explanation.
+    // Say where the next step is instead.
+    if (!data.session) {
+      setSentTo(email.trim());
+      setIsLoading(false);
+      return;
+    }
+
+    // Auto-confirm is on: signed in already. Make sure the row carries the
+    // chosen username in case the trigger fell back to the email prefix.
     if (data.user) {
       await supabase
         .from("users")
@@ -102,6 +114,23 @@ function SignupForm() {
     }
 
     router.push(next);
+  }
+
+  if (sentTo) {
+    return (
+      <AuthForm title="check your email">
+        <p className="text-[14px] leading-relaxed text-[#6B6358]">
+          We sent a confirmation link to <span className="text-[#111111]">{sentTo}</span>. Open it to finish creating
+          your vault — it can take a minute to arrive, and sometimes lands in spam.
+        </p>
+        <p className="mt-6 text-center text-[13px] text-[#999999]">
+          already confirmed?{" "}
+          <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="text-[#111111] underline">
+            log in
+          </Link>
+        </p>
+      </AuthForm>
+    );
   }
 
   return (

@@ -121,7 +121,7 @@ export function FitForm({ userId, username, pieces }: FitFormProps) {
     setSubmitting(true);
 
     try {
-      const { username: user, slug: savedSlug } = await createFit({
+      const { id } = await createFit({
         photos,
         pieces: filledPieces.map((p, i) => ({ id: p.id, layer_order: i })),
         title: title.trim() || null,
@@ -130,7 +130,9 @@ export function FitForm({ userId, username, pieces }: FitFormProps) {
         location: location.trim() || null,
         slug,
       });
-      router.push(`/fit/${user}/${savedSlug}`);
+      // Your own fit page. /fit/<user>/<slug> is the shared view and needs a
+      // link token; without one it read "This link is no longer active".
+      router.push(`/fits/${id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to publish fit.");
       setSubmitting(false);

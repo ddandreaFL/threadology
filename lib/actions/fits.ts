@@ -15,7 +15,7 @@ interface CreateFitData {
 
 export async function createFit(
   data: CreateFitData
-): Promise<{ username: string; slug: string }> {
+): Promise<{ id: string; username: string; slug: string }> {
   const user = await requireUser();
   const supabase = await createServerClient();
 
@@ -29,7 +29,9 @@ export async function createFit(
       date: data.date,
       location: data.location,
       photos: data.photos,
-      visibility: "link_only",
+      // Private until its owner shares it, as in the app. "link_only" with no
+      // token minted was a fit marked shareable that nobody could open.
+      visibility: "private",
     })
     .select("id")
     .single();
@@ -53,5 +55,5 @@ export async function createFit(
     .eq("id", user.id)
     .single();
 
-  return { username: profile?.username ?? user.id, slug: data.slug };
+  return { id: fit.id, username: profile?.username ?? user.id, slug: data.slug };
 }

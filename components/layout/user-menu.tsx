@@ -84,6 +84,13 @@ export function UserMenu({ username, avatarUrl, isPremium }: UserMenuProps) {
               Your Vault
             </Link>
             <Link
+              href="/fits"
+              onClick={() => setOpen(false)}
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+            >
+              Your Fits
+            </Link>
+            <Link
               href="/fit/new"
               onClick={() => setOpen(false)}
               className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"

@@ -11,11 +11,18 @@ function LoginForm() {
   const router = useRouter();
   // A visitor sent here from a share link comes back to that link, with the
   // save they were trying to make still attached.
-  const next = safeNext(useSearchParams().get("next"));
+  const params = useSearchParams();
+  const next = safeNext(params.get("next"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  // A confirmation link that failed lands here with ?error=; say so, rather
+  // than showing a plain form as if nothing had happened.
+  const [error, setError] = useState(
+    params.get("error") === "confirmation_failed"
+      ? "That confirmation link didn't work — it may have expired or already been used. Try logging in; if your email isn't confirmed yet, sign up again to get a new link."
+      : ""
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {

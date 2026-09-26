@@ -19,7 +19,12 @@ interface PublicVaultHeaderProps {
   profile: Profile;
   pieces: Piece[];
   isOwner: boolean;
-  vaultUrl: string;
+  /**
+   * The vault's live share link (with its ?k= token), or null when the
+   * vault is not shared. A bare /vault/<username> URL is a dead link since
+   * sharing moved to tokens, so there is nothing to copy without one.
+   */
+  vaultUrl: string | null;
 }
 
 function getTopBrands(pieces: Piece[], limit = 5): string[] {
@@ -83,7 +88,7 @@ export function PublicVaultHeader({ profile, pieces, isOwner, vaultUrl }: Public
 
         {isOwner && (
           <div className="flex items-center gap-1 pt-1">
-            <CopyLinkButton url={vaultUrl} iconOnly />
+            {vaultUrl && <CopyLinkButton url={vaultUrl} iconOnly />}
             <Link
               href="/settings"
               className="flex h-8 w-8 items-center justify-center rounded-lg text-[#999999] transition-colors hover:bg-[#F5F5F5] hover:text-[#111111]"

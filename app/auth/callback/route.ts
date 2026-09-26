@@ -2,12 +2,12 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { safeNext } from "@/lib/next-path";
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const raw = searchParams.get("next") ?? "/vault";
-  const next = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/vault";
+  const next = safeNext(searchParams.get("next"), "/auth/confirmed");
 
   if (code) {
     const cookieStore = cookies();
