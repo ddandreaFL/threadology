@@ -8,6 +8,8 @@ import { Sheet } from "@/components/ui/Sheet";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { PieceCard } from "@/components/ui/PieceCard";
 import { Coverflow, type CoverflowHandle } from "@/components/coverflow/Coverflow";
+import { Gallery } from "@/components/gallery/Gallery";
+import { useEffect } from "react";
 
 // Stand-in photos: flat color cards, so the page needs no data.
 const swatch = (hue: number) =>
@@ -34,6 +36,12 @@ export function FoundationDemo() {
   const [season, setSeason] = useState<string | null>("fall/winter");
   const [sheet, setSheet] = useState<"light" | "dark" | null>(null);
   const cf = useRef<CoverflowHandle>(null);
+  const [gallery, setGallery] = useState<{ origin: DOMRect | null } | null>(null);
+  const openGallery = () => setGallery({ origin: cf.current?.measureActiveCard() ?? null });
+  // ?gallery=1 opens it on load, for checking without a tap.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("gallery") === "1") setTimeout(openGallery, 600);
+  }, []);
 
   return (
     <div className="font-th-sans">
@@ -51,7 +59,7 @@ export function FoundationDemo() {
       <div className="mx-auto max-w-5xl">
         {view === "coverflow" ? (
           <>
-            <Coverflow ref={cf} items={ITEMS} index={index} onIndexChange={setIndex} className="mt-6" />
+            <Coverflow ref={cf} items={ITEMS} index={index} onIndexChange={setIndex} className="mt-6" hiddenIndex={gallery ? index : null} />
             <div className="mt-4 text-center">
               <p className="text-[14px] font-semibold tracking-[-0.2px] text-th-ink">{NAMES[index]}</p>
               <p className="mt-0.5 text-[11px] text-[#999999]">Timberland</p>
@@ -61,6 +69,9 @@ export function FoundationDemo() {
                 <button className="rounded-full bg-th-chip px-4 py-2 text-[13px]" onClick={() => cf.current?.flyTo((index + 1 + Math.floor(Math.random() * 7)) % 8, "spin")}>spin</button>
                 <button className="rounded-full bg-th-chip px-4 py-2 text-[13px]" onClick={() => cf.current?.flyTo(7, "drift", 2500)}>drift</button>
               </div>
+              <button onClick={openGallery} className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-th-chip px-[18px] text-[13px] font-semibold">
+                <Icon name="expand" size={15} /> enter gallery
+              </button>
             </div>
           </>
         ) : (
@@ -126,6 +137,22 @@ export function FoundationDemo() {
           </div>
         </div>
       </div>
+
+      {gallery && (
+        <Gallery
+          pieces={ITEMS.map((it, i) => ({ id: it.id, photo: it.photo, title: NAMES[i], brand: "Timberland", year: "1994" }))}
+          startIndex={index}
+          origin={gallery.origin}
+          scopes={[{ id: null, label: "whole vault" }, { id: "tees", label: "tbl tees 🌳👕" }]}
+          loadScope={async (id) =>
+            ITEMS.filter((_, i) => id === null || i % 2 === 0).map((it, i) => ({ id: it.id, photo: it.photo, title: NAMES[i], brand: "Timberland", year: null }))
+          }
+          onClose={(end) => {
+            setGallery(null);
+            setIndex(end);
+          }}
+        />
+      )}
 
       <Sheet open={sheet !== null} tone={sheet ?? "light"} title={sheet === "dark" ? "gallery" : "collections"} onClose={() => setSheet(null)}>
         <ChipRow options={["step", "drift", "off"]} value="step" onChange={() => {}} />

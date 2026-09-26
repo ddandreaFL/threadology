@@ -38,7 +38,7 @@ export function ScreenHeader({
     <header className="flex items-start gap-2 px-5 pb-3.5 pt-[15px] font-th-sans">
       {leading && <ChipButton {...leading} />}
       <div className="flex min-h-11 min-w-0 flex-1 flex-col gap-1.5">
-        <h1 className="line-clamp-2 text-[28px] font-bold leading-8 tracking-[-0.02em] text-th-ink">{title}</h1>
+        <h1 className="line-clamp-2 text-[28px] font-bold leading-8 tracking-[-0.02em] text-th-ink">{keepEmojiAttached(title)}</h1>
         {subtitle ? (
           <p
             className={
@@ -58,3 +58,18 @@ export function ScreenHeader({
     </header>
   );
 }
+
+/**
+ * Collection names carry emoji ("tbl tees 🌳👕"). Left alone, a narrow header
+ * wraps the emoji onto a line of their own. Non-breaking space before an
+ * emoji run, and word joiners inside it, keep the run with the word before.
+ */
+// Built at runtime: the project's TypeScript target predates the `u` flag
+// in regex literals, though every browser that runs this supports it.
+const SPACE_BEFORE_EMOJI = new RegExp("\\s+(?=\\p{Extended_Pictographic})", "gu");
+const BETWEEN_EMOJI = new RegExp("(\\p{Extended_Pictographic}\\uFE0F?)(?=\\p{Extended_Pictographic})", "gu");
+
+function keepEmojiAttached(title: string): string {
+  return title.replace(SPACE_BEFORE_EMOJI, "\u00A0").replace(BETWEEN_EMOJI, "$1\u2060");
+}
+
