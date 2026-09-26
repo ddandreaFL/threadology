@@ -1,6 +1,6 @@
 # Following & friends — scope
 
-Status: **scoping, nothing built.** Written 2026-09-25 to decide what Stage 4 is before any schema is written.
+Status: **tabled 2026-09-26.** Scoped, nothing built; the five questions below are still open. Stage 4 went to polishing saves, notifications and reactions instead.
 
 ## Where the product stands
 
