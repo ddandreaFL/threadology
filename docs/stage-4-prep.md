@@ -35,4 +35,26 @@ Status: **prep, 2026-09-26.** Followers/friends are tabled (`following-scope.md`
 
 ## Ideas from the user
 
-_To be filled in._
+### 1. Cover flow caption + player controls (vault first)
+
+**Caption.** Title and brand centered on the screen's axis and set smaller. The overflow (···) becomes a pen that opens the editor. Today the ··· sits in the same row as the title, which is why the title reads off-center: the row is centered, not the title.
+
+**Controls, like a music player:** ⏮ previous · ▶/⏸ play · ⏭ next · 🔀 shuffle. Play steps through pieces on a timer.
+
+**Shuffle audit (current implementation, `vault.tsx` → `CoverflowView.scrollToIndex`):**
+- Two chained native scroll animations, the second fired 190ms into the first. iOS gives each animated `scrollTo` a fixed ~0.3s regardless of distance, so the second cuts the first off mid-flight: a velocity break, and the flight reverses outright whenever the random waypoint is on the other side of the target.
+- The waypoint is random: it can equal the current card, the target, or sit past it. Some shuffles are one clean glide, others a lurch.
+- The caption changes the instant a scroll starts (`onActiveChange` is called up front), so the title flashes the waypoint's name, then the target's, before either card arrives.
+- Fixed duration means a 2-card and a 40-card jump take the same time — long jumps whip, short ones crawl.
+- No guard: tapping twice stacks two flights and two timers.
+- Every card is mounted (the cover flow is a plain ScrollView); fine at 8 pieces, heavy at a few hundred.
+
+**Proposed rebuild:** drive the scroll position from Reanimated on the UI thread (`scrollTo` fed by one `withTiming`), so a shuffle is one continuous motion with its own curve — quick spin up, long decelerating settle, like a wheel — and a duration scaled to distance. The caption changes once, when the card lands (or cross-fades as it passes). Controls lock while a flight is in progress. The same driver gives prev/next and play their motion.
+
+**Decided 2026-09-26:**
+- **Pen:** tap opens the editor; press and hold opens the full menu (make private, delete).
+- **Shuffle:** one tap = one wheel-spin to a random piece (never the current one). Not a mode — play and prev/next stay in order.
+- **Play:** advances every 3s, wraps last → first, pauses the moment the cover flow is touched or the screen is left.
+- **Where:** vault only. Fits and collection cover flows keep a plain caption and no controls.
+- **My calls, unless told otherwise:** title 16 → 14pt, brand 12 → 11pt; controls as an icon row (no labels), play as the larger center button; prev/next at the ends wrap around, matching play; a light haptic per step.
+
