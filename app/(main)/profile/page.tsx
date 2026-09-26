@@ -1,5 +1,4 @@
 import { requireUser, getUserProfile } from "@/lib/auth";
-import { getUserSubscription } from "@/lib/subscription";
 import { createServerClient } from "@/lib/supabase-server";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileStats } from "@/components/profile/profile-stats";
@@ -19,10 +18,7 @@ function getEraSpan(years: (string | null)[]): string | null {
 
 export default async function ProfilePage() {
   const user = await requireUser();
-  const [profile, subscription] = await Promise.all([
-    getUserProfile(user.id),
-    getUserSubscription(user.id),
-  ]);
+  const profile = await getUserProfile(user.id);
 
   if (!profile) return null;
 
@@ -53,7 +49,7 @@ export default async function ProfilePage() {
         eraSpan={eraSpan}
       />
 
-      <ProfileActions username={profile.username} isPremium={subscription.isPremium} />
+      <ProfileActions username={profile.username} />
     </div>
   );
 }

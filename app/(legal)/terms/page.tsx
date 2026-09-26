@@ -72,25 +72,6 @@ export default function TermsPage() {
         <Li>Circumvent usage limits or security measures</Li>
       </Ul>
 
-      <H2>Premium Subscription</H2>
-      <Ul>
-        <Li>Premium is billed monthly ($8/month) or annually ($60/year)</Li>
-        <Li>Subscriptions auto-renew until cancelled</Li>
-        <Li>Cancel anytime; access continues until the billing period ends</Li>
-        <Li>
-          Refunds follow App Store/Play Store policies for mobile; web refunds at our discretion
-          within 7 days
-        </Li>
-      </Ul>
-
-      <H2>Free Tier Limits</H2>
-      <P>Free accounts are limited to:</P>
-      <Ul>
-        <Li>25 pieces</Li>
-        <Li>3 collections</Li>
-      </Ul>
-      <P>Exceeding limits requires a Premium subscription.</P>
-
       <H2>Termination</H2>
       <P>
         We may suspend or terminate accounts that violate these terms. You may delete your account

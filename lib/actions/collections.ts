@@ -4,16 +4,9 @@ import { requireUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { revalidatePath } from "next/cache";
 import { slugify } from "@/lib/utils";
-import { getUserSubscription, FREE_COLLECTION_LIMIT } from "@/lib/subscription";
 
 export async function createCollection(data: { name: string; description?: string }) {
   const user = await requireUser();
-  const { isPremium, collectionCount } = await getUserSubscription(user.id);
-
-  if (!isPremium && collectionCount >= FREE_COLLECTION_LIMIT) {
-    return { error: "Collection limit reached. Upgrade to Premium for unlimited collections." };
-  }
-
   const supabase = await createServerClient();
   const slug = slugify(data.name);
 

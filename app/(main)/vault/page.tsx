@@ -1,10 +1,8 @@
-import { Suspense } from "react";
 import { requireUser, getUserProfile } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { EmptyVault } from "@/components/vault/empty-vault";
 import { VaultClient } from "@/components/vault/vault-client";
 import { PublicVaultHeader } from "@/components/vault/public-vault-header";
-import { UpgradeSuccessToast } from "@/components/vault/upgrade-success-toast";
 import { getShareState } from "@/lib/share-state";
 import { ShareControl } from "@/components/sharing/share-control";
 
@@ -74,10 +72,6 @@ export default async function OwnerVaultPage() {
 
   return (
     <div className="pb-24">
-      <Suspense fallback={null}>
-        <UpgradeSuccessToast />
-      </Suspense>
-
       <PublicVaultHeader profile={profile} pieces={pieces} isOwner vaultUrl={vaultUrl} />
 
       <div className="mx-auto mb-8 max-w-2xl">

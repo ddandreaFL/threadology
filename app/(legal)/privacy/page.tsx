@@ -80,8 +80,6 @@ export default function PrivacyPage() {
             {[
               ["Supabase", "Database, auth, image storage", "Account info, photos, piece data"],
               ["Vercel", "Web hosting", "Usage logs, IP address"],
-              ["Stripe", "Payments (web)", "Email, payment method (handled by Stripe)"],
-              ["RevenueCat", "Payments (mobile)", "User ID, subscription status"],
               ["Expo", "App updates, crash reports", "Device info, crash logs"],
             ].map(([service, purpose, data]) => (
               <tr key={service}>

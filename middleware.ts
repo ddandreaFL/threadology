@@ -7,7 +7,6 @@ function isProtectedRoute(pathname: string): boolean {
   if (pathname === "/vault") return true;
   if (pathname === "/vault/add") return true;
   if (pathname.startsWith("/settings")) return true;
-  if (pathname.startsWith("/upgrade")) return true;
   if (pathname.startsWith("/profile")) return true;
   if (pathname.startsWith("/collections")) return true;
   if (pathname.startsWith("/fits")) return true;

@@ -3,7 +3,6 @@
 import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase-server";
 import { requireUser } from "@/lib/auth";
-import { getUserSubscription } from "@/lib/subscription";
 import type { Database } from "@/types/supabase";
 
 type PieceInsert = Database["public"]["Tables"]["pieces"]["Insert"];
@@ -13,10 +12,6 @@ export async function addPiece(
 ): Promise<{ error: string } | undefined> {
   const user = await requireUser();
 
-  const { isPremium, pieceCount, pieceLimit } = await getUserSubscription(user.id);
-  if (!isPremium && pieceCount >= pieceLimit) {
-    return { error: "Piece limit reached. Upgrade to premium to add more." };
-  }
 
   const supabase = await createServerClient();
   const { data: inserted, error } = await supabase

@@ -77,7 +77,6 @@ export default function SecurityPage() {
             {[
               ["Supabase", "SOC 2 Type II compliant"],
               ["Vercel", "SOC 2 Type II compliant"],
-              ["Stripe", "PCI DSS Level 1"],
             ].map(([provider, security]) => (
               <tr key={provider}>
                 <td className="border-b border-[#F0F0F0] py-3 pr-6 align-top text-[13px] font-medium text-[#111111]">
@@ -98,12 +97,6 @@ export default function SecurityPage() {
         <Li>Only visible to others if you share your vault link</Li>
         <Li>Stored in isolated cloud storage with access controls</Li>
       </Ul>
-
-      <H2>Payment Security</H2>
-      <P>
-        We never see or store your full credit card number. Payments are handled entirely by Stripe
-        (web) or Apple/Google (mobile).
-      </P>
 
       <H2>Incident Response</H2>
       <P>In the unlikely event of a data breach:</P>

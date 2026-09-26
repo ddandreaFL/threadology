@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { CopyLinkButton } from "./copy-link-button";
-import { FREE_PIECE_LIMIT } from "@/lib/subscription";
 
 type Profile = {
   username: string;
@@ -57,7 +56,6 @@ export function PublicVaultHeader({ profile, pieces, isOwner, vaultUrl }: Public
   const topBrands = getTopBrands(pieces);
   const initial = profile.username[0].toUpperCase();
   const joinYear = new Date(profile.created_at).getFullYear();
-  const atLimit = !profile.is_premium && pieceCount >= FREE_PIECE_LIMIT;
 
   return (
     <div className="mb-6 space-y-5">
@@ -136,28 +134,6 @@ export function PublicVaultHeader({ profile, pieces, isOwner, vaultUrl }: Public
         </div>
       )}
 
-      {/* Owner: piece limit or premium badge */}
-      {isOwner && !profile.is_premium && (
-        <div className="flex items-center gap-3">
-          <span className="shrink-0 text-[11px] text-[#999999]">
-            {pieceCount} of {FREE_PIECE_LIMIT}
-          </span>
-          <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-[#F0F0F0]">
-            <div
-              className="h-full rounded-full bg-[#111111] transition-all"
-              style={{ width: `${Math.min(100, Math.round((pieceCount / FREE_PIECE_LIMIT) * 100))}%`,
-                       backgroundColor: atLimit ? "#CC4444" : "#111111" }}
-            />
-          </div>
-          <Link href="/upgrade" className="shrink-0 text-[11px] text-[#999999] underline transition-colors hover:text-[#111111]">
-            upgrade
-          </Link>
-        </div>
-      )}
-
-      {isOwner && profile.is_premium && (
-        <p className="text-[11px] uppercase tracking-wide text-[#999999]">✦ premium</p>
-      )}
     </div>
   );
 }
