@@ -50,6 +50,8 @@ Each phase ships to a Vercel preview for review before it merges.
 
 Email sign-up only. Sign in with Apple stays in the app, and the web's auth screens point anyone who wants it there ("prefer sign in with apple? get the iPhone app"). SMS sign-in is wanted later — to be scoped separately.
 
+Apple on the web is half set up (2026-09-26): the Services ID `com.threadology.web` and key `N369KYZZGF` exist (the .p8 is in iCloud Drive/Downloads). Left to do, at the Mac: run `node scripts/apple-client-secret.mjs <path to AuthKey_N369KYZZGF.p8>` (Supabase's in-browser generator fails on iOS), paste the secret into Supabase → Providers → Apple, set Client IDs to `com.threadology.app,com.threadology.web`, then revert 8f61835 to bring the button back.
+
 Known gap: an account made with Apple in the app has no password, so it can't log in on the web. When web login for those accounts matters, add either a "set a password" option in the app's settings, or email magic links on the web.
 
 ## Review notes
