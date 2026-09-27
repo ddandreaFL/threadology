@@ -27,8 +27,8 @@ export default async function Home() {
         </p>
 
         <div className="flex flex-col gap-3">
-          <a href={APP_STORE_URL} className="rounded-[30px] bg-[#1A1A1A] py-[17px] text-center text-[15px] font-medium text-white transition-opacity hover:opacity-85">
-            get the app
+          <a href={APP_STORE_URL} className="rounded-[30px] bg-th-accent py-[17px] text-center text-[15px] font-medium text-white transition-opacity hover:opacity-85">
+            get the iPhone app
           </a>
           <AppleButton />
           <Link href="/signup" className="rounded-[30px] border border-[#EBEBEB] py-[17px] text-center text-[15px] font-medium transition-colors hover:border-[#1A1A1A]">

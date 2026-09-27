@@ -86,7 +86,7 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="quiet morning" className={inputClass} />
         </Field>
         <Field label="date">
-          <input type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} className={inputClass} />
+          <input type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} className={`${inputClass} text-left [&::-webkit-date-and-time-value]:text-left`} />
         </Field>
         <Field label="pieces">
           <div className="flex flex-col gap-2">
