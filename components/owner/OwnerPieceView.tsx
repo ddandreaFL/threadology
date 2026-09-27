@@ -22,6 +22,7 @@ export type OwnerPieceDetail = {
   story: string | null;
   photos: string[];
   estimatedValue: number | null;
+  is_private: boolean;
 };
 
 /**
@@ -116,7 +117,10 @@ export function OwnerPieceView({
           <ChipButton icon="chevron-left" label="back" href="/vault" />
           <span className="flex gap-2">{chips}</span>
         </div>
-        <p className="font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">{piece.brand}</p>
+        <p className="font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">
+          {piece.brand}
+          {piece.is_private && <span className="ml-2 rounded-full bg-th-chip px-2 py-0.5 normal-case tracking-normal">private · not in shared links</span>}
+        </p>
         <h1 className="mt-2 text-[28px] font-bold leading-8 tracking-[-0.02em] lg:text-[34px] lg:leading-[38px]">{title}</h1>
         {piece.name && <p className="mt-1.5 font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">{piece.type}</p>}
 

@@ -52,14 +52,20 @@ export function OwnerFitView({ fit, username, share }: { fit: OwnerFitDetail; us
         )}
         <div className="absolute left-5 right-5 top-[calc(env(safe-area-inset-top)+12px)] flex justify-between lg:hidden">
           <ChipButton icon="chevron-left" label="back" href="/fits" onMedia />
-          <ChipButton icon="share" label="share" onClick={() => setSharing(true)} onMedia />
+          <div className="flex gap-2">
+            <ChipButton icon="share" label="share" onClick={() => setSharing(true)} onMedia />
+            <ChipButton icon="pencil" label="edit fit" href={`/fits/${fit.id}/edit`} onMedia />
+          </div>
         </div>
       </div>
 
       <div className="px-5 pb-10 pt-6 lg:px-0 lg:pt-0">
         <div className="mb-6 hidden items-center justify-between lg:flex">
           <ChipButton icon="chevron-left" label="back" href="/fits" />
-          <ChipButton icon="share" label="share" onClick={() => setSharing(true)} />
+          <div className="flex gap-2">
+            <ChipButton icon="share" label="share" onClick={() => setSharing(true)} />
+            <ChipButton icon="pencil" label="edit fit" href={`/fits/${fit.id}/edit`} />
+          </div>
         </div>
         <p className="font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">{[date, fit.location].filter(Boolean).join(" · ") || " "}</p>
         <h1 className="mt-2 text-[28px] font-bold leading-8 tracking-[-0.02em] lg:text-[34px] lg:leading-[38px]">{fit.title || "untitled fit"}</h1>

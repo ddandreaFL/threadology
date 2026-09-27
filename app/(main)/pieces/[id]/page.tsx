@@ -13,7 +13,7 @@ export default async function PiecePage({ params }: { params: { id: string } }) 
   const [{ data: piece }, { data: priv }, { data: collections }, { data: memberships }] = await Promise.all([
     supabase
       .from("pieces")
-      .select("id, brand, type, name, year, season, size, condition, made_in, story, photos")
+      .select("id, brand, type, name, year, season, size, condition, made_in, story, photos, is_private")
       .eq("id", params.id)
       .eq("user_id", user.id)
       .single(),

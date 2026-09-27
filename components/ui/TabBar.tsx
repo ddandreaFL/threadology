@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "./Icon";
-import { CREATE, TABS, isActive } from "./nav";
+import { CREATE, TABS, isActive, isEditor } from "./nav";
 import { useUnread } from "./useUnread";
 
 /**
@@ -38,6 +38,8 @@ export function TabBar() {
       </Link>
     );
   };
+
+  if (isEditor(pathname)) return null;
 
   return (
     <div className="lg:hidden">

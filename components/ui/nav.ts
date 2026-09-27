@@ -18,3 +18,8 @@ export const CREATE: { href: string; label: string; icon: IconName }[] = [
 export function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(href + "/");
 }
+
+/** Editors are modal in the app: no tab bar while one is open. */
+export function isEditor(pathname: string) {
+  return pathname === "/vault/add" || pathname === "/fit/new" || /^\/(pieces|fits)\/[^/]+\/edit$/.test(pathname);
+}

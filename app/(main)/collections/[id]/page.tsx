@@ -25,6 +25,10 @@ export default async function OwnerCollectionPage({ params }: { params: { id: st
     .sort((a, b) => b.created_at.localeCompare(a.created_at))
     .map((p) => ({ id: p.id, brand: p.brand, type: p.type, name: p.name, year: p.year, photo: p.photos?.[0] ?? null }));
 
-  const share = await getShareState(supabase, "collection", collection.id);
-  return <OwnerCollectionView id={collection.id} name={collection.name} username={profile.username} pieces={pieces} share={share} />;
+  const [share, { data: all }] = await Promise.all([
+    getShareState(supabase, "collection", collection.id),
+    supabase.from("pieces").select("id, name, type, brand, year, photos").eq("user_id", user.id).order("created_at", { ascending: false }),
+  ]);
+  const vault: CollectionPiece[] = (all ?? []).map((p) => ({ id: p.id, brand: p.brand, type: p.type, name: p.name, year: p.year, photo: p.photos?.[0] ?? null }));
+  return <OwnerCollectionView id={collection.id} name={collection.name} username={profile.username} pieces={pieces} vault={vault} share={share} />;
 }
