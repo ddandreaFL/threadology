@@ -41,12 +41,16 @@ export function GET() {
           {
             appIDs: [`${TEAM_ID}.${BUNDLE_ID}`],
             components: [
-              // Fits only, for now. The app can render a shared fit through
-              // shared_fit(); it has no viewer for someone else's vault or
-              // collection, and opening one would be worse than the browser.
-              // Paths are served from here, so /vault/* widens the day that
-              // viewer exists — no release needed.
-              { "/": "/fit/*", comment: "a shared fit" },
+              // Share links only — each needs its ?k= token, so the owner's
+              // own /vault pages (no token) stay in the browser. Vaults and
+              // collections open the app's shared viewer (native
+              // app/+native-intent.tsx maps the paths). Pieces have no
+              // native viewer and are not claimed.
+              //
+              // Needs app build 31 or later: older builds read /vault/<name>
+              // as a piece id.
+              { "/": "/fit/*", "?": { k: "?*" }, comment: "a shared fit" },
+              { "/": "/vault/*", "?": { k: "?*" }, comment: "a shared vault or collection" },
             ],
           },
         ],
