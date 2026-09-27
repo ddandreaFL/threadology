@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { SharedBrowser } from "./SharedBrowser";
 import { AppNudge } from "./GetTheApp";
-import type { SharedPiece } from "@/components/shared/shared-pieces";
+import type { SharedPiece } from "@/lib/shared";
 import type { SharedCollectionSummary, SharedFitSummary } from "@/lib/shared";
 
 /**

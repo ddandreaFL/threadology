@@ -1,4 +1,39 @@
-import type { SharedPiece } from "@/components/shared/shared-pieces";
+import { cookies } from "next/headers";
+
+/**
+ * A password-gated link, once opened, stays open for that browser: the
+ * password rides in an httpOnly cookie named for the token, never in a URL,
+ * and the page reads it here so the unlocked view renders on the server
+ * like any other.
+ */
+/** A piece as a share link shows it: no owner-only fields. */
+export type SharedPiece = {
+  id: string;
+  brand: string;
+  type: string;
+  name: string | null;
+  year: string | null;
+  season: string | null;
+  size: string | null;
+  condition: string | null;
+  made_in: string | null;
+  story: string | null;
+  photos: string[];
+  materials: string | null;
+  acquired_where: string | null;
+  acquired_at: string | null;
+};
+
+export const unlockCookie = (token: string) => `th_unlock_${token.replace(/[^A-Za-z0-9_-]/g, "")}`;
+
+function rememberedPassword(token: string): string | undefined {
+  try {
+    return cookies().get(unlockCookie(token))?.value;
+  } catch {
+    // Outside a request (build time): nothing remembered.
+    return undefined;
+  }
+}
 
 /**
  * Reading a shared container.
@@ -60,6 +95,7 @@ async function callShared(
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return { kind: "unavailable" };
+  password ??= rememberedPassword(token);
 
   const res = await fetch(`${url}/rest/v1/rpc/${fn}`, {
     method: "POST",

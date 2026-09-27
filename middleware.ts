@@ -15,10 +15,7 @@ function isProtectedRoute(pathname: string): boolean {
   if (pathname.startsWith("/saved")) return true;
   if (pathname.startsWith("/notifications")) return true;
   if (pathname === "/fit/new") return true;
-  // /fit/[slug]/edit
-  if (/^\/fit\/[^/]+\/edit$/.test(pathname)) return true;
-  // /fit/[slug] — owner view (single dynamic segment)
-  if (/^\/fit\/[^/]+$/.test(pathname)) return true;
+  if (pathname === "/username") return true;
   return false;
 }
 
@@ -63,6 +60,8 @@ export async function middleware(request: NextRequest) {
   if (!user && isProtectedRoute(pathname)) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
+    // Back to where they were headed once signed in.
+    loginUrl.search = pathname === "/vault" ? "" : `?next=${encodeURIComponent(pathname + request.nextUrl.search)}`;
     return NextResponse.redirect(loginUrl);
   }
 

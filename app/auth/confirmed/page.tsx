@@ -8,8 +8,8 @@ import { AuthForm } from "@/components/auth/auth-form";
  */
 export default function ConfirmedPage() {
   return (
-    <AuthForm title="you're confirmed">
-      <p className="text-[14px] leading-relaxed text-[#6B6358]">
+    <AuthForm title="you're confirmed" back={null}>
+      <p className="text-[14px] leading-relaxed text-th-muted">
         Your email is verified and your vault is ready. If you signed up in the Threadology app, go back to it and sign
         in there.
       </p>

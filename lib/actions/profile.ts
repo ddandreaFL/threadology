@@ -24,6 +24,7 @@ export async function updateProfile(formData: FormData) {
   if (error) throw new Error(error.message);
 
   revalidatePath("/settings");
+  revalidatePath("/profile");
 
   const { data: profile } = await supabase
     .from("users")

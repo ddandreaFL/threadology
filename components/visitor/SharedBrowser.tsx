@@ -8,7 +8,7 @@ import { Coverflow, type CoverflowHandle } from "@/components/coverflow/Coverflo
 import { Gallery } from "@/components/gallery/Gallery";
 import { SaveButton } from "@/components/shared/save-button";
 import { PieceSheet } from "./PieceSheet";
-import type { SharedPiece } from "@/components/shared/shared-pieces";
+import type { SharedPiece } from "@/lib/shared";
 
 /**
  * Someone else's pieces — a shared vault or collection — as the app shows

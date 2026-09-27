@@ -46,9 +46,9 @@ export function NotificationList({ initial }: { initial: NotificationRow[] }) {
 
   if (initial.length === 0) {
     return (
-      <div className="py-24 text-center">
-        <p className="text-[15px] text-[#111111]">Nothing yet.</p>
-        <p className="mt-2 text-[14px] text-[#999999]">
+      <div className="px-10 py-24 text-center font-th-sans">
+        <p className="text-[15px] text-th-ink">Nothing yet.</p>
+        <p className="mt-2 text-[14px] text-th-muted">
           Save a link someone sends you and you will hear about it here when it grows.
         </p>
       </div>
@@ -56,7 +56,7 @@ export function NotificationList({ initial }: { initial: NotificationRow[] }) {
   }
 
   return (
-    <ul className="divide-y divide-[#F0F0F0]">
+    <ul className="mx-auto max-w-2xl divide-y divide-[#F0F0F0] px-5 font-th-sans">
       {initial.map((n) => (
         <li key={n.id}>
           <Row n={n} />
@@ -70,14 +70,14 @@ function Row({ n }: { n: NotificationRow }) {
   const href = targetHref(n);
   const body = (
     <div className={`flex items-center gap-3 py-4 ${href ? "transition-opacity hover:opacity-70" : ""}`}>
-      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[10px] bg-[#F2F0EC]">
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[10px] bg-th-surface">
         {n.thumbnail && <Image src={n.thumbnail} alt="" fill sizes="48px" className="object-cover" />}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[15px] leading-snug text-[#111111]">{describe(n)}</p>
-        <p className="mt-0.5 text-[13px] text-[#999999]">{ago(n.created_at)}</p>
+        <p className="text-[15px] leading-snug text-th-ink">{describe(n)}</p>
+        <p className="mt-0.5 text-[13px] text-th-muted">{ago(n.created_at)}</p>
       </div>
-      {!n.read_at && <span className="h-2 w-2 shrink-0 rounded-full bg-[#2D5A45]" />}
+      {!n.read_at && <span className="h-2 w-2 shrink-0 rounded-full bg-th-accent" />}
     </div>
   );
 
@@ -96,8 +96,7 @@ function describe(n: NotificationRow): string {
 
 /**
  * An addition opens through the token on your own save. Anything else is
- * about something you own, so it opens on your own screen — and a fit has
- * none on the web, which is where the app takes over.
+ * about something you own, so it opens on your own screen.
  */
 function targetHref(n: NotificationRow): string | null {
   if (n.kind === "addition") {
@@ -107,9 +106,9 @@ function targetHref(n: NotificationRow): string | null {
       return `/vault/${n.owner_username}/c/${n.slug}?k=${n.share_token}`;
     return `/fit/${n.owner_username}/${n.slug}?k=${n.share_token}`;
   }
-  if (n.container_type === "collection") return "/collections";
-  if (n.container_type === "vault") return "/vault";
-  return null;
+  if (n.container_type === "collection") return `/collections/${n.container_id}`;
+  if (n.container_type === "fit") return `/fits/${n.container_id}`;
+  return "/vault";
 }
 
 function ago(iso: string): string {

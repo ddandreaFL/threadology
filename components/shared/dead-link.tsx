@@ -8,9 +8,9 @@
  */
 export function DeadLink() {
   return (
-    <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
-      <p className="text-[17px] text-[#1B1A17]">This link is no longer active.</p>
-      <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-[#6B6358]">
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center font-th-sans">
+      <p className="text-[17px] font-medium text-th-ink">This link is no longer active.</p>
+      <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-th-muted">
         It may have been turned off by whoever shared it.
       </p>
     </div>

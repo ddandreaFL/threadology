@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { safeNext } from "@/lib/next-path";
-import { AuthForm, FormField, SubmitButton } from "@/components/auth/auth-form";
+import { AppleButton, AuthForm, FormField, OrDivider, SubmitButton } from "@/components/auth/auth-form";
 
 interface FieldErrors {
   username?: string;
@@ -119,13 +119,13 @@ function SignupForm() {
   if (sentTo) {
     return (
       <AuthForm title="check your email">
-        <p className="text-[14px] leading-relaxed text-[#6B6358]">
+        <p className="text-[14px] leading-relaxed text-th-muted">
           We sent a confirmation link to <span className="text-[#111111]">{sentTo}</span>. Open it to finish creating
           your vault — it can take a minute to arrive, and sometimes lands in spam.
         </p>
         <p className="mt-6 text-center text-[13px] text-[#999999]">
           already confirmed?{" "}
-          <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="text-[#111111] underline">
+          <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="font-medium text-th-ink underline">
             log in
           </Link>
         </p>
@@ -134,13 +134,15 @@ function SignupForm() {
   }
 
   return (
-    <AuthForm title="create your account">
+    <AuthForm title="create account" subtitle="start documenting your wardrobe">
+      <AppleButton next={next} />
+      <OrDivider />
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <FormField
           id="username"
           label="Username"
           value={username}
-          onChange={setUsername}
+          onChange={(v) => setUsername(v.toLowerCase().replace(/[^a-z0-9_]/g, ""))}
           placeholder="yourhandle"
           autoComplete="username"
           error={fieldErrors.username}
@@ -166,7 +168,7 @@ function SignupForm() {
           error={fieldErrors.password}
         />
 
-        {formError && <p className="text-sm text-red-600">{formError}</p>}
+        {formError && <p className="text-[13px] text-th-danger">{formError}</p>}
 
         <SubmitButton
           label="create account →"
@@ -177,7 +179,7 @@ function SignupForm() {
 
       <p className="mt-6 text-center text-[13px] text-[#999999]">
         already have an account?{" "}
-        <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="text-[#111111] underline">
+        <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="font-medium text-th-ink underline">
           log in
         </Link>
       </p>

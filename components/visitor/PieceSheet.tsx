@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
-import type { SharedPiece } from "@/components/shared/shared-pieces";
+import type { SharedPiece } from "@/lib/shared";
 
 /**
  * One piece, from someone else's vault or collection. Full screen on a
