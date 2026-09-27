@@ -1,34 +1,29 @@
-import { requireUser, getUserProfile } from "@/lib/auth";
+import { Suspense } from "react";
+import { requireUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
-import { CollectionList } from "@/components/collections/collection-list";
-import { CreateCollectionForm } from "@/components/collections/create-collection-form";
+import { OwnerCollections, type OwnerCollectionCard } from "@/components/owner/OwnerCollections";
 
+/** Your collections — the app's collections tab. */
 export default async function CollectionsPage() {
   const user = await requireUser();
-  const [profile, supabase] = await Promise.all([
-    getUserProfile(user.id),
-    createServerClient(),
-  ]);
-
-  const { data: collections } = await supabase
+  const supabase = await createServerClient();
+  const { data } = await supabase
     .from("collections")
-    .select("id, name, slug, description, collection_pieces(count)")
+    .select("id, name, collection_pieces(pieces(photos, created_at))")
     .eq("user_id", user.id)
     .order("position");
 
+  const collections: OwnerCollectionCard[] = (data ?? []).map((c) => {
+    const pieces = ((c.collection_pieces ?? []) as { pieces: { photos: string[] | null; created_at: string } | null }[])
+      .map((cp) => cp.pieces)
+      .filter((p): p is { photos: string[] | null; created_at: string } => !!p)
+      .sort((a, b) => b.created_at.localeCompare(a.created_at));
+    return { id: c.id, name: c.name, count: pieces.length, previews: pieces.map((p) => p.photos?.[0]).filter(Boolean).slice(0, 4) as string[] };
+  });
+
   return (
-    <div className="mx-auto max-w-lg pb-24">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-[22px] font-medium tracking-[-0.02em] text-[#111111]">collections</h1>
-        <CreateCollectionForm disabled={false} compact />
-      </div>
-
-
-      <div className="mt-5 border-t border-[#EBEBEB]">
-        <CollectionList collections={collections ?? []} username={profile?.username ?? ""} />
-      </div>
-
-    </div>
+    <Suspense>
+      <OwnerCollections collections={collections} />
+    </Suspense>
   );
 }

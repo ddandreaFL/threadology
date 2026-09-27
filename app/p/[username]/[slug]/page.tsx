@@ -69,7 +69,7 @@ export default async function SharedPiecePage({ params, searchParams }: Props) {
 
   const { owner, piece } = result.data;
   const isOwner = await viewerIsOwner(params.username);
-  const ownHref = `/vault/${owner.username}/${piece.id}`;
+  const ownHref = `/pieces/${piece.id}`;
   if (isOwner && searchParams.preview !== "1") redirect(ownHref);
 
   return (

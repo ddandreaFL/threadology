@@ -22,13 +22,8 @@ export async function addPiece(
 
   if (error) return { error: error.message };
 
-  const { data: profile } = await supabase
-    .from("users")
-    .select("username")
-    .eq("id", user.id)
-    .single();
 
-  redirect(`/vault/${profile?.username ?? user.id}/${inserted.id}`);
+  redirect(`/pieces/${inserted.id}`);
 }
 
 export async function updatePiece(
@@ -58,13 +53,8 @@ export async function updatePiece(
 
   if (privateError) throw new Error(privateError.message);
 
-  const { data: profile } = await supabase
-    .from("users")
-    .select("username")
-    .eq("id", user.id)
-    .single();
 
-  redirect(`/vault/${profile?.username ?? user.id}/${pieceId}`);
+  redirect(`/pieces/${pieceId}`);
 }
 
 export async function updateCropPositions(

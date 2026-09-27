@@ -79,3 +79,20 @@ export async function getPieceCollections(pieceId: string): Promise<string[]> {
 
   return (data ?? []).map((cp) => cp.collection_id);
 }
+
+/** Rename a collection. The slug follows the name, as in the app. */
+export async function renameCollection(collectionId: string, name: string) {
+  const user = await requireUser();
+  const trimmed = name.trim();
+  if (!trimmed) return { error: "A collection needs a name." };
+  const supabase = await createServerClient();
+  const { error } = await supabase
+    .from("collections")
+    .update({ name: trimmed, slug: slugify(trimmed) })
+    .eq("id", collectionId)
+    .eq("user_id", user.id);
+  if (error) return { error: error.message };
+  revalidatePath("/collections");
+  revalidatePath(`/collections/${collectionId}`);
+  return { success: true };
+}
