@@ -28,15 +28,8 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // Sign in with Apple makes the account on the way in, named after the
-      // email's prefix — often a private-relay string. As in the app, a new
-      // Apple account chooses its username before anything else.
-      const user = data.user;
-      if (user?.app_metadata?.provider === "apple" && !user.user_metadata?.username_chosen) {
-        return NextResponse.redirect(`${origin}/username?next=${encodeURIComponent(next)}`);
-      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

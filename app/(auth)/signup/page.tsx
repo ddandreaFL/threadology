@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { safeNext } from "@/lib/next-path";
-import { AppleButton, AuthForm, FormField, OrDivider, SubmitButton } from "@/components/auth/auth-form";
+import { AppHint, AuthForm, FormField, SubmitButton } from "@/components/auth/auth-form";
 
 interface FieldErrors {
   username?: string;
@@ -135,8 +135,6 @@ function SignupForm() {
 
   return (
     <AuthForm title="create account" subtitle="start documenting your wardrobe">
-      <AppleButton next={next} />
-      <OrDivider />
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <FormField
           id="username"
@@ -176,6 +174,7 @@ function SignupForm() {
           isLoading={isLoading}
         />
       </form>
+      <AppHint />
 
       <p className="mt-6 text-center text-[13px] text-[#999999]">
         already have an account?{" "}

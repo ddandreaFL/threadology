@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { ChipButton } from "@/components/ui/ChipButton";
-import { supabase } from "@/lib/supabase";
+import { APP_STORE_URL } from "@/lib/app-store";
 
 /**
  * The auth screens, as in the app (threadology-native/app/(auth)): a white
@@ -97,48 +96,16 @@ export function SubmitButton({ label, loadingLabel, isLoading, disabled }: { lab
 }
 
 /**
- * Continue with Apple — Supabase's OAuth flow, back through /auth/callback,
- * which sends a new Apple account to choose a username first.
+ * Apple sign-in lives in the app. The web signs people up by email and
+ * points anyone who'd rather use Apple to the app.
  */
-export function AppleButton({ next = "/vault" }: { next?: string }) {
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  async function go() {
-    setBusy(true);
-    setError("");
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "apple",
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
-    });
-    if (error) {
-      setError(error.message);
-      setBusy(false);
-    }
-  }
+export function AppHint() {
   return (
-    <div>
-      <button
-        type="button"
-        onClick={go}
-        disabled={busy}
-        className="flex w-full items-center justify-center gap-2 rounded-[30px] bg-black py-[15px] text-[16px] font-medium text-white transition-opacity hover:opacity-85 disabled:opacity-60"
-      >
-        <svg width="16" height="19" viewBox="0 0 814 1000" fill="currentColor" aria-hidden>
-          <path d="M788 341c-6 4-108 62-108 190 0 148 130 200 134 202-1 3-21 72-69 142-43 62-88 124-156 124s-86-40-165-40c-77 0-104 41-167 41s-106-58-156-128C43 790 0 671 0 558 0 376 118 280 235 280c62 0 114 41 153 41 37 0 95-43 166-43 27 0 124 2 188 94zM554 157c29-35 50-83 50-131 0-7-1-14-2-19-48 2-104 32-138 71-27 30-52 78-52 127 0 7 1 15 2 17 3 1 8 2 13 2 43 0 97-29 127-67z" />
-        </svg>
-        {busy ? "opening apple…" : "continue with apple"}
-      </button>
-      {error && <p className="mt-2 text-center text-[12px] text-th-danger">{error}</p>}
-    </div>
-  );
-}
-
-export function OrDivider() {
-  return (
-    <div className="my-6 flex items-center gap-3 text-[11px] text-[#BBBBBB]">
-      <span className="h-px flex-1 bg-[#EFEFEF]" />
-      or
-      <span className="h-px flex-1 bg-[#EFEFEF]" />
-    </div>
+    <p className="mt-4 text-center text-[13px] text-[#999999]">
+      prefer sign in with apple?{" "}
+      <a href={APP_STORE_URL} className="font-medium text-th-accent">
+        get the iPhone app
+      </a>
+    </p>
   );
 }

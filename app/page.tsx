@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getUser } from "@/lib/auth";
 import { APP_STORE_URL } from "@/lib/app-store";
-import { AppleButton, LegalLinks } from "@/components/auth/auth-form";
+import { LegalLinks } from "@/components/auth/auth-form";
 
 /**
  * The front door — the app's welcome screen (threadology-native/app/(auth)/
@@ -30,9 +30,8 @@ export default async function Home() {
           <a href={APP_STORE_URL} className="rounded-[30px] bg-th-accent py-[17px] text-center text-[15px] font-medium text-white transition-opacity hover:opacity-85">
             get the iPhone app
           </a>
-          <AppleButton />
           <Link href="/signup" className="rounded-[30px] border border-[#EBEBEB] py-[17px] text-center text-[15px] font-medium transition-colors hover:border-[#1A1A1A]">
-            create account
+            create account with email
           </Link>
           <Link href="/login" className="py-3 text-center text-[14px] text-[#999999] hover:text-th-ink">
             already have an account? <span className="text-th-ink">log in</span>

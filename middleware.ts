@@ -15,7 +15,6 @@ function isProtectedRoute(pathname: string): boolean {
   if (pathname.startsWith("/saved")) return true;
   if (pathname.startsWith("/notifications")) return true;
   if (pathname === "/fit/new") return true;
-  if (pathname === "/username") return true;
   return false;
 }
 

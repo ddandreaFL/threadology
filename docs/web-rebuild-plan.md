@@ -43,19 +43,14 @@ Each phase ships to a Vercel preview for review before it merges.
 ## Answered (2026-09-26)
 
 1. **App download link:** build as if the app is public. The get-the-app layer uses a single placeholder URL (`NEXT_PUBLIC_APP_STORE_URL`) and the Smart App Banner takes an App Store ID from config; both switch on when the listing exists.
-2. **Sign in with Apple on the web:** yes — part of phase 5 (needs a Supabase Apple provider and an Apple Services ID).
+2. **Sign in with Apple on the web:** reversed on 2026-09-26 — email only on the web; Apple in the app; SMS later.
 3. **Desktop:** a distinct desktop layout, with mobile web matching the app. Phones get the app's screens; wide screens get a layout of their own — persistent side navigation in place of the pill, wider grids, a larger cover flow, and two-column piece and fit detail — built on the same components and tokens. Phase 1 builds both breakpoints of every foundation part.
 
-## Sign in with Apple on the web — setup (not yet done)
+## Sign-in on the web (decided 2026-09-26)
 
-The button is live on welcome, login and signup, but Supabase refuses the OAuth flow until the provider has web credentials. The app's native sign-in keeps working either way.
+Email sign-up only. Sign in with Apple stays in the app, and the web's auth screens point anyone who wants it there ("prefer sign in with apple? get the iPhone app"). SMS sign-in is wanted later — to be scoped separately.
 
-1. **Apple Developer → Identifiers → +  → Services IDs.** Identifier e.g. `co.threadology.web`. Enable *Sign in with Apple* → Configure: primary App ID = the app's; **Domains**: `<project-ref>.supabase.co`; **Return URLs**: `https://<project-ref>.supabase.co/auth/v1/callback`.
-2. **Keys → +** with *Sign in with Apple* (the push key can't be reused for this). Download the `.p8`, note the Key ID and your Team ID.
-3. **Supabase → Authentication → Providers → Apple:** enable; **Client IDs**: the Services ID *and* the app's bundle ID, comma-separated (so native keeps working); **Secret Key**: generate the client-secret JWT from the .p8 (Supabase's docs link a generator) — it expires after 6 months, so diarise it.
-4. **Supabase → Authentication → URL Configuration → Redirect URLs:** make sure `https://threadology.vercel.app/auth/callback` (and the preview pattern `https://*-dill10dill-9968s-projects.vercel.app/auth/callback`) are listed.
-
-New Apple accounts land on `/username` first; the flag `user_metadata.username_chosen` marks it done.
+Known gap: an account made with Apple in the app has no password, so it can't log in on the web. When web login for those accounts matters, add either a "set a password" option in the app's settings, or email magic links on the web.
 
 ## Review notes
 
