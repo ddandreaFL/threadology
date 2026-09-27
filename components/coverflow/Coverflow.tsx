@@ -214,8 +214,11 @@ export const Coverflow = forwardRef<
       tabIndex={0}
       aria-roledescription="carousel"
       className={`flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain outline-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className ?? ""}`}
-      style={{ paddingLeft: pad, paddingRight: pad, height: cardHeight || undefined }}
+      style={{ height: cardHeight || undefined }}
     >
+      {/* End space as spacers, not padding: Safari has dropped a scroller's
+          trailing padding, which leaves the last card short of center. */}
+      {box > 0 && <div aria-hidden className="shrink-0" style={{ width: pad }} />}
       {box > 0 &&
         items.map((it, i) => (
           <div key={it.id} className="flex shrink-0 snap-center items-center justify-center" style={{ width: item, height: cardHeight, opacity: i === hiddenIndex ? 0 : 1 }}>
@@ -236,6 +239,7 @@ export const Coverflow = forwardRef<
             </div>
           </div>
         ))}
+      {box > 0 && <div aria-hidden className="shrink-0" style={{ width: pad }} />}
     </div>
   );
 });
