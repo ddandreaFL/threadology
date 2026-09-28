@@ -73,7 +73,7 @@ export function SettingsView({
     });
   }
 
-  const section = "font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted";
+  const section = "font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted";
 
   return (
     <div className="font-th-sans">
@@ -108,7 +108,7 @@ export function SettingsView({
             placeholder="a line about you and your wardrobe"
             className="mt-1 w-full resize-none border-b border-[#E8E8E8] bg-transparent pb-2 text-[16px] outline-none placeholder:text-[#C8C8C8] focus:border-th-ink"
           />
-          <p className="text-right font-th-mono text-[10px] text-[#BBBBBB]">{bio.length}/160</p>
+          <p className="text-right font-th-label font-light text-[10px] text-[#BBBBBB]">{bio.length}/160</p>
           {error && <p className="mt-2 text-[13px] text-th-danger">{error}</p>}
           <button
             type="button"

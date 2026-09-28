@@ -101,3 +101,18 @@ export async function deletePiece(pieceId: string) {
 
   if (error) throw new Error(error.message);
 }
+
+/** Hide a piece from every shared link, or show it again. */
+export async function setPiecePrivate(pieceId: string, isPrivate: boolean) {
+  const user = await requireUser();
+  const supabase = await createServerClient();
+  const { error } = await supabase
+    .from("pieces")
+    .update({ is_private: isPrivate })
+    .eq("id", pieceId)
+    .eq("user_id", user.id);
+  if (error) return { error: error.message };
+  revalidatePath(`/pieces/${pieceId}`);
+  revalidatePath("/vault");
+  return { ok: true as const };
+}

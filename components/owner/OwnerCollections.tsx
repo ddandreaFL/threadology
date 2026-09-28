@@ -96,7 +96,7 @@ export function OwnerCollections({ collections }: { collections: OwnerCollection
             <div key={c.id} className="relative rounded-th-card border border-th-border p-4 transition-colors hover:border-th-muted/40">
               <Link href={`/collections/${c.id}`} className="block">
                 <p className="truncate pr-10 text-[17px] font-semibold tracking-[-0.01em]">{c.name}</p>
-                <p className="mt-0.5 font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">
+                <p className="mt-0.5 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted">
                   <span className="text-th-accent">{c.count}</span> {c.count === 1 ? "piece" : "pieces"}
                 </p>
                 <div className="mt-3 grid grid-cols-4 gap-2">

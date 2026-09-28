@@ -320,7 +320,7 @@ export function Gallery({
           />
         </div>
         <div key={labelKey} className="mt-5 animate-[fadeIn_320ms_ease-out] px-8 text-center">
-          <p className="truncate font-th-mono text-[11px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
+          <p className="truncate font-th-label font-light text-[11px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
             {current ? [current.brand, current.year].filter(Boolean).join("  ·  ") : " "}
           </p>
           <p className="mt-2 line-clamp-2 text-[22px] font-medium tracking-[-0.02em] lg:text-[28px]" style={{ color: c.text }}>
@@ -354,7 +354,7 @@ export function Gallery({
       <div className={`pointer-events-none absolute inset-0 ${chrome ? "" : "cursor-none"}`} style={fade(chrome, 240)}>
         <div className="pointer-events-auto absolute inset-x-5 top-[calc(env(safe-area-inset-top)+12px)] flex items-center">
           <WallChip icon="close" label="leave gallery" onClick={close} fill={c.chip} color={c.text} />
-          <p className="mx-3 flex-1 truncate text-center font-th-mono text-[11px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
+          <p className="mx-3 flex-1 truncate text-center font-th-label font-light text-[11px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
             {label ?? ""}
           </p>
           <span className="hidden lg:block">

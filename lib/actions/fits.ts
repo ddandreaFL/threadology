@@ -11,6 +11,8 @@ export interface FitFields {
   pieceIds: string[];
   title: string | null;
   caption: string | null;
+  /** Where it was worn — free text for now; a place lookup can come later. */
+  location: string | null;
   date: string;
 }
 
@@ -30,6 +32,7 @@ export async function createFit(data: FitFields): Promise<{ id: string } | { err
     slug,
     title: data.title,
     caption: data.caption,
+    location: data.location,
     date: data.date,
     photos: data.photos,
     visibility: "private" as const,
@@ -52,7 +55,7 @@ export async function updateFit(fitId: string, data: FitFields): Promise<{ ok: t
   const supabase = await createServerClient();
   const { error } = await supabase
     .from("fits")
-    .update({ title: data.title, caption: data.caption, date: data.date, photos: data.photos })
+    .update({ title: data.title, caption: data.caption, location: data.location, date: data.date, photos: data.photos })
     .eq("id", fitId)
     .eq("user_id", user.id);
   if (error) return { error: error.message };

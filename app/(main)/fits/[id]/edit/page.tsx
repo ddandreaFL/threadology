@@ -12,7 +12,7 @@ export default async function EditFitPage({ params }: { params: { id: string } }
   const [{ data: fit }, pieces] = await Promise.all([
     supabase
       .from("fits")
-      .select("id, title, caption, date, photos, fit_pieces(piece_id, layer_order)")
+      .select("id, title, caption, location, date, photos, fit_pieces(piece_id, layer_order)")
       .eq("id", params.id)
       .eq("user_id", user.id)
       .single(),
@@ -25,7 +25,7 @@ export default async function EditFitPage({ params }: { params: { id: string } }
     <FitEditor
       userId={user.id}
       pieces={pieces}
-      fit={{ id: fit.id, title: fit.title, caption: fit.caption, date: fit.date ?? new Date().toISOString().slice(0, 10), photos: fit.photos ?? [], pieceIds }}
+      fit={{ id: fit.id, title: fit.title, caption: fit.caption, location: fit.location, date: fit.date ?? new Date().toISOString().slice(0, 10), photos: fit.photos ?? [], pieceIds }}
     />
   );
 }

@@ -6,11 +6,11 @@ import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { Sheet } from "@/components/ui/Sheet";
 import { createFit, updateFit, deleteFit } from "@/lib/actions/fits";
 import { deleteImage } from "@/lib/storage";
-import { Field, PhotoPicker, inputClass, uploadPhotos, type PhotoItem } from "@/components/piece/fields";
+import { Field, PhotoPicker, inputClass, uploadPhotos, useFocusField, type PhotoItem } from "@/components/piece/fields";
 import { EditorBody, EditorFooter } from "@/components/piece/editor";
 
 export type FitPieceOption = { id: string; brand: string; type: string; name: string | null; photo: string | null };
-export type EditableFit = { id: string; title: string | null; caption: string | null; date: string; photos: string[]; pieceIds: string[] };
+export type EditableFit = { id: string; title: string | null; caption: string | null; location: string | null; date: string; photos: string[]; pieceIds: string[] };
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -25,6 +25,8 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
   const [title, setTitle] = useState(fit?.title ?? "");
   const [date, setDate] = useState(fit?.date ?? today());
   const [caption, setCaption] = useState(fit?.caption ?? "");
+  const [location, setLocation] = useState(fit?.location ?? "");
+  useFocusField();
   const [worn, setWorn] = useState<string[]>(fit?.pieceIds ?? []);
   const [picking, setPicking] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -46,7 +48,7 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
       setSaving(false);
       return;
     }
-    const data = { photos: urls, pieceIds: worn, title: title.trim() || null, caption: caption.trim() || null, date };
+    const data = { photos: urls, pieceIds: worn, title: title.trim() || null, caption: caption.trim() || null, location: location.trim() || null, date };
     const result = fit ? await updateFit(fit.id, data) : await createFit(data);
     if ("error" in result) {
       const fresh = urls.filter((u) => !fit?.photos.includes(u));
@@ -85,7 +87,7 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
         <Field label="title">
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="quiet morning" className={inputClass} />
         </Field>
-        <Field label="date">
+        <Field label="date" name="date">
           <input type="date" value={date} max={today()} onChange={(e) => setDate(e.target.value)} className={`${inputClass} text-left [&::-webkit-date-and-time-value]:text-left`} />
         </Field>
         <Field label="pieces">
@@ -95,7 +97,7 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
               if (!p) return null;
               return (
                 <div key={id} className="flex items-center gap-3">
-                  <span className="w-4 font-th-mono text-[11px] text-th-muted">{n + 1}</span>
+                  <span className="w-4 font-th-label font-light text-[11px] text-th-muted">{n + 1}</span>
                   {p.photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={p.photo} alt="" className="h-12 w-9 rounded-md object-cover" />
@@ -103,7 +105,7 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
                     <span className="h-12 w-9 rounded-md bg-[#F0F0F0]" />
                   )}
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-th-mono text-[10px] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
+                    <span className="block truncate font-th-label font-light text-[10px] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
                     <span className="block truncate text-[14px]">{p.name ?? p.type}</span>
                   </span>
                   <button type="button" onClick={() => setWorn(worn.filter((x) => x !== id))} className="text-[12px] text-[#999999]">
@@ -118,7 +120,10 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
             </button>
           </div>
         </Field>
-        <Field label="caption">
+        <Field label="where" name="location">
+          <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="neighborhood, city, venue" className={inputClass} />
+        </Field>
+        <Field label="caption" name="caption">
           <textarea value={caption} onChange={(e) => setCaption(e.target.value)} rows={4} placeholder="something small about today" className={`${inputClass} resize-none`} />
         </Field>
         {error && <p className="text-[13px] text-th-danger">{error}</p>}

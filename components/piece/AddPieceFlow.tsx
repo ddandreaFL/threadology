@@ -127,7 +127,7 @@ export function AddPieceFlow({
         title={meta.title}
         subtitle={meta.subtitle}
         {...(step === 1 ? { close: { onClick: leave } } : { back: { onClick: () => setStep(step - 1) } })}
-        trailing={<span className="pt-3 font-th-mono text-[11px] text-th-muted">{step}/{STEPS.length}</span>}
+        trailing={<span className="pt-3 font-th-label font-light text-[11px] text-th-muted">{step}/{STEPS.length}</span>}
       />
       <div className="mx-auto mb-5 flex max-w-xl gap-1 px-5">
         {STEPS.map((_, i) => (

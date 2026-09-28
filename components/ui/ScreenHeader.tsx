@@ -43,7 +43,7 @@ export function ScreenHeader({
           <p
             className={
               subtitleStyle === "brandLine"
-                ? "truncate font-th-mono text-[11px] uppercase leading-[15px] tracking-[0.1em] text-th-muted"
+                ? "truncate font-th-label font-light text-[11px] uppercase leading-[15px] tracking-[0.1em] text-th-muted"
                 : "truncate text-[13px] leading-[17px] tracking-[-0.01em] text-th-muted"
             }
           >

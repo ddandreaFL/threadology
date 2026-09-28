@@ -4,7 +4,8 @@ import { getSharedPiece } from "@/lib/shared";
 import { viewerIsOwner } from "@/lib/shared-viewer";
 import { getUser } from "@/lib/auth";
 import { VisitorFrame, OwnerPreview } from "@/components/visitor/VisitorFrame";
-import { PieceSheet } from "@/components/visitor/PieceSheet";
+import { PieceDetail } from "@/components/detail/PieceDetail";
+import { VisitorChips } from "@/components/detail/VisitorChips";
 import { AppNudge } from "@/components/visitor/GetTheApp";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
 import { DeadLink } from "@/components/shared/dead-link";
@@ -67,19 +68,37 @@ export default async function SharedPiecePage({ params, searchParams }: Props) {
     );
   }
 
-  const { owner, piece } = result.data;
+  const { owner, piece, worn_in = [], collections = [] } = result.data;
   const isOwner = await viewerIsOwner(params.username);
   const ownHref = `/pieces/${piece.id}`;
   if (isOwner && searchParams.preview !== "1") redirect(ownHref);
 
   return (
     <VisitorFrame signedIn={signedIn} banner={isOwner ? <OwnerPreview href={ownHref} /> : undefined}>
-      <PieceSheet piece={piece} owner={owner.username} inline />
-      {!signedIn && (
-        <div className="px-5">
-          <AppNudge line={`@${owner.username} keeps their archive on threadology.`} />
-        </div>
-      )}
+      <PieceDetail
+        piece={{ ...piece, photos: piece.photos ?? [], added_on: piece.created_at?.slice(0, 10) ?? null }}
+        owner={false}
+        byline={`@${owner.username}`}
+        // Only fits and collections that are out by link themselves, each
+        // opened through its own token.
+        wornIn={worn_in.map((f) => ({
+          id: f.id,
+          title: f.title ?? "untitled fit",
+          date: f.date,
+          photo: f.photo,
+          href: `/fit/${owner.username}/${f.slug}?k=${f.share_token}`,
+        }))}
+        collections={collections.map((c) => ({ id: c.id, name: c.name, href: `/vault/${owner.username}/c/${c.slug}?k=${c.share_token}` }))}
+        chips={<VisitorChips glass />}
+        toolbar={<VisitorChips glass={false} />}
+        footer={
+          !signedIn ? (
+            <div className="px-5 lg:px-0">
+              <AppNudge line={`@${owner.username} keeps their archive on threadology.`} />
+            </div>
+          ) : null
+        }
+      />
     </VisitorFrame>
   );
 }

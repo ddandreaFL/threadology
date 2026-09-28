@@ -27,7 +27,7 @@ const COLORS: [string, string][] = [
 ];
 
 function Label({ children }: { children: string }) {
-  return <p className="mb-3 mt-12 font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">{children}</p>;
+  return <p className="mb-3 mt-12 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted">{children}</p>;
 }
 
 export function FoundationDemo() {
@@ -99,7 +99,7 @@ export function FoundationDemo() {
           <p className="mt-2 text-[16px] font-medium">body</p>
           <p className="mt-2 text-[14px] text-th-muted">supporting</p>
           <p className="mt-2 text-[13px] leading-[17px] text-th-muted">metadata · 8 pieces</p>
-          <p className="mt-2 font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">brand line · timberland</p>
+          <p className="mt-2 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted">brand line · timberland</p>
 
           <Label>icons</Label>
           <div className="grid grid-cols-6 gap-4 lg:grid-cols-9">

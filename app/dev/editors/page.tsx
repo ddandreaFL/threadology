@@ -51,7 +51,7 @@ export default function EditorsDemo({ searchParams }: { searchParams: { e?: stri
       <FitEditor
         userId="demo"
         pieces={[0, 1, 2, 3, 4].map((i) => ({ id: `p${i}`, brand: "Timberland", type: "Tops — T-Shirt", name: `Piece ${i + 1}`, photo: swatch(i * 60) }))}
-        fit={{ id: "f1", title: "quiet morning", caption: null, date: "2026-09-20", photos: [swatch(120)], pieceIds: ["p1", "p3"] }}
+        fit={{ id: "f1", title: "quiet morning", caption: null, location: null, date: "2026-09-20", photos: [swatch(120)], pieceIds: ["p1", "p3"] }}
       />
     );
   return <AddPieceFlow userId="demo" topBrands={["Timberland", "Patagonia", "Engineered Garments"]} collections={collections} />;

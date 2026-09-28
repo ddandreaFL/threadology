@@ -160,3 +160,23 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* Detail pages (design handoff 2026-09-28). The label is every eyebrow,
+   section header, record label and count: Inter Light, 12/16, tracked 0.8. */
+@layer components {
+  .th-label {
+    font-family: var(--font-inter-label), system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #6B6358;
+  }
+  /* Surface at 72% over a light blur — anything floating on a photo. */
+  .th-glass {
+    background: rgba(247, 246, 243, 0.72);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}

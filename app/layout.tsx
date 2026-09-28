@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Cormorant_Garamond, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Inter } from "next/font/google";
 import { PageTransition } from "@/components/page-transition";
 import "./globals.css";
 import { APP_STORE_ID } from "@/lib/app-store";
@@ -12,11 +12,12 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-// The app's mono: wall labels, brand lines, section labels.
-const plexMono = IBM_Plex_Mono({
+// Labels: eyebrows, section headers, record labels, counts. Inter Light
+// replaced IBM Plex Mono here, as it did in the app.
+const interLabel = Inter({
   subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-plex-mono",
+  weight: ["300"],
+  variable: "--font-inter-label",
   display: "swap",
 });
 
@@ -56,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${plexMono.variable} ${cormorant.variable} ${geistMono.variable} font-mono-display antialiased`}
+        className={`${dmSans.variable} ${interLabel.variable} ${cormorant.variable} ${geistMono.variable} font-mono-display antialiased`}
       >
         <PageTransition>{children}</PageTransition>
       </body>

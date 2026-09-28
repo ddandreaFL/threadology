@@ -12,7 +12,7 @@ export default async function OwnerFitPage({ params }: { params: { id: string } 
 
   const { data: fit } = await supabase
     .from("fits")
-    .select("id, title, caption, date, location, photos, fit_pieces(layer_order, pieces(id, name, type, brand, photos))")
+    .select("id, title, caption, date, location, view_count, photos, fit_pieces(layer_order, pieces(id, name, type, brand, year, size, photos, is_private))")
     .eq("id", params.id)
     .eq("user_id", user.id)
     .single();
@@ -24,12 +24,12 @@ export default async function OwnerFitPage({ params }: { params: { id: string } 
     getShareState(supabase, "fit", fit.id),
   ]);
 
-  type P = { id: string; name: string | null; type: string; brand: string; photos: string[] | null };
-  const worn = ((fit.fit_pieces ?? []) as { layer_order: number; pieces: P | null }[])
+  type P = { id: string; name: string | null; type: string; brand: string; year: string | null; size: string | null; photos: string[] | null; is_private: boolean };
+  const worn = ((fit.fit_pieces ?? []) as unknown as { layer_order: number; pieces: P | null }[])
     .sort((a, b) => a.layer_order - b.layer_order)
     .map((fp) => fp.pieces)
     .filter((p): p is P => !!p)
-    .map((p) => ({ id: p.id, name: p.name, type: p.type, brand: p.brand, photo: p.photos?.[0] ?? null }));
+    .map((p) => ({ ...p, photo: p.photos?.[0] ?? null, href: `/pieces/${p.id}` }));
 
   return (
     <OwnerFitView
@@ -39,10 +39,11 @@ export default async function OwnerFitPage({ params }: { params: { id: string } 
         caption: fit.caption,
         date: fit.date,
         location: fit.location,
+        view_count: fit.view_count,
         photos: fit.photos ?? [],
         worn,
-        reactions: (Array.isArray(counts) ? counts : []) as { emoji: string; count: number }[],
-        reactors: (Array.isArray(who) ? who : []) as { emoji: string; username: string; created_at: string }[],
+        reactions: (Array.isArray(counts) ? counts : []) as { emoji: string; count: number; mine: boolean }[],
+        reactors: (Array.isArray(who) ? who : []) as { emoji: string; username: string; avatar_url: string | null; created_at: string }[],
       }}
       username={profile.username}
       share={share}

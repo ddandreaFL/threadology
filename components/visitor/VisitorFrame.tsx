@@ -14,7 +14,7 @@ export function VisitorFrame({ signedIn, children, banner }: { signedIn: boolean
     <div className="min-h-dvh bg-th-bg font-th-sans text-th-ink">
       <AppBanner />
       <header className="hidden items-center justify-between border-b border-th-border px-8 py-4 lg:flex">
-        <Link href="/" className="font-th-mono text-[12px] uppercase tracking-[0.2em]">
+        <Link href="/" className="font-th-label font-light text-[12px] uppercase tracking-[0.2em]">
           threadology
         </Link>
         <nav className="flex items-center gap-2 text-[14px]">
@@ -35,7 +35,7 @@ export function VisitorFrame({ signedIn, children, banner }: { signedIn: boolean
       {banner}
       <main className="mx-auto w-full max-w-6xl pb-16">{children}</main>
       <footer className="border-t border-th-border px-5 py-8 text-center">
-        <p className="font-th-mono text-[11px] uppercase tracking-[0.2em] text-th-muted">threadology</p>
+        <p className="font-th-label font-light text-[11px] uppercase tracking-[0.2em] text-th-muted">threadology</p>
         <p className="mt-2 text-[13px] text-th-muted">An archive for the clothes you keep.</p>
         {!signedIn && (
           <Link href="/signup" className="mt-4 inline-block text-[13px] font-medium text-th-ink underline-offset-4 hover:underline">

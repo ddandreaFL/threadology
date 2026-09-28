@@ -40,7 +40,7 @@ export function OwnerSearch({ pieces, fits }: { pieces: SearchPiece[]; fits: Sea
 
       {hitPieces.length > 0 && (
         <section className="mt-6">
-          <p className="px-5 font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted lg:px-8">pieces · {hitPieces.length}</p>
+          <p className="px-5 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted lg:px-8">pieces · {hitPieces.length}</p>
           <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 md:grid-cols-3 lg:grid-cols-5 lg:px-8">
             {hitPieces.map((p) => (
               <PieceCard key={p.id} href={`/pieces/${p.id}`} photo={p.photo} title={p.name ?? p.type} subtitle={p.brand} />
@@ -50,7 +50,7 @@ export function OwnerSearch({ pieces, fits }: { pieces: SearchPiece[]; fits: Sea
       )}
       {hitFits.length > 0 && (
         <section className="mt-8">
-          <p className="px-5 font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted lg:px-8">fits · {hitFits.length}</p>
+          <p className="px-5 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted lg:px-8">fits · {hitFits.length}</p>
           <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 md:grid-cols-3 lg:grid-cols-5 lg:px-8">
             {hitFits.map((f) => (
               <PieceCard key={f.id} href={`/fits/${f.id}`} photo={f.photo} title={f.title || "untitled fit"} aspect="portrait" />

@@ -105,7 +105,7 @@ export function PieceSheet({
               </button>
             </div>
           )}
-          <p className="font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">
+          <p className="font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted">
             {piece.brand} · @{owner}
           </p>
           <h2 className="mt-2 text-[28px] font-bold leading-8 tracking-[-0.02em]">{piece.name ?? piece.type}</h2>
@@ -115,7 +115,7 @@ export function PieceSheet({
             <dl className="mt-7 grid grid-cols-2 gap-x-6 gap-y-4">
               {facts.map(([k, v]) => (
                 <div key={k}>
-                  <dt className="font-th-mono text-[10px] uppercase tracking-[0.12em] text-th-muted">{k}</dt>
+                  <dt className="font-th-label font-light text-[10px] uppercase tracking-[0.12em] text-th-muted">{k}</dt>
                   <dd className="mt-1 text-[15px] capitalize text-th-ink">{v}</dd>
                 </div>
               ))}

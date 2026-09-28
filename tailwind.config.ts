@@ -76,7 +76,7 @@ const config: Config = {
         sans: ["var(--font-dm-sans)", "sans-serif"],
         mono: ["var(--font-geist-mono)", "monospace"],
         "th-sans": ["var(--font-dm-sans)", "system-ui", "sans-serif"],
-        "th-mono": ["var(--font-plex-mono)", "ui-monospace", "monospace"],
+        "th-label": ["var(--font-inter-label)", "system-ui", "sans-serif"],
         "mono-display": ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
         serif: ["var(--font-cormorant)", "Georgia", "serif"],
       },

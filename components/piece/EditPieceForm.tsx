@@ -8,7 +8,7 @@ import { updatePiece, deletePiece } from "@/lib/actions/pieces";
 import { addPieceToCollections } from "@/lib/actions/collections";
 import { deleteImage } from "@/lib/storage";
 import { CONDITION_OPTIONS, SEASON_OPTIONS, SIZE_OPTIONS_DEFAULT, SIZE_OPTIONS_FOOTWEAR, parseType } from "./options";
-import { Field, MadeInPicker, PhotoPicker, TypePicker, YearWheel, inputClass, uploadPhotos, type PhotoItem } from "./fields";
+import { Field, MadeInPicker, PhotoPicker, TypePicker, YearWheel, inputClass, uploadPhotos, useFocusField, type PhotoItem } from "./fields";
 import { CollectionChecklist, EditorBody, EditorFooter, Toggle, parseMoney } from "./editor";
 
 export type EditablePiece = {
@@ -44,6 +44,7 @@ export function EditPieceForm({
   memberOf: string[];
 }) {
   const router = useRouter();
+  useFocusField();
   const [photos, setPhotos] = useState<PhotoItem[]>(piece.photos.map((url) => ({ url })));
   const [brand, setBrand] = useState(piece.brand);
   const [type, setType] = useState(piece.type);
@@ -129,23 +130,25 @@ export function EditPieceForm({
         <Field label="type">
           <TypePicker value={type} onChange={setType} />
         </Field>
-        <YearWheel value={year} onChange={setYear} />
-        <Field label="season">
+        <div id="field-year" className="scroll-mt-24">
+          <YearWheel value={year} onChange={setYear} />
+        </div>
+        <Field label="season" name="season">
           <ChipRow options={SEASON_OPTIONS} value={season} onChange={setSeason} />
         </Field>
-        <Field label="size">
+        <Field label="size" name="size">
           <ChipRow options={sizes} value={size} onChange={setSize} />
         </Field>
-        <Field label="condition">
+        <Field label="condition" name="condition">
           <ChipRow options={CONDITION_OPTIONS} value={condition} onChange={setCondition} />
         </Field>
-        <Field label="made in">
+        <Field label="made in" name="made_in">
           <MadeInPicker value={madeIn} onChange={setMadeIn} />
         </Field>
-        <Field label="story">
+        <Field label="story" name="story">
           <textarea value={story} onChange={(e) => setStory(e.target.value)} rows={5} placeholder="where it came from, why it matters" className={`${inputClass} resize-none`} />
         </Field>
-        <Field label="estimated value · only you see this">
+        <Field label="estimated value · only you see this" name="value">
           <input inputMode="decimal" value={value} onChange={(e) => setValue(e.target.value)} placeholder="$0" className={inputClass} />
         </Field>
         <Field label="collections">

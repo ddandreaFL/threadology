@@ -2,66 +2,42 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChipButton } from "@/components/ui/ChipButton";
 import { Sheet } from "@/components/ui/Sheet";
 import { ShareControl } from "@/components/sharing/share-control";
-import { deletePiece } from "@/lib/actions/pieces";
+import { DetailChip, MoreMenu, type StripItem } from "@/components/detail/kit";
+import { PieceDetail, type PieceDetailData } from "@/components/detail/PieceDetail";
+import { deletePiece, setPiecePrivate } from "@/lib/actions/pieces";
 import { addPieceToCollections } from "@/lib/actions/collections";
 import type { ShareState } from "@/lib/share-state";
 
-export type OwnerPieceDetail = {
-  id: string;
-  brand: string;
-  type: string;
-  name: string | null;
-  year: string | null;
-  season: string | null;
-  size: string | null;
-  condition: string | null;
-  made_in: string | null;
-  story: string | null;
-  photos: string[];
-  estimatedValue: number | null;
-  is_private: boolean;
-};
+export type OwnerPieceDetail = PieceDetailData & { estimatedValue: number | null; is_private: boolean };
 
 /**
- * One of your pieces — the app's piece screen (threadology-native/app/
- * (main)/vault/[id].tsx): the photo edge to edge with floating chips, then
- * the record — brand line, name, type, the details as pills, collections,
- * the story. Estimated value is yours alone and appears only here. On a
- * desktop, photos left and the record right.
+ * One of your pieces — the app's piece screen (threadology-native/components/
+ * detail/PieceBody.tsx). The page is PieceDetail; this holds its sheets:
+ * share, collections, and the ··· menu's actions.
  */
 export function OwnerPieceView({
   piece,
   username,
   collections,
   memberOf,
+  wornIn,
   share,
 }: {
   piece: OwnerPieceDetail;
   username: string;
   collections: { id: string; name: string }[];
   memberOf: string[];
+  wornIn: StripItem[];
   share: ShareState;
 }) {
   const router = useRouter();
-  const [photo, setPhoto] = useState(0);
   const [sharing, setSharing] = useState(false);
   const [picking, setPicking] = useState(false);
   const [selected, setSelected] = useState<string[]>(memberOf);
   const [saving, setSaving] = useState(false);
   const title = piece.name ?? piece.type;
-
-  const pills = (
-    [
-      ["COND", piece.condition],
-      ["YEAR", piece.year],
-      ["SEASON", piece.season],
-      ["SIZE", piece.size],
-      ["MADE IN", piece.made_in],
-    ] as [string, string | null][]
-  ).filter(([, v]) => !!v) as [string, string][];
 
   async function saveCollections() {
     setSaving(true);
@@ -78,102 +54,43 @@ export function OwnerPieceView({
     router.refresh();
   }
 
-  const chips = (
+  async function togglePrivate() {
+    const r = await setPiecePrivate(piece.id, !piece.is_private);
+    if ("error" in r) return window.alert(r.error);
+    router.refresh();
+  }
+
+  const chips = (glass: boolean) => (
     <>
-      <ChipButton icon="share" label="share" onClick={() => setSharing(true)} onMedia />
-      <ChipButton icon="pencil" label="edit piece" href={`/pieces/${piece.id}/edit`} onMedia />
+      <DetailChip icon="chevron-left" label="Back" href="/vault" glass={glass} />
+      <span className="flex gap-2">
+        {/* A private piece is in no shared link, so there is nothing to share. */}
+        {!piece.is_private && <DetailChip icon="share" label="Share" onClick={() => setSharing(true)} glass={glass} />}
+        <MoreMenu
+          glass={glass}
+          items={[
+            ...(piece.is_private ? [] : [{ label: "share", onClick: () => setSharing(true) }]),
+            { label: "edit piece", href: `/pieces/${piece.id}/edit` },
+            { label: piece.is_private ? "make visible in shares" : "make private", onClick: togglePrivate },
+            { label: "delete piece", onClick: remove, danger: true },
+          ]}
+        />
+      </span>
     </>
   );
 
   return (
-    <div className="font-th-sans lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12 lg:px-8 lg:pt-8">
-      {/* Photos */}
-      <div className="relative lg:sticky lg:top-8 lg:self-start">
-        <div className="aspect-[4/5] w-full overflow-hidden bg-th-chip lg:rounded-[24px]">
-          {piece.photos[photo] ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={piece.photos[photo]} alt={title} className="h-full w-full object-cover" />
-          ) : null}
-        </div>
-        <div className="absolute left-5 right-5 top-[calc(env(safe-area-inset-top)+12px)] flex justify-between lg:hidden">
-          <ChipButton icon="chevron-left" label="back" href="/vault" onMedia />
-          <span className="flex gap-2">{chips}</span>
-        </div>
-        {piece.photos.length > 1 && (
-          <div className="mt-3 flex justify-center gap-2 lg:justify-start">
-            {piece.photos.map((src, i) => (
-              <button key={src} onClick={() => setPhoto(i)} aria-label={`photo ${i + 1}`} className={`h-14 w-14 overflow-hidden rounded-xl border-2 ${i === photo ? "border-th-ink" : "border-transparent"}`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt="" className="h-full w-full object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* The record */}
-      <div className="px-5 pb-10 pt-6 lg:px-0 lg:pt-0">
-        <div className="mb-6 hidden items-center justify-between lg:flex">
-          <ChipButton icon="chevron-left" label="back" href="/vault" />
-          <span className="flex gap-2">{chips}</span>
-        </div>
-        <p className="font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">
-          {piece.brand}
-          {piece.is_private && <span className="ml-2 rounded-full bg-th-chip px-2 py-0.5 normal-case tracking-normal">private · not in shared links</span>}
-        </p>
-        <h1 className="mt-2 text-[28px] font-bold leading-8 tracking-[-0.02em] lg:text-[34px] lg:leading-[38px]">{title}</h1>
-        {piece.name && <p className="mt-1.5 font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">{piece.type}</p>}
-
-        {(pills.length > 0 || piece.estimatedValue != null) && (
-          <section className="mt-7">
-            <h2 className="font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">details</h2>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {pills.map(([k, v]) => (
-                <span key={k} className="inline-flex items-center gap-1.5 rounded-full border border-th-border bg-[#FAFAFA] px-3 py-1.5">
-                  <span className="font-th-mono text-[9px] uppercase tracking-[0.1em] text-[#BBBBBB]">{k}</span>
-                  <span className="text-[12px] font-semibold capitalize">{v}</span>
-                </span>
-              ))}
-              {piece.estimatedValue != null && (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E4D9B8] bg-[#FDFAF0] px-3 py-1.5">
-                  <span className="font-th-mono text-[9px] uppercase tracking-[0.1em] text-[#BBBBBB]">EST.</span>
-                  <span className="text-[12px] font-semibold">${piece.estimatedValue.toLocaleString()}</span>
-                </span>
-              )}
-            </div>
-          </section>
-        )}
-
-        <section className="mt-7">
-          <h2 className="font-th-mono text-[11px] uppercase tracking-[0.1em] text-th-muted">collections</h2>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {collections
-              .filter((c) => memberOf.includes(c.id))
-              .map((c) => (
-                <a key={c.id} href={`/collections/${c.id}`} className="rounded-full bg-th-chip px-3.5 py-1.5 text-[13px] hover:bg-th-chip-pressed">
-                  {c.name}
-                </a>
-              ))}
-            <button onClick={() => setPicking(true)} className="rounded-full border border-dashed border-th-border px-3.5 py-1.5 text-[13px] text-th-muted hover:text-th-ink">
-              add +
-            </button>
-          </div>
-        </section>
-
-        {piece.story && (
-          <section className="mt-8 border-l-2 border-th-accent pl-5">
-            {piece.story.split("\n\n").map((para, i) => (
-              <p key={i} className="mb-3 text-[15px] leading-relaxed">
-                {para}
-              </p>
-            ))}
-          </section>
-        )}
-
-        <button onClick={remove} className="mt-12 text-[12px] text-[#999999] transition-colors hover:text-th-danger">
-          delete piece
-        </button>
-      </div>
+    <>
+      <PieceDetail
+        piece={piece}
+        owner
+        estimatedValue={piece.estimatedValue}
+        wornIn={wornIn}
+        collections={collections.filter((c) => memberOf.includes(c.id)).map((c) => ({ ...c, href: `/collections/${c.id}` }))}
+        chips={chips(true)}
+        toolbar={chips(false)}
+        onManageCollections={() => setPicking(true)}
+      />
 
       <Sheet open={sharing} title="share" onClose={() => setSharing(false)}>
         <ShareControl type="piece" id={piece.id} username={username} initial={share} />
@@ -204,6 +121,6 @@ export function OwnerPieceView({
           </div>
         )}
       </Sheet>
-    </div>
+    </>
   );
 }

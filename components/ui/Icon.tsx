@@ -31,7 +31,8 @@ export type IconName =
   | "play"
   | "pause"
   | "gear"
-  | "bell-off";
+  | "bell-off"
+  | "lock";
 
 export function Icon({
   name,
@@ -170,6 +171,12 @@ const GLYPHS: Record<IconName, (s: StrokeProps, color: string) => ReactNode> = {
   "chevron-left": (s) => <path d="M14.5 5.5 8 12l6.5 6.5" {...s} />,
   "chevron-right": (s) => <path d="M9.5 5.5 16 12l-6.5 6.5" {...s} />,
   expand: (s) => <path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" {...s} />,
+  lock: (s) => (
+    <>
+      <rect x={5.5} y={10.5} width={13} height={9.5} rx={2.2} {...s} />
+      <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" {...s} />
+    </>
+  ),
   overflow: (_s, color) => (
     <>
       <circle cx={6} cy={12} r={1.6} fill={color} />

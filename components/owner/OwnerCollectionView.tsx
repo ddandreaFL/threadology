@@ -166,7 +166,7 @@ export function OwnerCollectionView({
                 <span className="h-12 w-9 rounded-md bg-[#F0F0F0]" />
               )}
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-th-mono text-[10px] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
+                <span className="block truncate font-th-label font-light text-[10px] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
                 <span className="block truncate text-[14px]">{p.name ?? p.type}</span>
               </span>
               {adding ? (

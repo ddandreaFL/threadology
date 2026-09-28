@@ -146,6 +146,8 @@ export type SharedFitData = {
     title: string | null;
     caption: string | null;
     date: string | null;
+    /** From detail_pages.sql on. */
+    location?: string | null;
     photos: string[];
   };
   pieces: SharedFitPiece[];
@@ -170,7 +172,13 @@ export type SharedPieceData = {
     materials: string | null;
     acquired_where: string | null;
     acquired_at: string | null;
+    /** From detail_pages.sql on. */
+    created_at?: string;
   };
+  /** Fits this piece was worn in that are themselves shared by link. */
+  worn_in?: { id: string; slug: string; title: string | null; date: string | null; photo: string | null; share_token: string }[];
+  /** Collections it is in that are themselves shared by link. */
+  collections?: { id: string; name: string; slug: string; share_token: string }[];
 };
 
 export type SharedPieceResult =

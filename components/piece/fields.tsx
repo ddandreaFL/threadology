@@ -8,9 +8,9 @@ import { compressImage } from "@/lib/compress";
 import { uploadImage } from "@/lib/storage";
 
 /** Label over a field, as the app sets it. */
-export function Field({ label, children }: { label: string; children: React.ReactNode }) {
+export function Field({ label, children, name }: { label: string; children: React.ReactNode; name?: string }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 scroll-mt-24" id={name ? `field-${name}` : undefined}>
       <span className="text-[11px] text-[#999999]">{label}</span>
       {children}
     </div>
@@ -209,4 +209,21 @@ export async function uploadPhotos(photos: PhotoItem[], userId: string): Promise
     out.push(await uploadImage(compressed, userId));
   }
   return out;
+}
+
+/**
+ * ?field=<name> comes from a "+ add" on a detail page: scroll that field into
+ * view and put the cursor in it when it takes typing.
+ */
+export function useFocusField() {
+  useEffect(() => {
+    const name = new URLSearchParams(window.location.search).get("field");
+    if (!name) return;
+    const el = document.getElementById(`field-${name}`);
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ block: "center" });
+      el.querySelector<HTMLInputElement | HTMLTextAreaElement>("input:not([type=hidden]), textarea")?.focus({ preventScroll: true });
+    });
+  }, []);
 }
