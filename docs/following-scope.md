@@ -1,6 +1,8 @@
 # Following & friends — scope
 
-Status: **scoping, nothing built.** Written 2026-09-25 to decide what Stage 4 is before any schema is written.
+Status: **v1 built 2026-09-29** on branch `profile-overhaul` (web + native), migration `supabase/migrations/friends.sql`. Written 2026-09-25 to decide what Stage 4 is before any schema is written.
+
+Answers (2026-09-29): **mutual friends** (request + accept); a friend sees **everything not marked private** — every non-`is_private` piece, every collection, every fit (price paid and value never); **anyone signed in** can open `@name` and see the card (avatar, name, bio, add-friend button), the archive unlocks once friends. Entry points: @names in who-reacted, saved-by, the inbox, and the friends list in activity. Friend activity in the inbox (new fits/pieces) and search-by-username are not built. The reserved `invite_only` visibility is unused: friends see everything unhidden, so no per-container "friends" setting was needed.
 
 ## Where the product stands
 
