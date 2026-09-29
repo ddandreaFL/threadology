@@ -18,7 +18,7 @@ export default async function SaversPage() {
   const { savers, saver_count } = stats.saves;
   return (
     <div className="font-th-sans">
-      <ScreenHeader title="saved by" subtitle={`${saver_count} ${saver_count === 1 ? "person" : "people"}`} back={{ href: "/profile" }} />
+      <ScreenHeader title="saved by" subtitle={`${saver_count} ${saver_count === 1 ? "person" : "people"}`} back={{ href: "/activity" }} />
       <ul className="mx-auto max-w-xl border-t border-th-border px-5 pb-10 lg:mt-3">
         {savers.map((s) => (
           <li key={s.username} className="flex min-h-16 items-center gap-3.5 border-b border-th-border py-3">

@@ -86,6 +86,18 @@ export const SOCIAL_EMPTY: Record<Exclude<SocialState, "active">, { title: strin
   },
 };
 
+/** The inbox's activity row: what other people did, in a line. */
+export function activitySummary(s: ProfileStats): string {
+  const state = socialState(s);
+  if (state === "new") return "saves and reactions land here";
+  if (state === "private") return "share something to start";
+  if (state === "waiting") return "nobody yet";
+  const parts: string[] = [];
+  if (s.reactions.total > 0) parts.push(`${s.reactions.total} ${s.reactions.total === 1 ? "reaction" : "reactions"}`);
+  if (s.saves.total > 0) parts.push(`${s.saves.total} ${s.saves.total === 1 ? "save" : "saves"}`);
+  return parts.join(" · ");
+}
+
 /** "@mira, @jkwon and 6 others" */
 export function saverNames(savers: Saver[], total: number): string {
   const named = savers.slice(0, 2).map((s) => `@${s.username}`);

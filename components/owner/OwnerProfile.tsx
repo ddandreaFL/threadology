@@ -13,23 +13,21 @@ import {
   NavGroup,
   NavRow,
   RankList,
-  ReactionsStat,
-  SavedStat,
   SectionHead,
-  SocialEmpty,
   Totals,
   TypeList,
 } from "@/components/profile/kit";
-import { describeLatest, socialState, SOCIAL_EMPTY, type ProfileStats } from "@/lib/profile-stats";
+import { activitySummary, describeLatest, socialState, type ProfileStats } from "@/lib/profile-stats";
 import type { ShareState } from "@/lib/share-state";
 
 /**
  * You — the app's profile tab, as "your collection, in numbers": who you
- * are, the totals, top brands, pieces by type, what other people did with
- * what you shared, then the inbox and settings.
+ * are, the totals, top brands, pieces by type, then the inbox and settings.
+ * What other people did with what you shared lives in the inbox, under
+ * activity (/activity).
  *
  * A phone gets the app's single column. A desktop gets a side column
- * (identity, totals, inbox, settings) beside a two-by-two of the stats. One
+ * (identity, totals, inbox, settings) beside the stats. One
  * set of elements serves both: the two columns are `contents` on a phone,
  * so their children fall into the page's own order.
  */
@@ -54,6 +52,9 @@ export function OwnerProfile({ userId, stats, share }: { userId: string; stats: 
     <section>
       <SectionHead label="inbox" />
       <NavGroup>
+        {/* What other people did with what you shared — the room a friends
+            list will move into. */}
+        <NavRow icon="profile" title="activity" sub={activitySummary(stats)} href="/activity" />
         <NavRow icon="bookmark" title="saved" sub={`your shelf · ${stats.shelf_count} ${stats.shelf_count === 1 ? "item" : "items"}`} href="/saved" />
         <NavRow
           icon="bell"
@@ -73,26 +74,6 @@ export function OwnerProfile({ userId, stats, share }: { userId: string; stats: 
       </NavGroup>
     </section>
   );
-
-  const socialSections =
-    social === "active" ? (
-      <>
-        {stats.reactions.total > 0 && (
-          <div className="order-5 lg:order-none">
-            <ReactionsStat reactions={stats.reactions} />
-          </div>
-        )}
-        {stats.saves.total > 0 && (
-          <div className="order-6 lg:order-none">
-            <SavedStat saves={stats.saves} />
-          </div>
-        )}
-      </>
-    ) : (
-      <div className="order-5 lg:order-none lg:col-span-2">
-        <SocialEmpty {...SOCIAL_EMPTY[social]} onShare={SOCIAL_EMPTY[social].share ? openShare : undefined} />
-      </div>
-    );
 
   return (
     <div className="font-th-sans">
@@ -131,7 +112,7 @@ export function OwnerProfile({ userId, stats, share }: { userId: string; stats: 
           <div className="order-8 lg:order-none">{settings}</div>
         </div>
 
-        {/* The stats: a two-by-two on a desktop. */}
+        {/* The stats: side by side on a desktop. */}
         <div className="contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-10 lg:gap-y-12">
           {isNew ? (
             <section className="order-2 lg:order-none lg:col-span-2">
@@ -156,7 +137,6 @@ export function OwnerProfile({ userId, stats, share }: { userId: string; stats: 
               </section>
             </>
           )}
-          {socialSections}
         </div>
       </div>
 
