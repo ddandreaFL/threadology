@@ -36,19 +36,22 @@ export function ReactionsSection({
   initial,
   reactors = [],
   token,
+  friendFitId,
   signedIn = false,
 }: {
   owner: boolean;
   initial: Reaction[];
   reactors?: Reactor[];
   token?: string;
+  /** A friend: react through the friendship rather than a token. */
+  friendFitId?: string;
   signedIn?: boolean;
 }) {
   const [reactions, setReactions] = useState<Reaction[]>(initial);
   const [busy, setBusy] = useState(false);
   const [picking, setPicking] = useState(false);
   const [listing, setListing] = useState(false);
-  const canReact = !owner && signedIn && !!token;
+  const canReact = !owner && signedIn && (!!token || !!friendFitId);
   const people = distinctPeople(reactors);
 
   if (owner && reactions.length === 0) return null;
@@ -65,7 +68,9 @@ export function ReactionsSection({
           : before.map((r) => (r.emoji === emoji ? { ...r, count: r.count + 1, mine: true } : r))
         : [...before, { emoji, count: 1, mine: true }]
     );
-    const { data, error } = await supabase.rpc("react_to_fit" as never, { p_token: token, p_emoji: emoji } as never);
+    const { data, error } = friendFitId
+      ? await supabase.rpc("react_to_friend_fit" as never, { p_fit_id: friendFitId, p_emoji: emoji } as never)
+      : await supabase.rpc("react_to_fit" as never, { p_token: token, p_emoji: emoji } as never);
     setBusy(false);
     if (error) return setReactions(before);
     if (Array.isArray(data)) setReactions(data as Reaction[]);
@@ -151,7 +156,9 @@ export function ReactionsSection({
           {reactors.map((r) => (
             <li key={`${r.username}-${r.emoji}`} className="flex items-center gap-3 py-2.5">
               <Avatar person={r} />
-              <span className="flex-1 truncate text-[15px]">@{r.username}</span>
+              <Link href={`/u/${r.username}`} className="flex-1 truncate text-[15px] hover:underline">
+                @{r.username}
+              </Link>
               <span className="text-[18px]">{r.emoji}</span>
               <span suppressHydrationWarning className="w-16 text-right text-[13px] text-th-muted">{timeAgo(r.created_at)}</span>
             </li>

@@ -53,6 +53,7 @@ export function FitDetail({
   reactions,
   reactors,
   token,
+  friendFitId,
   signedIn,
   chips,
   toolbar,
@@ -65,6 +66,7 @@ export function FitDetail({
   reactions: Reaction[];
   reactors?: Reactor[];
   token?: string;
+  friendFitId?: string;
   signedIn?: boolean;
   chips: ReactNode;
   toolbar: ReactNode;
@@ -131,7 +133,7 @@ export function FitDetail({
         </Section>
       ) : null}
 
-      <ReactionsSection owner={owner} initial={reactions} reactors={reactors} token={token} signedIn={signedIn} />
+      <ReactionsSection owner={owner} initial={reactions} reactors={reactors} token={token} friendFitId={friendFitId} signedIn={signedIn} />
 
       <Section label="entry">
         <RecordGrid

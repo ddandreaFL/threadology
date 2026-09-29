@@ -20,8 +20,8 @@ import { supabase } from "@/lib/supabase";
 
 export type NotificationRow = {
   id: string;
-  kind: "addition" | "reaction" | "save";
-  container_type: "vault" | "collection" | "fit" | "piece";
+  kind: "addition" | "reaction" | "save" | "friend_request" | "friend_accepted";
+  container_type: "vault" | "collection" | "fit" | "piece" | "user";
   container_id: string;
   piece_count: number;
   emoji: string | null;
@@ -91,6 +91,8 @@ function describe(n: NotificationRow): string {
     return `${n.piece_count} ${n.piece_count === 1 ? "piece" : "pieces"} added to ${what}`;
   }
   if (n.kind === "reaction") return `${who} reacted ${n.emoji ?? ""} to ${what}`;
+  if (n.kind === "friend_request") return `${who} wants to be friends`;
+  if (n.kind === "friend_accepted") return `${who} accepted your friend request`;
   return `${who} saved ${what}`;
 }
 
@@ -99,6 +101,8 @@ function describe(n: NotificationRow): string {
  * about something you own, so it opens on your own screen.
  */
 function targetHref(n: NotificationRow): string | null {
+  // A friend request or acceptance is about a person: open them.
+  if (n.container_type === "user") return n.actor_username ? `/u/${n.actor_username}` : null;
   if (n.kind === "addition") {
     if (!n.share_token || !n.owner_username) return null;
     if (n.container_type === "vault") return `/vault/${n.owner_username}?k=${n.share_token}`;

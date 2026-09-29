@@ -30,7 +30,8 @@ export function SharedBrowser({
   subtitle: string;
   owner: string;
   pieces: SharedPiece[];
-  save: { type: "vault" | "collection"; token: string; label: string };
+  /** Absent for a friend's collection: theirs to share, not yours to save. */
+  save?: { type: "vault" | "collection"; token: string; label: string };
   galleryLabel: string;
   /** Between the header and the pieces (a vault's segment chips). */
   above?: ReactNode;
@@ -48,7 +49,7 @@ export function SharedBrowser({
 
   const actions = (
     <div className="flex flex-wrap items-center justify-center gap-2.5">
-      <SaveButton containerType={save.type} token={save.token} label={save.label} />
+      {save && <SaveButton containerType={save.type} token={save.token} label={save.label} />}
       {pieces.length > 0 && (
         <button
           onClick={() => openGallery(view === "coverflow" ? index : 0, true)}
