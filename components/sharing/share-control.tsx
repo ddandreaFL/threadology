@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { shareUrl, type ShareState, type ShareType } from "@/lib/share-state";
 
@@ -19,13 +19,20 @@ export function ShareControl({
   id,
   username,
   initial,
+  onChange,
 }: {
   type: ShareType;
   id: string;
   username: string;
   initial: ShareState;
+  /** Told whenever the link changes, for a screen that shows its state. */
+  onChange?: (state: ShareState) => void;
 }) {
   const [state, setState] = useState<ShareState>(initial);
+  useEffect(() => {
+    onChange?.(state);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);

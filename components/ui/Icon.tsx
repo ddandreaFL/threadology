@@ -32,7 +32,8 @@ export type IconName =
   | "pause"
   | "gear"
   | "bell-off"
-  | "lock";
+  | "lock"
+  | "chevron-down";
 
 export function Icon({
   name,
@@ -170,6 +171,7 @@ const GLYPHS: Record<IconName, (s: StrokeProps, color: string) => ReactNode> = {
   bookmark: (s) => <path d="M6.5 4.5h11a1 1 0 0 1 1 1V20l-6.5-3.9L5.5 20V5.5a1 1 0 0 1 1-1Z" {...s} />,
   "chevron-left": (s) => <path d="M14.5 5.5 8 12l6.5 6.5" {...s} />,
   "chevron-right": (s) => <path d="M9.5 5.5 16 12l-6.5 6.5" {...s} />,
+  "chevron-down": (s) => <path d="M5.5 9.5 12 16l6.5-6.5" {...s} />,
   expand: (s) => <path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7" {...s} />,
   lock: (s) => (
     <>

@@ -24,7 +24,7 @@ export function SaveButton({
   token,
   label = "save",
 }: {
-  containerType: "vault" | "collection" | "fit";
+  containerType: "vault" | "collection" | "fit" | "piece";
   token?: string;
   label?: string;
 }) {

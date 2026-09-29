@@ -9,6 +9,7 @@ import { VisitorChips } from "@/components/detail/VisitorChips";
 import { AppNudge } from "@/components/visitor/GetTheApp";
 import { PasswordChallenge } from "@/components/shared/password-challenge";
 import { DeadLink } from "@/components/shared/dead-link";
+import { SaveButton } from "@/components/shared/save-button";
 
 /**
  * A single piece, shared by link.
@@ -92,11 +93,12 @@ export default async function SharedPiecePage({ params, searchParams }: Props) {
         chips={<VisitorChips glass />}
         toolbar={<VisitorChips glass={false} />}
         footer={
-          !signedIn ? (
-            <div className="px-5 lg:px-0">
-              <AppNudge line={`@${owner.username} keeps their archive on threadology.`} />
+          <div className="px-5 lg:px-0">
+            <div className="mt-8">
+              <SaveButton containerType="piece" token={searchParams.k} label="save this piece" />
             </div>
-          ) : null
+            {!signedIn && <AppNudge line={`@${owner.username} keeps their archive on threadology.`} />}
+          </div>
         }
       />
     </VisitorFrame>

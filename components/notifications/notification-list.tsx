@@ -21,7 +21,7 @@ import { supabase } from "@/lib/supabase";
 export type NotificationRow = {
   id: string;
   kind: "addition" | "reaction" | "save";
-  container_type: "vault" | "collection" | "fit";
+  container_type: "vault" | "collection" | "fit" | "piece";
   container_id: string;
   piece_count: number;
   emoji: string | null;
@@ -108,6 +108,7 @@ function targetHref(n: NotificationRow): string | null {
   }
   if (n.container_type === "collection") return `/collections/${n.container_id}`;
   if (n.container_type === "fit") return `/fits/${n.container_id}`;
+  if (n.container_type === "piece") return `/pieces/${n.container_id}`;
   return "/vault";
 }
 

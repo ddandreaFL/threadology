@@ -8,7 +8,7 @@ import { Icon } from "@/components/ui/Icon";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
 
 export type SavedRow = {
-  container_type: "vault" | "collection" | "fit";
+  container_type: "vault" | "collection" | "fit" | "piece";
   container_id: string;
   share_token: string | null;
   notify: boolean;
@@ -25,6 +25,7 @@ function href(r: SavedRow): string | null {
   if (!r.active || !r.share_token) return null;
   if (r.container_type === "vault") return `/vault/${r.owner_username}?k=${r.share_token}`;
   if (r.container_type === "collection") return `/vault/${r.owner_username}/c/${r.slug}?k=${r.share_token}`;
+  if (r.container_type === "piece") return `/p/${r.owner_username}/${r.slug}?k=${r.share_token}`;
   return `/fit/${r.owner_username}/${r.slug}?k=${r.share_token}`;
 }
 
@@ -115,7 +116,7 @@ export function SavedShelf({ userId, initial }: { userId: string; initial: Saved
                 ) : (
                   row
                 )}
-                {r.active && (
+                {r.active && r.container_type !== "piece" && (
                   <button
                     type="button"
                     onClick={() => toggleNotify(r)}
