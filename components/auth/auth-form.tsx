@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChipButton } from "@/components/ui/ChipButton";
+import { Logo } from "@/components/ui/Logo";
 import { APP_STORE_URL } from "@/lib/app-store";
 
 /**
@@ -29,6 +30,7 @@ export function AuthForm({
             <ChipButton icon="chevron-left" label="back" href={back} />
           </div>
         )}
+        <Logo size={56} className="mb-6" />
         <h1 className="text-[28px] font-bold leading-8 tracking-[-0.02em]">{title}</h1>
         {subtitle && <p className="mt-2 text-[15px] text-[#999999]">{subtitle}</p>}
         <div className="mt-9">{children}</div>

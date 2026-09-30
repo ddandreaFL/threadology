@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "./Icon";
+import { Logo } from "./Logo";
 import { CREATE, TABS, isActive } from "./nav";
 import { useUnread } from "./useUnread";
 
@@ -40,7 +41,8 @@ export function SideNav({ username }: { username: string }) {
 
   return (
     <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 flex-col border-r border-th-border px-4 py-6 font-th-sans lg:flex">
-      <Link href="/vault" className="px-3 font-th-label font-light text-[12px] uppercase tracking-[0.2em] text-th-ink">
+      <Link href="/vault" className="flex items-center gap-2.5 px-3 font-th-label font-light text-[12px] uppercase tracking-[0.2em] text-th-ink">
+        <Logo size={28} />
         threadology
       </Link>
 

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { AppBanner } from "./GetTheApp";
 import { APP_STORE_URL } from "@/lib/app-store";
+import { Logo } from "@/components/ui/Logo";
 
 /**
  * The frame for someone else's vault, collection, fit or piece. On a phone
@@ -14,7 +15,8 @@ export function VisitorFrame({ signedIn, children, banner }: { signedIn: boolean
     <div className="min-h-dvh bg-th-bg font-th-sans text-th-ink">
       <AppBanner />
       <header className="hidden items-center justify-between border-b border-th-border px-8 py-4 lg:flex">
-        <Link href="/" className="font-th-label font-light text-[12px] uppercase tracking-[0.2em]">
+        <Link href="/" className="flex items-center gap-2.5 font-th-label font-light text-[12px] uppercase tracking-[0.2em]">
+          <Logo size={28} />
           threadology
         </Link>
         <nav className="flex items-center gap-2 text-[14px]">
