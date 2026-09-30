@@ -3,14 +3,34 @@ import Link from "next/link";
 import { AppBanner } from "./GetTheApp";
 import { APP_STORE_URL } from "@/lib/app-store";
 import { Logo } from "@/components/ui/Logo";
+import { AppFrame } from "@/components/ui/AppFrame";
+import { getUser, getUserProfile } from "@/lib/auth";
 
 /**
  * The frame for someone else's vault, collection, fit or piece. On a phone
  * it is the app's screen with the get-the-app banner above it. On a desktop
  * it gets a quiet top bar — wordmark, get the app, and log in (or your own
  * vault, signed in) — and the content sits in a wide centered column.
+ *
+ * A signed-in viewer gets the app's own frame instead (AppFrame).
  */
-export function VisitorFrame({ signedIn, children, banner }: { signedIn: boolean; children: ReactNode; banner?: ReactNode }) {
+export async function VisitorFrame({ signedIn, children, banner }: { signedIn: boolean; children: ReactNode; banner?: ReactNode }) {
+  // Signed in, a shared link is just another screen in the app: keep the
+  // side column (desktop) and tab bar (phone) rather than dropping into the
+  // visitor's frame, whose chrome is all "get the app" and "log in".
+  if (signedIn) {
+    const user = await getUser();
+    const profile = user ? await getUserProfile(user.id) : null;
+    if (user) {
+      return (
+        <AppFrame username={profile?.username ?? user.email?.split("@")[0] ?? "you"}>
+          {banner}
+          <div className="mx-auto w-full max-w-6xl pb-16">{children}</div>
+        </AppFrame>
+      );
+    }
+  }
+
   return (
     <div className="min-h-dvh bg-th-bg font-th-sans text-th-ink">
       <AppBanner />
