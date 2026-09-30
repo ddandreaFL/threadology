@@ -99,7 +99,7 @@ export function SaveButton({
     return (
       <a
         href={`/signup?next=${next}`}
-        className="inline-flex items-center gap-2 rounded-full bg-[#1A1A1A] px-5 py-2.5 text-[14px] font-medium text-white transition-opacity hover:opacity-80"
+        className="inline-flex items-center gap-2 rounded-full bg-[#1A1A1A] px-5 py-2.5 text-[0.875rem] font-medium text-white transition-opacity hover:opacity-80"
       >
         <BookmarkIcon filled={false} />
         {label}
@@ -112,7 +112,7 @@ export function SaveButton({
       type="button"
       onClick={() => (state.saved ? unsave() : save())}
       disabled={busy}
-      className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[14px] font-medium transition-colors ${
+      className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-[0.875rem] font-medium transition-colors ${
         state.saved
           ? "border-[#2D5A45] bg-[#EDF6F1] text-[#2D5A45]"
           : "border-[#1A1A1A] bg-[#1A1A1A] text-white hover:opacity-80"

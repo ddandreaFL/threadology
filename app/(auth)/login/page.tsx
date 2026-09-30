@@ -70,13 +70,13 @@ function LoginForm() {
           autoComplete="current-password"
         />
 
-        {error && <p className="text-[13px] text-th-danger">{error}</p>}
+        {error && <p className="text-[0.8125rem] text-th-danger">{error}</p>}
 
         <SubmitButton label="log in →" loadingLabel="logging in…" isLoading={isLoading} />
       </form>
       <AppHint />
 
-      <p className="mt-6 text-center text-[13px] text-[#999999]">
+      <p className="mt-6 text-center text-[0.8125rem] text-[#999999]">
         don&apos;t have an account?{" "}
         <Link href={next === "/vault" ? "/signup" : `/signup?next=${encodeURIComponent(next)}`} className="font-medium text-th-ink underline">
           sign up

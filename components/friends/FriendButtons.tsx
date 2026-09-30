@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { removeFriend, respondFriendRequest, sendFriendRequest, type Relationship } from "@/lib/friends";
 
-const pill = "inline-flex h-11 items-center rounded-th-chip px-[18px] text-[14px] font-medium disabled:opacity-60";
+const pill = "inline-flex h-11 items-center rounded-th-chip px-[1.125rem] text-[0.875rem] font-medium disabled:opacity-60";
 const primary = `${pill} bg-th-accent text-th-on-ink hover:bg-th-accent-pressed`;
 const quiet = `${pill} bg-th-chip text-th-ink hover:bg-th-chip-pressed`;
 
@@ -86,10 +86,10 @@ export function RequestActions({ username }: { username: string }) {
   }
   return (
     <span className="flex shrink-0 items-center gap-2">
-      <button type="button" disabled={busy} onClick={() => answer(true)} className="h-9 rounded-th-inline-chip bg-th-accent px-3.5 text-[14px] font-medium text-th-on-ink hover:bg-th-accent-pressed disabled:opacity-60">
+      <button type="button" disabled={busy} onClick={() => answer(true)} className="h-9 rounded-th-inline-chip bg-th-accent px-3.5 text-[0.875rem] font-medium text-th-on-ink hover:bg-th-accent-pressed disabled:opacity-60">
         accept
       </button>
-      <button type="button" disabled={busy} onClick={() => answer(false)} aria-label="decline" className="h-9 rounded-th-inline-chip px-2.5 text-[14px] text-th-muted hover:bg-th-chip">
+      <button type="button" disabled={busy} onClick={() => answer(false)} aria-label="decline" className="h-9 rounded-th-inline-chip px-2.5 text-[0.875rem] text-th-muted hover:bg-th-chip">
         ✕
       </button>
     </span>

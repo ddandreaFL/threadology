@@ -44,7 +44,7 @@ export function SharedVault({
             key={s.id}
             onClick={() => setSegment(s.id)}
             aria-pressed={segment === s.id}
-            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[13px] transition-colors ${
+            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[0.8125rem] transition-colors ${
               segment === s.id ? "bg-[#1A1A1A] text-white" : "border border-[#EBEBEB] text-[#999999] hover:text-th-ink"
             }`}
           >
@@ -87,8 +87,8 @@ export function SharedVault({
                     )
                   )}
                 </div>
-                <p className="mt-2 truncate text-[13px] font-medium">{c.name}</p>
-                <p className="text-[11px] text-th-muted">
+                <p className="mt-2 truncate text-[0.8125rem] font-medium">{c.name}</p>
+                <p className="text-[0.6875rem] text-th-muted">
                   {c.piece_count} {c.piece_count === 1 ? "piece" : "pieces"}
                 </p>
               </Link>
@@ -101,9 +101,9 @@ export function SharedVault({
                     <img src={f.photos[0]} alt={f.title ?? "fit"} className="h-full w-full object-cover" />
                   ) : null}
                 </div>
-                <p className="mt-2 truncate text-[13px] font-medium">{f.title || "untitled fit"}</p>
+                <p className="mt-2 truncate text-[0.8125rem] font-medium">{f.title || "untitled fit"}</p>
                 {f.date && (
-                  <p className="text-[11px] text-th-muted">
+                  <p className="text-[0.6875rem] text-th-muted">
                     {new Date(f.date).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
                   </p>
                 )}

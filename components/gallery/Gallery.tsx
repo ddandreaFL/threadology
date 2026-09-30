@@ -292,7 +292,7 @@ export function Gallery({
         {settings.wall === "blur" && current?.photo && (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={current.photo} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover blur-[60px] transition-opacity duration-700" />
+            <img src={current.photo} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover blur-[3.75rem] transition-opacity duration-700" />
             <div className="absolute inset-0 bg-[rgba(17,17,16,0.45)]" />
           </>
         )}
@@ -301,7 +301,7 @@ export function Gallery({
       <button aria-label="show or hide controls" className="absolute inset-0 cursor-default" onClick={() => phase === "shown" && setChrome((v) => !v)} />
 
       {/* The piece and its wall label. */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-center pb-[calc(env(safe-area-inset-bottom)+92px)] pt-[calc(env(safe-area-inset-top)+56px)]" style={fade(stageOn, 220)}>
+      <div className="pointer-events-none absolute inset-0 flex flex-col justify-center pb-[calc(env(safe-area-inset-bottom)+5.75rem)] pt-[calc(env(safe-area-inset-top)+3.5rem)]" style={fade(stageOn, 220)}>
         <div className="pointer-events-auto">
           <Coverflow
             ref={cf}
@@ -320,10 +320,10 @@ export function Gallery({
           />
         </div>
         <div key={labelKey} className="mt-5 animate-[fadeIn_320ms_ease-out] px-8 text-center">
-          <p className="truncate font-th-label font-light text-[11px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
+          <p className="truncate font-th-label font-light text-[0.6875rem] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
             {current ? [current.brand, current.year].filter(Boolean).join("  ·  ") : " "}
           </p>
-          <p className="mt-2 line-clamp-2 text-[22px] font-medium tracking-[-0.02em] lg:text-[28px]" style={{ color: c.text }}>
+          <p className="mt-2 line-clamp-2 text-[1.375rem] font-medium tracking-[-0.02em] lg:text-[1.75rem]" style={{ color: c.text }}>
             {current ? current.title : count === 0 ? "nothing here yet" : " "}
           </p>
         </div>
@@ -352,9 +352,9 @@ export function Gallery({
 
       {/* Chrome — everything that is not a piece. */}
       <div className={`pointer-events-none absolute inset-0 ${chrome ? "" : "cursor-none"}`} style={fade(chrome, 240)}>
-        <div className="pointer-events-auto absolute inset-x-5 top-[calc(env(safe-area-inset-top)+12px)] flex items-center">
+        <div className="pointer-events-auto absolute inset-x-5 top-[calc(env(safe-area-inset-top)+0.75rem)] flex items-center">
           <WallChip icon="close" label="leave gallery" onClick={close} fill={c.chip} color={c.text} />
-          <p className="mx-3 flex-1 truncate text-center font-th-label font-light text-[11px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
+          <p className="mx-3 flex-1 truncate text-center font-th-label font-light text-[0.6875rem] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
             {label ?? ""}
           </p>
           <span className="hidden lg:block">
@@ -362,7 +362,7 @@ export function Gallery({
           </span>
           <span className="w-11 lg:hidden" />
         </div>
-        <div className="pointer-events-auto absolute inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+24px)] flex justify-center">
+        <div className="pointer-events-auto absolute inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] flex justify-center">
           <div className="flex h-12 items-center gap-1 rounded-3xl px-2" style={{ background: c.control }}>
             <WallControl icon="shuffle" label="shuffle" color={c.text} onClick={() => { setChrome(true); shuffle(); }} disabled={count < 2} />
             <WallControl icon="previous" label="previous" color={c.text} onClick={() => { setChrome(true); step(-1); }} disabled={count < 2} />
@@ -392,7 +392,7 @@ export function Gallery({
             <SheetChip key={m} label={m} selected={settings.motion === m} onClick={() => update({ motion: m })} />
           ))}
         </div>
-        <p className="mt-2 text-[12px] text-white/40">
+        <p className="mt-2 text-[0.75rem] text-white/40">
           {settings.motion === "step" ? "holds each piece, then glides on" : settings.motion === "drift" ? "a slow, constant scroll" : "you move it"}
         </p>
         {settings.motion !== "off" && (
@@ -409,10 +409,10 @@ export function Gallery({
         <div className="flex gap-3.5">
           {(["ink", "stone", "paper", "blur"] as Wall[]).map((w) => (
             <button key={w} onClick={() => update({ wall: w })} aria-pressed={settings.wall === w} className="flex flex-col items-center gap-2">
-              <span className={`h-[52px] w-[52px] rounded-[14px] border-2 p-[3px] ${settings.wall === w ? "border-white" : "border-white/10"}`}>
-                <span className="block h-full w-full rounded-[10px]" style={{ background: w === "ink" ? "#111110" : w === "stone" ? "#F2F0EC" : w === "paper" ? "#FFFFFF" : "#6B6358" }} />
+              <span className={`h-[3.25rem] w-[3.25rem] rounded-[0.875rem] border-2 p-[0.1875rem] ${settings.wall === w ? "border-white" : "border-white/10"}`}>
+                <span className="block h-full w-full rounded-[0.625rem]" style={{ background: w === "ink" ? "#111110" : w === "stone" ? "#F2F0EC" : w === "paper" ? "#FFFFFF" : "#6B6358" }} />
               </span>
-              <span className={`text-[12px] ${settings.wall === w ? "text-white" : "text-white/50"}`}>{w}</span>
+              <span className={`text-[0.75rem] ${settings.wall === w ? "text-white" : "text-white/50"}`}>{w}</span>
             </button>
           ))}
         </div>
@@ -438,19 +438,19 @@ function WallChip({ icon, label, onClick, fill, color }: { icon: IconName; label
 
 function WallControl({ icon, label, onClick, color, large = false, disabled = false }: { icon: IconName; label: string; onClick: () => void; color: string; large?: boolean; disabled?: boolean }) {
   return (
-    <button onClick={onClick} aria-label={label} disabled={disabled} className="flex h-[42px] w-[42px] items-center justify-center disabled:opacity-35" style={{ color }}>
+    <button onClick={onClick} aria-label={label} disabled={disabled} className="flex h-[2.625rem] w-[2.625rem] items-center justify-center disabled:opacity-35" style={{ color }}>
       <Icon name={icon} size={large ? 23 : 19} strokeWidth={1.5} />
     </button>
   );
 }
 
 function SheetLabel({ children, top = false }: { children: string; top?: boolean }) {
-  return <p className={`mb-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-white/40 ${top ? "mt-6" : ""}`}>{children}</p>;
+  return <p className={`mb-2.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-white/40 ${top ? "mt-6" : ""}`}>{children}</p>;
 }
 
 function SheetChip({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
   return (
-    <button onClick={onClick} aria-pressed={selected} className={`shrink-0 rounded-full px-4 py-2 text-[13px] font-medium ${selected ? "bg-white text-[#1A1A1A]" : "bg-white/10 text-white/75"}`}>
+    <button onClick={onClick} aria-pressed={selected} className={`shrink-0 rounded-full px-4 py-2 text-[0.8125rem] font-medium ${selected ? "bg-white text-[#1A1A1A]" : "bg-white/10 text-white/75"}`}>
       {label}
     </button>
   );

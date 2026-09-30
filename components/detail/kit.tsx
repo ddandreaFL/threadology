@@ -19,12 +19,12 @@ export function DetailLayout({ media, toolbar, children }: { media: ReactNode; t
     // Sized by its container, not the window: the same page lays out as a
     // full screen or inside the slide-over panel.
     <div className="@container font-th-sans text-th-ink">
-      <div className="@3xl:grid @3xl:grid-cols-2 @3xl:items-start @5xl:grid-cols-[640px_minmax(0,1fr)]">
+      <div className="@3xl:grid @3xl:grid-cols-2 @3xl:items-start @5xl:grid-cols-[40rem_minmax(0,1fr)]">
         {/* Wide: back top-left, the rest top-right — where every screen's
             header chips sit, so back does not jump across the page. */}
-        <div className="hidden items-center justify-between px-5 pb-3.5 pt-[15px] @3xl:col-span-2 @3xl:flex">{toolbar}</div>
+        <div className="hidden items-center justify-between px-5 pb-3.5 pt-[0.9375rem] @3xl:col-span-2 @3xl:flex">{toolbar}</div>
         <div className="relative @3xl:sticky @3xl:top-0 @3xl:px-8 @3xl:pb-8">{media}</div>
-        <div className="pb-12 @3xl:max-w-[600px] @3xl:pb-12 @3xl:pl-8 @3xl:pr-16">{children}</div>
+        <div className="pb-12 @3xl:max-w-[37.5rem] @3xl:pb-12 @3xl:pl-8 @3xl:pr-16">{children}</div>
       </div>
     </div>
   );
@@ -85,7 +85,7 @@ export function DetailHero({
           </div>
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-3.5">
-            <span className="text-[32px] text-th-muted">✦</span>
+            <span className="text-[2rem] text-th-muted">✦</span>
             {placeholder && <span className="th-label">{placeholder}</span>}
           </div>
         )}
@@ -98,7 +98,7 @@ export function DetailHero({
             {i + 1} / {photos.length}
           </span>
         )}
-        <div className="absolute left-5 right-5 top-[calc(env(safe-area-inset-top)+16px)] flex justify-between @3xl:hidden">{chips}</div>
+        <div className="absolute left-5 right-5 top-[calc(env(safe-area-inset-top)+1rem)] flex justify-between @3xl:hidden">{chips}</div>
       </div>
       {thumbs && photos.length > 1 && (
         <div className="mt-3 hidden gap-2 @3xl:flex">
@@ -162,7 +162,7 @@ export function MoreMenu({ glass = false, items }: { glass?: boolean; items: { l
         <div className="absolute right-0 top-12 z-20 w-52 overflow-hidden rounded-th-chip border border-th-border bg-white py-1 shadow-lg">
           {items.map((it) =>
             it.href ? (
-              <Link key={it.label} href={it.href} className="block px-4 py-2.5 text-[14px] hover:bg-th-surface">
+              <Link key={it.label} href={it.href} className="block px-4 py-2.5 text-[0.875rem] hover:bg-th-surface">
                 {it.label}
               </Link>
             ) : (
@@ -170,7 +170,7 @@ export function MoreMenu({ glass = false, items }: { glass?: boolean; items: { l
                 key={it.label}
                 type="button"
                 onClick={() => (setOpen(false), it.onClick?.())}
-                className={`block w-full px-4 py-2.5 text-left text-[14px] hover:bg-th-surface ${it.danger ? "text-th-danger" : ""}`}
+                className={`block w-full px-4 py-2.5 text-left text-[0.875rem] hover:bg-th-surface ${it.danger ? "text-th-danger" : ""}`}
               >
                 {it.label}
               </button>
@@ -188,8 +188,8 @@ export function Identity({ eyebrow, title, sub, onPhoto = false, children }: { e
   return (
     <div className="px-5 @3xl:px-0">
       <p className={`th-label ${onPhoto ? "!text-white" : "!text-th-accent"}`}>{eyebrow}</p>
-      <h1 className={`mt-1.5 text-[28px] font-bold leading-8 tracking-[-0.56px] [text-wrap:pretty] @3xl:text-[34px] @3xl:leading-[38px] ${onPhoto ? "text-white" : ""}`}>{title}</h1>
-      {sub && <p className="mt-1.5 text-[14px] leading-5 text-th-muted">{sub}</p>}
+      <h1 className={`mt-1.5 text-[1.75rem] font-bold leading-8 tracking-[-0.035rem] [text-wrap:pretty] @3xl:text-[2.125rem] @3xl:leading-[2.375rem] ${onPhoto ? "text-white" : ""}`}>{title}</h1>
+      {sub && <p className="mt-1.5 text-[0.875rem] leading-5 text-th-muted">{sub}</p>}
       {children}
     </div>
   );
@@ -201,7 +201,7 @@ export function PrivateBadge() {
       <span className="th-label inline-flex h-6 items-center gap-1.5 rounded-th-inline-chip bg-th-ink px-2.5 !text-white">
         <Icon name="lock" size={13} /> private
       </span>
-      <span className="text-[13px] leading-[17px] text-th-muted">hidden from every shared link</span>
+      <span className="text-[0.8125rem] leading-[1.0625rem] text-th-muted">hidden from every shared link</span>
     </div>
   );
 }
@@ -227,11 +227,11 @@ export function Section({
         <h2 className="th-label">{label}</h2>
         {action ? (
           action.href ? (
-            <Link href={action.href} className="text-[13px] font-medium leading-[17px] text-th-accent hover:underline">
+            <Link href={action.href} className="text-[0.8125rem] font-medium leading-[1.0625rem] text-th-accent hover:underline">
               {action.label}
             </Link>
           ) : (
-            <button type="button" onClick={action.onClick} className="text-[13px] font-medium leading-[17px] text-th-accent hover:underline">
+            <button type="button" onClick={action.onClick} className="text-[0.8125rem] font-medium leading-[1.0625rem] text-th-accent hover:underline">
               {action.label}
             </button>
           )
@@ -267,7 +267,7 @@ export function RecordGrid({ cells, owner }: { cells: RecordCell[]; owner: boole
             className={`min-h-16 border-b border-th-border pb-3.5 pt-3 ${span ? "col-span-2" : left ? "border-r pr-4" : "pl-4"}`}
           >
             <p className="th-label">{c.label}</p>
-            <div className="mt-1">{c.value ? <p className="break-words text-[16px] font-medium leading-[22px]">{c.value}</p> : <AddInline href={c.addHref} />}</div>
+            <div className="mt-1">{c.value ? <p className="break-words text-[1rem] font-medium leading-[1.375rem]">{c.value}</p> : <AddInline href={c.addHref} />}</div>
           </div>
         );
       })}
@@ -281,7 +281,7 @@ function AddInline({ href }: { href?: string }) {
       <Icon name="plus" size={14} /> add
     </>
   );
-  const cls = "inline-flex items-center gap-1.5 text-[16px] font-medium leading-[22px] text-th-accent";
+  const cls = "inline-flex items-center gap-1.5 text-[1rem] font-medium leading-[1.375rem] text-th-accent";
   return href ? (
     <Link href={href} className={`${cls} hover:underline`}>
       {inner}
@@ -297,9 +297,9 @@ export function OwnerValue({ value, addHref }: { value: number | null; addHref: 
     <div className="mt-3 flex items-center justify-between rounded-th-chip bg-th-surface px-4 pb-3.5 pt-3">
       <div>
         <p className="th-label">est. value</p>
-        <div className="mt-1">{value != null ? <p className="text-[16px] font-medium leading-[22px]">${value.toLocaleString()}</p> : <AddInline href={addHref} />}</div>
+        <div className="mt-1">{value != null ? <p className="text-[1rem] font-medium leading-[1.375rem]">${value.toLocaleString()}</p> : <AddInline href={addHref} />}</div>
       </div>
-      <span className="flex items-center gap-1.5 text-[13px] text-th-muted">
+      <span className="flex items-center gap-1.5 text-[0.8125rem] text-th-muted">
         <Icon name="lock" size={14} /> only you
       </span>
     </div>
@@ -315,11 +315,11 @@ export function RowList({ children }: { children: ReactNode }) {
 export function LinkedRow({ index, photo, title, sub, href }: { index?: number; photo: string | null | undefined; title: string; sub: string; href?: string }) {
   const inner = (
     <>
-      {index != null && <span className="th-label w-[18px] shrink-0">{String(index).padStart(2, "0")}</span>}
+      {index != null && <span className="th-label w-[1.125rem] shrink-0">{String(index).padStart(2, "0")}</span>}
       <Thumb src={photo} className="h-14 w-14 rounded-th-inline-chip" />
       <span className="min-w-0 flex-1">
-        <span className="line-clamp-2 block text-[16px] font-medium leading-[21px]">{title}</span>
-        {sub && <span className="block truncate text-[13px] leading-[17px] text-th-muted">{sub}</span>}
+        <span className="line-clamp-2 block text-[1rem] font-medium leading-[1.3125rem]">{title}</span>
+        {sub && <span className="block truncate text-[0.8125rem] leading-[1.0625rem] text-th-muted">{sub}</span>}
       </span>
       {href && <Icon name="chevron-right" size={16} className="shrink-0 text-th-muted" />}
     </>
@@ -343,7 +343,7 @@ export function Thumb({ src, className }: { src: string | null | undefined; clas
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt="" className={`shrink-0 bg-th-surface object-cover ${className}`} />
   ) : (
-    <span className={`flex shrink-0 items-center justify-center bg-th-surface text-[14px] text-th-muted ${className}`}>✦</span>
+    <span className={`flex shrink-0 items-center justify-center bg-th-surface text-[0.875rem] text-th-muted ${className}`}>✦</span>
   );
 }
 
@@ -355,9 +355,9 @@ export function Strip({ items }: { items: StripItem[] }) {
   return (
     <div className="flex gap-3 overflow-x-auto px-5 [scrollbar-width:none] @3xl:flex-wrap @3xl:overflow-visible @3xl:px-0 [&::-webkit-scrollbar]:hidden">
       {items.map((it) => (
-        <Link key={it.id} href={it.href} className="w-[120px] shrink-0 hover:opacity-85">
-          <Thumb src={it.photo} className="h-40 w-[120px] rounded-th-chip" />
-          <p className="mt-2 truncate text-[14px] font-medium leading-[19px]">{it.title}</p>
+        <Link key={it.id} href={it.href} className="w-[7.5rem] shrink-0 hover:opacity-85">
+          <Thumb src={it.photo} className="h-40 w-[7.5rem] rounded-th-chip" />
+          <p className="mt-2 truncate text-[0.875rem] font-medium leading-[1.1875rem]">{it.title}</p>
           {it.date && <p className="th-label mt-0.5">{shortDate(it.date)}</p>}
         </Link>
       ))}
@@ -369,12 +369,12 @@ export function Strip({ items }: { items: StripItem[] }) {
 
 export function LongText({ text }: { text: string }) {
   return (
-    <div className="space-y-4 border-l-2 border-th-accent pl-[18px]">
+    <div className="space-y-4 border-l-2 border-th-accent pl-[1.125rem]">
       {text
         .split(/\n\s*\n/)
         .filter((p) => p.trim())
         .map((p, n) => (
-          <p key={n} className="whitespace-pre-wrap text-[16px] leading-[26px]">
+          <p key={n} className="whitespace-pre-wrap text-[1rem] leading-[1.625rem]">
             {p.trim()}
           </p>
         ))}
@@ -391,8 +391,8 @@ export function EmptyPrompt({ title, hint, href }: { title: string; hint: string
         <Icon name="plus" size={18} />
       </span>
       <span>
-        <span className="block text-[16px] font-medium leading-[21px] text-th-accent">{title}</span>
-        <span className="block text-[13px] leading-[17px] text-th-muted">{hint}</span>
+        <span className="block text-[1rem] font-medium leading-[1.3125rem] text-th-accent">{title}</span>
+        <span className="block text-[0.8125rem] leading-[1.0625rem] text-th-muted">{hint}</span>
       </span>
     </Link>
   );
@@ -401,7 +401,7 @@ export function EmptyPrompt({ title, hint, href }: { title: string; hint: string
 // ── Collections ─────────────────────────────────────────────────────────────
 
 export function CollectionChips({ items, onAdd }: { items: { id: string; name: string; href?: string }[]; onAdd?: () => void }) {
-  const chip = "inline-flex h-9 items-center whitespace-nowrap rounded-th-inline-chip px-3.5 text-[14px] font-medium";
+  const chip = "inline-flex h-9 items-center whitespace-nowrap rounded-th-inline-chip px-3.5 text-[0.875rem] font-medium";
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((c) =>

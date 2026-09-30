@@ -57,7 +57,9 @@ export function Icon({
     fill: "none",
   };
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden className={className} {...rest}>
+    // Sized in rem, so icons grow with the desktop scale (globals.css) like
+    // the text beside them; `size` is still given in the app's points.
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden className={className} {...rest} style={{ width: `${size / 16}rem`, height: `${size / 16}rem`, ...rest.style }}>
       {GLYPHS[name](stroke, color)}
     </svg>
   );

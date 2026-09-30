@@ -28,7 +28,7 @@ export function SectionHead({ label, meta, action }: { label: string; meta?: str
     <div className="mb-3 flex items-baseline justify-between gap-3">
       <h2 className="th-label">{label}</h2>
       {action ? (
-        <Link href={action.href} className="text-[13px] font-medium leading-[17px] text-th-accent hover:underline">
+        <Link href={action.href} className="text-[0.8125rem] font-medium leading-[1.0625rem] text-th-accent hover:underline">
           {action.label}
         </Link>
       ) : meta ? (
@@ -42,7 +42,7 @@ export function Avatar({ src, username, size }: { src: string | null; username: 
   return (
     <span
       className="flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-th-chip font-th-label font-light text-th-muted"
-      style={{ width: size, height: size, fontSize: size * 0.4 }}
+      style={{ width: `${size / 16}rem`, height: `${size / 16}rem`, fontSize: `${(size * 0.4) / 16}rem` }}
     >
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -60,11 +60,11 @@ export function IdentityHead({ user, size = 72 }: { user: ProfileStats["user"]; 
       <div className="flex items-center gap-4">
         <Avatar src={user.avatar_url} username={user.username} size={size} />
         <div className="flex min-w-0 flex-col gap-1">
-          <p className="truncate text-[17px] font-bold leading-[22px] tracking-[-0.01em]">@{user.username}</p>
+          <p className="truncate text-[1.0625rem] font-bold leading-[1.375rem] tracking-[-0.01em]">@{user.username}</p>
           <p className="th-label">collecting since {new Date(user.created_at).getFullYear()}</p>
         </div>
       </div>
-      {user.bio && <p className="mt-3.5 text-[14px] leading-5 text-th-muted [text-wrap:pretty]">{user.bio}</p>}
+      {user.bio && <p className="mt-3.5 text-[0.875rem] leading-5 text-th-muted [text-wrap:pretty]">{user.bio}</p>}
     </section>
   );
 }
@@ -81,7 +81,7 @@ export function Totals({ items }: { items: [string, number][] }) {
             key={label}
             className={`flex flex-col gap-0.5 py-3 ${first ? "" : "border-l border-th-border pl-4"} ${four && i >= 2 ? "border-t border-th-border" : ""}`}
           >
-            <span className={`${num} text-[28px] leading-8 tracking-[-0.02em]`}>{value}</span>
+            <span className={`${num} text-[1.75rem] leading-8 tracking-[-0.02em]`}>{value}</span>
             <span className="th-label">{label}</span>
           </div>
         );
@@ -111,18 +111,18 @@ export function RankList({ rows, limit, total }: { rows: BrandCount[]; limit?: n
   return (
     <>
       {flat && (
-        <p className="-mt-1 mb-3 text-[13px] leading-[17px] text-th-muted">
+        <p className="-mt-1 mb-3 text-[0.8125rem] leading-[1.0625rem] text-th-muted">
           {rows.length} brands, {rows[0].count} {rows[0].count === 1 ? "piece" : "pieces"} each
         </p>
       )}
       <div className="border-t border-th-border">
         {shown.map((r, i) => (
           <div key={r.brand} className="flex min-h-14 items-center gap-3.5 border-b border-th-border py-3">
-            {!flat && <span className="th-label w-[18px] shrink-0">{String(i + 1).padStart(2, "0")}</span>}
+            {!flat && <span className="th-label w-[1.125rem] shrink-0">{String(i + 1).padStart(2, "0")}</span>}
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-3">
-                <span className="min-w-0 truncate text-[16px] font-medium leading-[21px]">{r.brand}</span>
-                <span className={`${num} shrink-0 text-[16px] leading-[21px]`}>{r.count}</span>
+                <span className="min-w-0 truncate text-[1rem] font-medium leading-[1.3125rem]">{r.brand}</span>
+                <span className={`${num} shrink-0 text-[1rem] leading-[1.3125rem]`}>{r.count}</span>
               </div>
               {!flat && <Bar value={r.count} max={max} />}
             </div>
@@ -131,10 +131,10 @@ export function RankList({ rows, limit, total }: { rows: BrandCount[]; limit?: n
       </div>
       {limit && more > 0 && (
         <div className="flex items-center justify-between pt-3">
-          <span className="text-[13px] leading-[17px] text-th-muted">
+          <span className="text-[0.8125rem] leading-[1.0625rem] text-th-muted">
             and {more} more {more === 1 ? "brand" : "brands"}
           </span>
-          <Link href="/profile/brands" className="text-[13px] font-medium leading-[17px] text-th-accent hover:underline">
+          <Link href="/profile/brands" className="text-[0.8125rem] font-medium leading-[1.0625rem] text-th-accent hover:underline">
             see all
           </Link>
         </div>
@@ -155,9 +155,9 @@ export function TypeList({ rows }: { rows: TypeCount[] }) {
         const head = (
           <div className="min-w-0 flex-1">
             <div className="flex items-baseline justify-between gap-3">
-              <span className="min-w-0 truncate text-left text-[16px] font-medium leading-[21px]">{r.type}</span>
+              <span className="min-w-0 truncate text-left text-[1rem] font-medium leading-[1.3125rem]">{r.type}</span>
               <span className="flex shrink-0 items-center gap-2">
-                <span className={`${num} text-[16px] leading-[21px]`}>{r.count}</span>
+                <span className={`${num} text-[1rem] leading-[1.3125rem]`}>{r.count}</span>
                 {expandable && (
                   <span className={`flex text-th-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}>
                     <Icon name="chevron-down" size={14} strokeWidth={2} />
@@ -185,9 +185,9 @@ export function TypeList({ rows }: { rows: TypeCount[] }) {
             {isOpen && (
               <div className="border-b border-th-border pb-2 pl-4 pt-1">
                 {r.subtypes.map((s) => (
-                  <div key={s.subtype} className="flex justify-between py-1.5 pr-[22px] text-[14px] leading-[19px] text-th-muted">
+                  <div key={s.subtype} className="flex justify-between py-1.5 pr-[1.375rem] text-[0.875rem] leading-[1.1875rem] text-th-muted">
                     <span className="truncate">{s.subtype}</span>
-                    <span className={`${num} text-[14px]`}>{s.count}</span>
+                    <span className={`${num} text-[0.875rem]`}>{s.count}</span>
                   </div>
                 ))}
               </div>
@@ -207,8 +207,8 @@ export function ReactionsStat({ reactions }: { reactions: ProfileStats["reaction
       <div className="flex flex-wrap gap-2">
         {reactions.by_emoji.map((e) => (
           <span key={e.emoji} className="inline-flex h-11 min-w-16 items-center justify-center gap-2 rounded-th-chip bg-th-chip px-3.5">
-            <span className="text-[18px]">{e.emoji}</span>
-            <span className="text-[16px] font-medium tabular-nums">{e.count}</span>
+            <span className="text-[1.125rem]">{e.emoji}</span>
+            <span className="text-[1rem] font-medium tabular-nums">{e.count}</span>
           </span>
         ))}
       </div>
@@ -259,8 +259,8 @@ export function SavedStat({ saves }: { saves: ProfileStats["saves"] }) {
             ))}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-[14px] font-medium leading-[19px]">{saverNames(saves.savers, saves.saver_count)}</span>
-            {saves.latest_at && <span className="block text-[13px] leading-[17px] text-th-muted">latest {timeAgo(saves.latest_at)}</span>}
+            <span className="block truncate text-[0.875rem] font-medium leading-[1.1875rem]">{saverNames(saves.savers, saves.saver_count)}</span>
+            {saves.latest_at && <span className="block text-[0.8125rem] leading-[1.0625rem] text-th-muted">latest {timeAgo(saves.latest_at)}</span>}
           </span>
           <Icon name="chevron-right" size={16} className="shrink-0 text-th-muted" />
         </Link>
@@ -304,20 +304,20 @@ export function NavRow({
   danger?: boolean;
 }) {
   const inner = (
-    <span className="flex min-h-[60px] items-center gap-3.5 px-4 py-3 text-left">
+    <span className="flex min-h-[3.75rem] items-center gap-3.5 px-4 py-3 text-left">
       {icon && (
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-th-inline-chip bg-th-bg">
           <Icon name={icon} size={18} />
         </span>
       )}
       <span className="min-w-0 flex-1">
-        <span className={`block text-[16px] font-medium leading-[21px] ${danger ? "text-th-danger" : ""}`}>{title}</span>
-        {sub && <span className="mt-0.5 block truncate text-[13px] leading-[17px] text-th-muted">{sub}</span>}
+        <span className={`block text-[1rem] font-medium leading-[1.3125rem] ${danger ? "text-th-danger" : ""}`}>{title}</span>
+        {sub && <span className="mt-0.5 block truncate text-[0.8125rem] leading-[1.0625rem] text-th-muted">{sub}</span>}
       </span>
       {badge && (
         <span className="flex shrink-0 items-center gap-1.5 text-th-accent">
           <span className="h-2 w-2 rounded-full bg-th-accent" />
-          <span className={`${num} text-[13px] tracking-[0.03em]`}>{badge}</span>
+          <span className={`${num} text-[0.8125rem] tracking-[0.03em]`}>{badge}</span>
         </span>
       )}
       {!danger && (href || onClick) && <Icon name="chevron-right" size={16} className="shrink-0 text-th-muted" />}
@@ -344,13 +344,13 @@ export function SocialEmpty({ title, body, onShare }: { title: string; body: str
     <section>
       <SectionHead label="reactions · saves" />
       <div className="rounded-th-card bg-th-surface p-5">
-        <p className="text-[17px] font-bold leading-[22px] tracking-[-0.01em]">{title}</p>
-        <p className="mt-1.5 text-[14px] leading-5 text-th-muted [text-wrap:pretty]">{body}</p>
+        <p className="text-[1.0625rem] font-bold leading-[1.375rem] tracking-[-0.01em]">{title}</p>
+        <p className="mt-1.5 text-[0.875rem] leading-5 text-th-muted [text-wrap:pretty]">{body}</p>
         {onShare && (
           <button
             type="button"
             onClick={onShare}
-            className="mt-3.5 inline-flex h-11 items-center gap-1.5 rounded-th-chip bg-th-bg px-4 text-[14px] font-medium text-th-accent hover:bg-th-chip"
+            className="mt-3.5 inline-flex h-11 items-center gap-1.5 rounded-th-chip bg-th-bg px-4 text-[0.875rem] font-medium text-th-accent hover:bg-th-chip"
           >
             <Icon name="share" size={18} /> share vault
           </button>

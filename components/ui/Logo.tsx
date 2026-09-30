@@ -12,7 +12,7 @@ export function Logo({ size, className = "" }: { size: number; className?: strin
       width={size}
       height={size}
       className={`shrink-0 ${className}`}
-      style={{ width: size, height: size, borderRadius: size * 0.22 }}
+      style={{ width: `${size / 16}rem`, height: `${size / 16}rem`, borderRadius: `${(size * 0.22) / 16}rem` }}
     />
   );
 }

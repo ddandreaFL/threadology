@@ -47,8 +47,8 @@ export function NotificationList({ initial }: { initial: NotificationRow[] }) {
   if (initial.length === 0) {
     return (
       <div className="px-10 py-24 text-center font-th-sans">
-        <p className="text-[15px] text-th-ink">Nothing yet.</p>
-        <p className="mt-2 text-[14px] text-th-muted">
+        <p className="text-[0.9375rem] text-th-ink">Nothing yet.</p>
+        <p className="mt-2 text-[0.875rem] text-th-muted">
           Save a link someone sends you and you will hear about it here when it grows.
         </p>
       </div>
@@ -70,12 +70,12 @@ function Row({ n }: { n: NotificationRow }) {
   const href = targetHref(n);
   const body = (
     <div className={`flex items-center gap-3 py-4 ${href ? "transition-opacity hover:opacity-70" : ""}`}>
-      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[10px] bg-th-surface">
+      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[0.625rem] bg-th-surface">
         {n.thumbnail && <Image src={n.thumbnail} alt="" fill sizes="48px" className="object-cover" />}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[15px] leading-snug text-th-ink">{describe(n)}</p>
-        <p className="mt-0.5 text-[13px] text-th-muted">{ago(n.created_at)}</p>
+        <p className="text-[0.9375rem] leading-snug text-th-ink">{describe(n)}</p>
+        <p className="mt-0.5 text-[0.8125rem] text-th-muted">{ago(n.created_at)}</p>
       </div>
       {!n.read_at && <span className="h-2 w-2 shrink-0 rounded-full bg-th-accent" />}
     </div>

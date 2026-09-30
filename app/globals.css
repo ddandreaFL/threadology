@@ -67,7 +67,7 @@
      moving between screens never shifts the content sideways. */
   .th-page {
     width: 100%;
-    max-width: 720px;
+    max-width: 45rem;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
@@ -173,6 +173,20 @@
   html {
     @apply font-sans;
   }
+  /* Desktop scale. The app's sizes are phone sizes — 16px body, 44px
+     chips — and on a laptop they read small and far away. Everything in
+     the new UI is in rem, so raising the root size scales text, chips,
+     spacing and columns together; a phone keeps exactly the app's sizes. */
+  @media (min-width: 1024px) {
+    html {
+      font-size: 112.5%;
+    }
+  }
+  @media (min-width: 1440px) {
+    html {
+      font-size: 125%;
+    }
+  }
   /* Prevent iOS Safari from zooming on input focus */
   input, textarea, select {
     font-size: max(16px, 1em);
@@ -194,9 +208,9 @@
   .th-label {
     font-family: var(--font-inter-label), system-ui, sans-serif;
     font-weight: 300;
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: 0.8px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    letter-spacing: 0.05rem;
     text-transform: uppercase;
     color: #6B6358;
   }

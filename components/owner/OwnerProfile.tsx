@@ -87,7 +87,7 @@ export function OwnerProfile({ userId, stats, share }: { userId: string; stats: 
         />
       </div>
 
-      <div className="flex flex-col gap-7 px-5 pb-7 pt-3 lg:grid lg:grid-cols-[360px_minmax(0,1fr)] lg:items-start lg:gap-16 lg:px-12 lg:pb-14 lg:pt-10">
+      <div className="flex flex-col gap-7 px-5 pb-7 pt-3 lg:grid lg:grid-cols-[22.5rem_minmax(0,1fr)] lg:items-start lg:gap-16 lg:px-12 lg:pb-14 lg:pt-10">
         {/* Side column on a desktop; its parts join the page's order on a phone. */}
         <div className="contents lg:sticky lg:top-10 lg:flex lg:flex-col lg:gap-5">
           <div className="order-1 lg:hidden">
@@ -95,14 +95,14 @@ export function OwnerProfile({ userId, stats, share }: { userId: string; stats: 
           </div>
           <div className="hidden lg:block">
             <Avatar src={user.avatar_url} username={user.username} size={96} />
-            <p className="mt-4 truncate text-[22px] font-bold leading-7 tracking-[-0.01em]">@{user.username}</p>
+            <p className="mt-4 truncate text-[1.375rem] font-bold leading-7 tracking-[-0.01em]">@{user.username}</p>
             <p className="th-label mt-1">collecting since {new Date(user.created_at).getFullYear()}</p>
-            {user.bio && <p className="mt-3 text-[14px] leading-5 text-th-muted [text-wrap:pretty]">{user.bio}</p>}
+            {user.bio && <p className="mt-3 text-[0.875rem] leading-5 text-th-muted [text-wrap:pretty]">{user.bio}</p>}
             <div className="mt-5 flex gap-2">
-              <Link href="/profile/edit" className="inline-flex h-10 items-center gap-1.5 rounded-th-inline-chip bg-th-chip px-3.5 text-[14px] font-medium hover:bg-th-chip-pressed">
+              <Link href="/profile/edit" className="inline-flex h-10 items-center gap-1.5 rounded-th-inline-chip bg-th-chip px-3.5 text-[0.875rem] font-medium hover:bg-th-chip-pressed">
                 <Icon name="pencil" size={16} /> edit profile
               </Link>
-              <button type="button" onClick={openShare} className="inline-flex h-10 items-center gap-1.5 rounded-th-inline-chip bg-th-chip px-3.5 text-[14px] font-medium hover:bg-th-chip-pressed">
+              <button type="button" onClick={openShare} className="inline-flex h-10 items-center gap-1.5 rounded-th-inline-chip bg-th-chip px-3.5 text-[0.875rem] font-medium hover:bg-th-chip-pressed">
                 <Icon name="share" size={16} /> share
               </button>
             </div>
@@ -118,8 +118,8 @@ export function OwnerProfile({ userId, stats, share }: { userId: string; stats: 
             <section className="order-2 lg:order-none lg:col-span-2">
               <SectionHead label="your collection" />
               <div className="rounded-th-card bg-th-surface p-5">
-                <p className="text-[17px] font-bold leading-[22px] tracking-[-0.01em]">Your numbers start with your first piece</p>
-                <p className="mt-1.5 text-[14px] leading-5 text-th-muted">Top brands, types and counts fill in as your vault grows.</p>
+                <p className="text-[1.0625rem] font-bold leading-[1.375rem] tracking-[-0.01em]">Your numbers start with your first piece</p>
+                <p className="mt-1.5 text-[0.875rem] leading-5 text-th-muted">Top brands, types and counts fill in as your vault grows.</p>
               </div>
               <div className="mt-3">
                 <EmptyPrompt title="add your first piece" hint="photo, brand, type — the rest can wait" href="/vault/add" />

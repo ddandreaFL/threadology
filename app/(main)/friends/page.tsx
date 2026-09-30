@@ -18,7 +18,7 @@ export default async function FriendsPage() {
       <ScreenHeader title="friends" back={{ href: "/activity" }} />
       <div className="th-page flex flex-col gap-7 pb-10 pt-3">
         {data.friends.length === 0 && data.outgoing.length === 0 && (
-          <p className="text-[14px] text-th-muted">No friends yet. Tap an @name in your reactions or saves to add someone.</p>
+          <p className="text-[0.875rem] text-th-muted">No friends yet. Tap an @name in your reactions or saves to add someone.</p>
         )}
         {data.friends.length > 0 && (
           <section>

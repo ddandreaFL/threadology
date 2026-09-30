@@ -3,16 +3,16 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Terms of Service — Threadology" };
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="mb-3 mt-8 text-[15px] font-semibold text-[#111111]">{children}</h2>;
+  return <h2 className="mb-3 mt-8 text-[0.9375rem] font-semibold text-[#111111]">{children}</h2>;
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-4 text-[14px] leading-relaxed text-[#555555]">{children}</p>;
+  return <p className="mb-4 text-[0.875rem] leading-relaxed text-[#555555]">{children}</p>;
 }
 
 function Li({ children }: { children: React.ReactNode }) {
   return (
-    <li className="flex gap-3 text-[14px] leading-relaxed text-[#555555]">
+    <li className="flex gap-3 text-[0.875rem] leading-relaxed text-[#555555]">
       <span className="shrink-0 text-[#CCCCCC]">—</span>
       <span>{children}</span>
     </li>
@@ -26,10 +26,10 @@ function Ul({ children }: { children: React.ReactNode }) {
 export default function TermsPage() {
   return (
     <>
-      <h1 className="mb-1 text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
+      <h1 className="mb-1 text-[1.75rem] font-semibold tracking-[-0.02em] text-[#111111]">
         Terms of Service
       </h1>
-      <span className="mb-10 block text-[12px] text-[#999999]">Last updated: April 2026</span>
+      <span className="mb-10 block text-[0.75rem] text-[#999999]">Last updated: April 2026</span>
 
       <H2>Agreement</H2>
       <P>

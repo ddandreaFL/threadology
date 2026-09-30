@@ -24,15 +24,15 @@ export function AuthForm({
 }) {
   return (
     <div className="flex min-h-dvh flex-col bg-white font-th-sans text-th-ink">
-      <div className="mx-auto flex w-full max-w-sm flex-1 flex-col px-7 pb-6 pt-[calc(env(safe-area-inset-top)+16px)] lg:justify-center lg:pt-0">
+      <div className="mx-auto flex w-full max-w-sm flex-1 flex-col px-7 pb-6 pt-[calc(env(safe-area-inset-top)+1rem)] lg:justify-center lg:pt-0">
         {back && (
           <div className="mb-8 lg:mb-10">
             <ChipButton icon="chevron-left" label="back" href={back} />
           </div>
         )}
         <Logo size={56} className="mb-6" />
-        <h1 className="text-[28px] font-bold leading-8 tracking-[-0.02em]">{title}</h1>
-        {subtitle && <p className="mt-2 text-[15px] text-[#999999]">{subtitle}</p>}
+        <h1 className="text-[1.75rem] font-bold leading-8 tracking-[-0.02em]">{title}</h1>
+        {subtitle && <p className="mt-2 text-[0.9375rem] text-[#999999]">{subtitle}</p>}
         <div className="mt-9">{children}</div>
         <LegalLinks className="mt-auto pt-12 lg:mt-12" />
       </div>
@@ -43,9 +43,9 @@ export function AuthForm({
 export function LegalLinks({ className = "" }: { className?: string }) {
   return (
     <div className={`flex justify-center gap-5 ${className}`}>
-      <Link href="/privacy" className="text-[11px] text-[#BBBBBB] transition-colors hover:text-[#999999]">privacy</Link>
-      <Link href="/terms" className="text-[11px] text-[#BBBBBB] transition-colors hover:text-[#999999]">terms</Link>
-      <Link href="/security" className="text-[11px] text-[#BBBBBB] transition-colors hover:text-[#999999]">security</Link>
+      <Link href="/privacy" className="text-[0.6875rem] text-[#BBBBBB] transition-colors hover:text-[#999999]">privacy</Link>
+      <Link href="/terms" className="text-[0.6875rem] text-[#BBBBBB] transition-colors hover:text-[#999999]">terms</Link>
+      <Link href="/security" className="text-[0.6875rem] text-[#BBBBBB] transition-colors hover:text-[#999999]">security</Link>
     </div>
   );
 }
@@ -66,7 +66,7 @@ interface FormFieldProps {
 export function FormField({ id, label, type = "text", value, onChange, placeholder, autoComplete, error, hint, onBlur }: FormFieldProps) {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-[11px] text-[#999999]">
+      <label htmlFor={id} className="text-[0.6875rem] text-[#999999]">
         {label.toLowerCase()}
       </label>
       <input
@@ -78,9 +78,9 @@ export function FormField({ id, label, type = "text", value, onChange, placehold
         placeholder={placeholder}
         autoComplete={autoComplete}
         autoCapitalize="none"
-        className="w-full border-b border-[#E8E8E8] bg-transparent pb-2 pt-1 text-[16px] text-th-ink outline-none transition-colors placeholder:text-[#C8C8C8] focus:border-th-ink"
+        className="w-full border-b border-[#E8E8E8] bg-transparent pb-2 pt-1 text-[1rem] text-th-ink outline-none transition-colors placeholder:text-[#C8C8C8] focus:border-th-ink"
       />
-      {error ? <p className="text-[12px] text-th-danger">{error}</p> : hint ? <p className="text-[12px] text-th-muted">{hint}</p> : null}
+      {error ? <p className="text-[0.75rem] text-th-danger">{error}</p> : hint ? <p className="text-[0.75rem] text-th-muted">{hint}</p> : null}
     </div>
   );
 }
@@ -90,7 +90,7 @@ export function SubmitButton({ label, loadingLabel, isLoading, disabled }: { lab
     <button
       type="submit"
       disabled={isLoading || disabled}
-      className="mt-2 w-full rounded-[30px] bg-[#1A1A1A] py-[17px] text-[15px] font-medium text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50"
+      className="mt-2 w-full rounded-[1.875rem] bg-[#1A1A1A] py-[1.0625rem] text-[0.9375rem] font-medium text-white transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50"
     >
       {isLoading ? loadingLabel : label}
     </button>
@@ -103,7 +103,7 @@ export function SubmitButton({ label, loadingLabel, isLoading, disabled }: { lab
  */
 export function AppHint() {
   return (
-    <p className="mt-4 text-center text-[13px] text-[#999999]">
+    <p className="mt-4 text-center text-[0.8125rem] text-[#999999]">
       prefer sign in with apple?{" "}
       <a href={APP_STORE_URL} className="font-medium text-th-accent">
         get the iPhone app

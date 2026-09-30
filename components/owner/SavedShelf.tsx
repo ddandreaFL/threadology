@@ -86,8 +86,8 @@ export function SavedShelf({ userId, initial }: { userId: string; initial: Saved
       <ScreenHeader title="saved" subtitle={`${rows.length} kept`} back={{ href: "/profile" }} />
       {rows.length === 0 ? (
         <div className="px-10 py-24 text-center">
-          <p className="text-[15px] text-th-ink">Nothing saved yet.</p>
-          <p className="mt-2 text-[14px] text-th-muted">Open a link someone sends you and save it — it will wait here, and you will hear when it grows.</p>
+          <p className="text-[0.9375rem] text-th-ink">Nothing saved yet.</p>
+          <p className="mt-2 text-[0.875rem] text-th-muted">Open a link someone sends you and save it — it will wait here, and you will hear when it grows.</p>
         </div>
       ) : (
         <ul className="th-page divide-y divide-[#F0F0F0]">
@@ -95,12 +95,12 @@ export function SavedShelf({ userId, initial }: { userId: string; initial: Saved
             const to = href(r);
             const row = (
               <div className={`flex min-w-0 flex-1 items-center gap-3 py-4 ${to ? "transition-opacity hover:opacity-70" : "opacity-60"}`}>
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[10px] bg-th-surface">
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[0.625rem] bg-th-surface">
                   {r.thumbnail && <Image src={r.thumbnail} alt="" fill sizes="56px" className="object-cover" />}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[15px] text-th-ink">{r.title ?? "untitled"}</p>
-                  <p className="mt-0.5 truncate text-[13px] text-th-muted">
+                  <p className="truncate text-[0.9375rem] text-th-ink">{r.title ?? "untitled"}</p>
+                  <p className="mt-0.5 truncate text-[0.8125rem] text-th-muted">
                     @{r.owner_username} · {r.container_type}
                     {r.active ? "" : " · no longer shared"}
                   </p>
@@ -135,7 +135,7 @@ export function SavedShelf({ userId, initial }: { userId: string; initial: Saved
         </ul>
       )}
       {removed && (
-        <div className="fixed inset-x-4 bottom-[calc(env(safe-area-inset-bottom)+112px)] z-40 mx-auto flex max-w-sm items-center justify-between rounded-full bg-[#1A1A1A] py-2.5 pl-5 pr-2 text-[14px] text-white shadow-lg lg:bottom-8">
+        <div className="fixed inset-x-4 bottom-[calc(env(safe-area-inset-bottom)+7rem)] z-40 mx-auto flex max-w-sm items-center justify-between rounded-full bg-[#1A1A1A] py-2.5 pl-5 pr-2 text-[0.875rem] text-white shadow-lg lg:bottom-8">
           removed {removed.title ?? "it"}
           {removed.share_token && (
             <button type="button" onClick={undo} className="rounded-full px-3 py-1 font-semibold text-[#9FD3B8]">

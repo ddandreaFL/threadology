@@ -32,16 +32,16 @@ export function OwnerSearch({ pieces, fits }: { pieces: SearchPiece[]; fits: Sea
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="brand, name, type, year"
-          className="w-full rounded-th-chip bg-th-surface px-4 py-3 text-[16px] outline-none placeholder:text-[#B8B8B8]"
+          className="w-full rounded-th-chip bg-th-surface px-4 py-3 text-[1rem] outline-none placeholder:text-[#B8B8B8]"
         />
       </div>
 
-      {query && hitPieces.length === 0 && hitFits.length === 0 && <p className="py-20 text-center text-[13px] text-[#999999]">no results</p>}
+      {query && hitPieces.length === 0 && hitFits.length === 0 && <p className="py-20 text-center text-[0.8125rem] text-[#999999]">no results</p>}
 
       {hitPieces.length > 0 && (
         <section className="mt-6">
-          <p className="px-5 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted lg:px-8">pieces · {hitPieces.length}</p>
-          <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 md:grid-cols-3 lg:grid-cols-5 lg:px-8">
+          <p className="px-5 font-th-label font-light text-[0.6875rem] uppercase tracking-[0.1em] text-th-muted lg:px-8">pieces · {hitPieces.length}</p>
+          <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-[1.375rem] px-3 md:grid-cols-3 lg:grid-cols-5 lg:px-8">
             {hitPieces.map((p) => (
               <PieceCard key={p.id} href={`/pieces/${p.id}`} photo={p.photo} title={p.name ?? p.type} subtitle={p.brand} />
             ))}
@@ -50,8 +50,8 @@ export function OwnerSearch({ pieces, fits }: { pieces: SearchPiece[]; fits: Sea
       )}
       {hitFits.length > 0 && (
         <section className="mt-8">
-          <p className="px-5 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted lg:px-8">fits · {hitFits.length}</p>
-          <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 md:grid-cols-3 lg:grid-cols-5 lg:px-8">
+          <p className="px-5 font-th-label font-light text-[0.6875rem] uppercase tracking-[0.1em] text-th-muted lg:px-8">fits · {hitFits.length}</p>
+          <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-[1.375rem] px-3 md:grid-cols-3 lg:grid-cols-5 lg:px-8">
             {hitFits.map((f) => (
               <PieceCard key={f.id} href={`/fits/${f.id}`} photo={f.photo} title={f.title || "untitled fit"} aspect="portrait" />
             ))}

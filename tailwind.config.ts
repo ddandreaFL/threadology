@@ -64,11 +64,11 @@ const config: Config = {
       },
       borderRadius: {
         // The app's whole radius family.
-        "th-inline-chip": "11px",
-        "th-chip": "14px",
-        "th-card": "20px",
-        "th-pill": "33px",
-        "th-fab": "27px",
+        "th-inline-chip": "0.6875rem",
+        "th-chip": "0.875rem",
+        "th-card": "1.25rem",
+        "th-pill": "2.0625rem",
+        "th-fab": "1.6875rem",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",

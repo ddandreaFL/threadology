@@ -77,7 +77,7 @@ export function EditProfile({
             <Avatar src={avatar || null} username={username} size={112} />
             {uploading && <span className="absolute inset-0 rounded-full bg-white/60" />}
           </button>
-          <button type="button" onClick={() => file.current?.click()} disabled={uploading} className="text-[13px] font-medium leading-[17px] text-th-accent hover:underline">
+          <button type="button" onClick={() => file.current?.click()} disabled={uploading} className="text-[0.8125rem] font-medium leading-[1.0625rem] text-th-accent hover:underline">
             {uploading ? "uploading…" : "change photo"}
           </button>
           <input ref={file} type="file" accept="image/*" hidden onChange={pick} />
@@ -87,8 +87,8 @@ export function EditProfile({
           <div className="border-b border-th-border pb-3.5 pt-3">
             <p className="th-label">username</p>
             <div className="mt-1 flex items-center justify-between text-th-muted">
-              <span className="text-[16px] font-medium leading-[22px]">@{username}</span>
-              <span className="flex items-center gap-1 text-[13px] leading-[17px]">
+              <span className="text-[1rem] font-medium leading-[1.375rem]">@{username}</span>
+              <span className="flex items-center gap-1 text-[0.8125rem] leading-[1.0625rem]">
                 <Icon name="lock" size={14} /> can&apos;t be changed
               </span>
             </div>
@@ -109,19 +109,19 @@ export function EditProfile({
               rows={2}
               onChange={(e) => setBio(e.target.value.slice(0, BIO_LIMIT))}
               placeholder="a short line about your style"
-              className="mt-1.5 min-h-12 w-full resize-none bg-transparent text-[16px] leading-6 outline-none placeholder:text-th-muted/60"
+              className="mt-1.5 min-h-12 w-full resize-none bg-transparent text-[1rem] leading-6 outline-none placeholder:text-th-muted/60"
             />
           </div>
         </div>
 
-        <p className="mt-3 text-[13px] leading-[17px] text-th-muted">Shown on your profile only. Shared vault links don&apos;t show your photo or bio.</p>
-        {error && <p className="mt-3 text-[13px] text-th-danger">{error}</p>}
+        <p className="mt-3 text-[0.8125rem] leading-[1.0625rem] text-th-muted">Shown on your profile only. Shared vault links don&apos;t show your photo or bio.</p>
+        {error && <p className="mt-3 text-[0.8125rem] text-th-danger">{error}</p>}
 
         <button
           type="button"
           onClick={save}
           disabled={!dirty || pending || uploading}
-          className="mt-7 flex h-[54px] w-full items-center justify-center gap-2 rounded-th-fab bg-th-accent text-[16px] font-medium text-white transition-opacity hover:bg-th-accent-pressed disabled:opacity-40"
+          className="mt-7 flex h-[3.375rem] w-full items-center justify-center gap-2 rounded-th-fab bg-th-accent text-[1rem] font-medium text-white transition-opacity hover:bg-th-accent-pressed disabled:opacity-40"
         >
           {pending ? "saving…" : "save changes →"}
         </button>

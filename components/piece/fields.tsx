@@ -11,14 +11,14 @@ import { uploadImage } from "@/lib/storage";
 export function Field({ label, children, name }: { label: string; children: React.ReactNode; name?: string }) {
   return (
     <div className="flex flex-col gap-2 scroll-mt-24" id={name ? `field-${name}` : undefined}>
-      <span className="text-[11px] text-[#999999]">{label}</span>
+      <span className="text-[0.6875rem] text-[#999999]">{label}</span>
       {children}
     </div>
   );
 }
 
 export const inputClass =
-  "w-full border-b border-[#E8E8E8] bg-transparent pb-2 pt-1 text-[16px] text-th-ink outline-none placeholder:text-[#C8C8C8] focus:border-th-ink";
+  "w-full border-b border-[#E8E8E8] bg-transparent pb-2 pt-1 text-[1rem] text-th-ink outline-none placeholder:text-[#C8C8C8] focus:border-th-ink";
 
 /** Category, then its subcategories — the add flow's type step, compact. */
 export function TypePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
@@ -102,14 +102,14 @@ export function YearWheel({ value, onChange }: { value: string; onChange: (v: st
   return (
     <div>
       <div className="mb-1.5 flex items-baseline justify-between">
-        <span className="text-[11px] text-[#999999]">{legacy ? `year · saved as "${legacy}"` : set !== -1 ? "year" : "year · scroll to set"}</span>
+        <span className="text-[0.6875rem] text-[#999999]">{legacy ? `year · saved as "${legacy}"` : set !== -1 ? "year" : "year · scroll to set"}</span>
         {value.trim() && (
-          <button type="button" onClick={() => ((touched.current = false), onChange(""))} className="text-[12px] font-medium text-th-accent">
+          <button type="button" onClick={() => ((touched.current = false), onChange(""))} className="text-[0.75rem] font-medium text-th-accent">
             clear
           </button>
         )}
       </div>
-      <div className="relative h-[200px]">
+      <div className="relative h-[12.5rem]">
         <div className="pointer-events-none absolute inset-x-0 top-20 h-10 border-y border-[#E8E8E8]" />
         <div
           ref={ref}
@@ -130,7 +130,7 @@ export function YearWheel({ value, onChange }: { value: string; onChange: (v: st
             return (
               <div
                 key={y}
-                className="flex h-10 snap-center items-center justify-center text-[20px] tabular-nums transition-[opacity,transform] duration-100"
+                className="flex h-10 snap-center items-center justify-center text-[1.25rem] tabular-nums transition-[opacity,transform] duration-100"
                 style={{ opacity: d === 0 ? 1 : d === 1 ? 0.45 : 0.2, transform: `scale(${d === 0 ? 1 : d === 1 ? 0.92 : 0.84})`, color: set !== -1 ? "#111111" : "#B8B8B8" }}
               >
                 {y}
@@ -161,12 +161,12 @@ export function PhotoPicker({ photos, onChange, max = 12 }: { photos: PhotoItem[
           <div key={p.url} className={`relative aspect-[3/4] overflow-hidden rounded-xl border-2 ${i === 0 ? "border-[#1A1A1A]" : "border-transparent"}`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={p.url} alt="" className="h-full w-full object-cover" onClick={() => onChange([p, ...photos.filter((_, j) => j !== i)])} />
-            {i === 0 && <span className="absolute bottom-1.5 left-1.5 rounded bg-[#1A1A1A] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">cover</span>}
+            {i === 0 && <span className="absolute bottom-1.5 left-1.5 rounded bg-[#1A1A1A] px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase tracking-wide text-white">cover</span>}
             <button
               type="button"
               aria-label="remove photo"
               onClick={() => onChange(photos.filter((_, j) => j !== i))}
-              className="absolute right-1 top-1 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-black/60 text-[13px] font-bold text-white"
+              className="absolute right-1 top-1 flex h-[1.375rem] w-[1.375rem] items-center justify-center rounded-full bg-black/60 text-[0.8125rem] font-bold text-white"
             >
               ×
             </button>
@@ -175,11 +175,11 @@ export function PhotoPicker({ photos, onChange, max = 12 }: { photos: PhotoItem[
         {photos.length < max && (
           <button type="button" onClick={() => input.current?.click()} className="flex aspect-[3/4] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#DEDEDE] text-th-muted hover:border-th-ink hover:text-th-ink">
             <Icon name="photos" size={24} />
-            <span className="text-[12px]">add photos</span>
+            <span className="text-[0.75rem]">add photos</span>
           </button>
         )}
       </div>
-      <p className="mt-2 text-[11px] text-[#999999]">{photos.length} / {max} · tap a photo to make it the cover</p>
+      <p className="mt-2 text-[0.6875rem] text-[#999999]">{photos.length} / {max} · tap a photo to make it the cover</p>
       <input
         ref={input}
         type="file"

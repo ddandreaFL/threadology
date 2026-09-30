@@ -27,7 +27,7 @@ const COLORS: [string, string][] = [
 ];
 
 function Label({ children }: { children: string }) {
-  return <p className="mb-3 mt-12 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted">{children}</p>;
+  return <p className="mb-3 mt-12 font-th-label font-light text-[0.6875rem] uppercase tracking-[0.1em] text-th-muted">{children}</p>;
 }
 
 export function FoundationDemo() {
@@ -61,21 +61,21 @@ export function FoundationDemo() {
           <>
             <Coverflow ref={cf} items={ITEMS} index={index} onIndexChange={setIndex} className="mt-6" hiddenIndex={gallery ? index : null} />
             <div className="mt-4 text-center">
-              <p className="text-[14px] font-semibold tracking-[-0.2px] text-th-ink">{NAMES[index]}</p>
-              <p className="mt-0.5 text-[11px] text-[#999999]">Timberland</p>
+              <p className="text-[0.875rem] font-semibold tracking-[-0.0125rem] text-th-ink">{NAMES[index]}</p>
+              <p className="mt-0.5 text-[0.6875rem] text-[#999999]">Timberland</p>
               <div className="mt-4 flex justify-center gap-2">
-                <button className="rounded-full bg-th-chip px-4 py-2 text-[13px]" onClick={() => cf.current?.flyTo(index - 1, "glide")}>glide ←</button>
-                <button className="rounded-full bg-th-chip px-4 py-2 text-[13px]" onClick={() => cf.current?.flyTo(index + 1, "glide")}>glide →</button>
-                <button className="rounded-full bg-th-chip px-4 py-2 text-[13px]" onClick={() => cf.current?.flyTo((index + 1 + Math.floor(Math.random() * 7)) % 8, "spin")}>spin</button>
-                <button className="rounded-full bg-th-chip px-4 py-2 text-[13px]" onClick={() => cf.current?.flyTo(7, "drift", 2500)}>drift</button>
+                <button className="rounded-full bg-th-chip px-4 py-2 text-[0.8125rem]" onClick={() => cf.current?.flyTo(index - 1, "glide")}>glide ←</button>
+                <button className="rounded-full bg-th-chip px-4 py-2 text-[0.8125rem]" onClick={() => cf.current?.flyTo(index + 1, "glide")}>glide →</button>
+                <button className="rounded-full bg-th-chip px-4 py-2 text-[0.8125rem]" onClick={() => cf.current?.flyTo((index + 1 + Math.floor(Math.random() * 7)) % 8, "spin")}>spin</button>
+                <button className="rounded-full bg-th-chip px-4 py-2 text-[0.8125rem]" onClick={() => cf.current?.flyTo(7, "drift", 2500)}>drift</button>
               </div>
-              <button onClick={openGallery} className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-th-chip px-[18px] text-[13px] font-semibold">
+              <button onClick={openGallery} className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-th-chip px-[1.125rem] text-[0.8125rem] font-semibold">
                 <Icon name="expand" size={15} /> enter gallery
               </button>
             </div>
           </>
         ) : (
-          <div className="grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-[1.375rem] px-3 md:grid-cols-3 lg:grid-cols-4">
             {ITEMS.map((it, i) => (
               <PieceCard key={it.id} photo={it.photo} title={NAMES[i]} subtitle="Timberland" />
             ))}
@@ -88,25 +88,25 @@ export function FoundationDemo() {
             {COLORS.map(([n, c]) => (
               <div key={n}>
                 <div className="h-12 rounded-th-chip border border-th-border" style={{ background: c }} />
-                <p className="mt-1 text-[11px] text-th-muted">{n}</p>
+                <p className="mt-1 text-[0.6875rem] text-th-muted">{n}</p>
               </div>
             ))}
           </div>
 
           <Label>type</Label>
-          <p className="text-[28px] font-bold leading-8 tracking-[-0.02em]">screen title</p>
-          <p className="mt-2 text-[17px] font-bold tracking-[-0.01em]">section title</p>
-          <p className="mt-2 text-[16px] font-medium">body</p>
-          <p className="mt-2 text-[14px] text-th-muted">supporting</p>
-          <p className="mt-2 text-[13px] leading-[17px] text-th-muted">metadata · 8 pieces</p>
-          <p className="mt-2 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted">brand line · timberland</p>
+          <p className="text-[1.75rem] font-bold leading-8 tracking-[-0.02em]">screen title</p>
+          <p className="mt-2 text-[1.0625rem] font-bold tracking-[-0.01em]">section title</p>
+          <p className="mt-2 text-[1rem] font-medium">body</p>
+          <p className="mt-2 text-[0.875rem] text-th-muted">supporting</p>
+          <p className="mt-2 text-[0.8125rem] leading-[1.0625rem] text-th-muted">metadata · 8 pieces</p>
+          <p className="mt-2 font-th-label font-light text-[0.6875rem] uppercase tracking-[0.1em] text-th-muted">brand line · timberland</p>
 
           <Label>icons</Label>
           <div className="grid grid-cols-6 gap-4 lg:grid-cols-9">
             {ICONS.map((n) => (
               <div key={n} className="flex flex-col items-center gap-1">
                 <Icon name={n} size={22} />
-                <span className="text-[10px] text-th-muted">{n}</span>
+                <span className="text-[0.625rem] text-th-muted">{n}</span>
               </div>
             ))}
           </div>
@@ -132,8 +132,8 @@ export function FoundationDemo() {
 
           <Label>sheets</Label>
           <div className="flex gap-3">
-            <button className="rounded-full bg-th-chip px-4 py-2 text-[13px]" onClick={() => setSheet("light")}>light sheet</button>
-            <button className="rounded-full bg-[#1A1A1A] px-4 py-2 text-[13px] text-white" onClick={() => setSheet("dark")}>dark sheet</button>
+            <button className="rounded-full bg-th-chip px-4 py-2 text-[0.8125rem]" onClick={() => setSheet("light")}>light sheet</button>
+            <button className="rounded-full bg-[#1A1A1A] px-4 py-2 text-[0.8125rem] text-white" onClick={() => setSheet("dark")}>dark sheet</button>
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@ export function FoundationDemo() {
 
       <Sheet open={sheet !== null} tone={sheet ?? "light"} title={sheet === "dark" ? "gallery" : "collections"} onClose={() => setSheet(null)}>
         <ChipRow options={["step", "drift", "off"]} value="step" onChange={() => {}} />
-        <p className="mt-4 text-[13px] opacity-60">A sheet rises from the bottom on a phone and is a centered panel on a desktop.</p>
+        <p className="mt-4 text-[0.8125rem] opacity-60">A sheet rises from the bottom on a phone and is a centered panel on a desktop.</p>
       </Sheet>
     </div>
   );

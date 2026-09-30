@@ -103,11 +103,11 @@ export function ReactionsSection({
             aria-pressed={r.mine}
             aria-label={`${r.emoji} ${r.count}`}
             className={`flex h-11 min-w-16 items-center justify-center gap-2 rounded-th-chip px-3.5 transition-colors ${
-              r.mine ? "bg-th-chip-pressed shadow-[inset_0_0_0_1.5px_#1B1A17]" : "bg-th-chip"
+              r.mine ? "bg-th-chip-pressed shadow-[inset_0_0_0_0.0938rem_#1B1A17]" : "bg-th-chip"
             } ${canReact ? "hover:bg-th-chip-pressed" : "cursor-default"}`}
           >
-            <span className="text-[18px]">{r.emoji}</span>
-            <span className="text-[16px] font-medium">{r.count}</span>
+            <span className="text-[1.125rem]">{r.emoji}</span>
+            <span className="text-[1rem] font-medium">{r.count}</span>
           </button>
         ))}
         {canReact && (
@@ -118,7 +118,7 @@ export function ReactionsSection({
       </div>
 
       {!owner && !signedIn && (
-        <p className="mt-2.5 text-[13px] text-th-muted">
+        <p className="mt-2.5 text-[0.8125rem] text-th-muted">
           <Link href="/signup" className="font-medium text-th-accent hover:underline">
             Sign up
           </Link>{" "}
@@ -136,13 +136,13 @@ export function ReactionsSection({
             {people.slice(0, 5).map((p, n) => (
               <span key={p.username} className="relative" style={{ marginLeft: n ? -6 : 0, zIndex: 5 - n }}>
                 <Avatar person={p} />
-                <span className="absolute -bottom-1 -right-1 text-[11px]">{p.emoji}</span>
+                <span className="absolute -bottom-1 -right-1 text-[0.6875rem]">{p.emoji}</span>
               </span>
             ))}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-[14px] font-medium leading-[19px]">{names(people)}</span>
-            <span suppressHydrationWarning className="block text-[13px] leading-[17px] text-th-muted">latest {timeAgo(reactors[0].created_at)}</span>
+            <span className="block truncate text-[0.875rem] font-medium leading-[1.1875rem]">{names(people)}</span>
+            <span suppressHydrationWarning className="block text-[0.8125rem] leading-[1.0625rem] text-th-muted">latest {timeAgo(reactors[0].created_at)}</span>
           </span>
           <Icon name="chevron-right" size={16} className="text-th-muted" />
         </button>
@@ -156,11 +156,11 @@ export function ReactionsSection({
           {reactors.map((r) => (
             <li key={`${r.username}-${r.emoji}`} className="flex items-center gap-3 py-2.5">
               <Avatar person={r} />
-              <Link href={`/u/${r.username}`} className="flex-1 truncate text-[15px] hover:underline">
+              <Link href={`/u/${r.username}`} className="flex-1 truncate text-[0.9375rem] hover:underline">
                 @{r.username}
               </Link>
-              <span className="text-[18px]">{r.emoji}</span>
-              <span suppressHydrationWarning className="w-16 text-right text-[13px] text-th-muted">{timeAgo(r.created_at)}</span>
+              <span className="text-[1.125rem]">{r.emoji}</span>
+              <span suppressHydrationWarning className="w-16 text-right text-[0.8125rem] text-th-muted">{timeAgo(r.created_at)}</span>
             </li>
           ))}
         </ul>
@@ -173,7 +173,7 @@ function Picker({ onPick }: { onPick: (emoji: string) => void }) {
   const [typed, setTyped] = useState("");
   const emoji = firstEmoji(typed);
   const cell = (e: string) => (
-    <button key={e} type="button" onClick={() => onPick(e)} aria-label={e} className="flex aspect-square items-center justify-center rounded-th-chip text-[26px] hover:bg-th-chip">
+    <button key={e} type="button" onClick={() => onPick(e)} aria-label={e} className="flex aspect-square items-center justify-center rounded-th-chip text-[1.625rem] hover:bg-th-chip">
       {e}
     </button>
   );
@@ -193,9 +193,9 @@ function Picker({ onPick }: { onPick: (emoji: string) => void }) {
           value={typed}
           onChange={(e) => setTyped(e.target.value)}
           placeholder="or type any emoji"
-          className="h-11 min-w-0 flex-1 rounded-th-chip bg-th-surface px-3.5 text-[18px] outline-none placeholder:text-[15px] placeholder:text-th-muted"
+          className="h-11 min-w-0 flex-1 rounded-th-chip bg-th-surface px-3.5 text-[1.125rem] outline-none placeholder:text-[0.9375rem] placeholder:text-th-muted"
         />
-        <button type="submit" disabled={!emoji} className={`h-11 rounded-th-chip px-4 text-[14px] font-medium ${emoji ? "bg-th-accent text-th-on-ink" : "bg-th-chip text-th-muted"}`}>
+        <button type="submit" disabled={!emoji} className={`h-11 rounded-th-chip px-4 text-[0.875rem] font-medium ${emoji ? "bg-th-accent text-th-on-ink" : "bg-th-chip text-th-muted"}`}>
           {emoji ? `add ${emoji}` : "add"}
         </button>
       </form>

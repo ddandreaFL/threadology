@@ -3,16 +3,16 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Privacy Policy — Threadology" };
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="mb-3 mt-8 text-[15px] font-semibold text-[#111111]">{children}</h2>;
+  return <h2 className="mb-3 mt-8 text-[0.9375rem] font-semibold text-[#111111]">{children}</h2>;
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-4 text-[14px] leading-relaxed text-[#555555]">{children}</p>;
+  return <p className="mb-4 text-[0.875rem] leading-relaxed text-[#555555]">{children}</p>;
 }
 
 function Li({ children }: { children: React.ReactNode }) {
   return (
-    <li className="flex gap-3 text-[14px] leading-relaxed text-[#555555]">
+    <li className="flex gap-3 text-[0.875rem] leading-relaxed text-[#555555]">
       <span className="shrink-0 text-[#CCCCCC]">—</span>
       <span>{children}</span>
     </li>
@@ -26,21 +26,21 @@ function Ul({ children }: { children: React.ReactNode }) {
 export default function PrivacyPage() {
   return (
     <>
-      <h1 className="mb-1 text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
+      <h1 className="mb-1 text-[1.75rem] font-semibold tracking-[-0.02em] text-[#111111]">
         Privacy Policy
       </h1>
-      <span className="mb-10 block text-[12px] text-[#999999]">Last updated: April 2026</span>
+      <span className="mb-10 block text-[0.75rem] text-[#999999]">Last updated: April 2026</span>
 
       <H2>What We Collect</H2>
 
-      <p className="mb-2 text-[13px] font-semibold text-[#111111]">Account Information</p>
+      <p className="mb-2 text-[0.8125rem] font-semibold text-[#111111]">Account Information</p>
       <Ul>
         <Li>Email address (required for account creation)</Li>
         <Li>Username (chosen by you)</Li>
         <Li>Profile photo (optional)</Li>
       </Ul>
 
-      <p className="mb-2 text-[13px] font-semibold text-[#111111]">Wardrobe Data</p>
+      <p className="mb-2 text-[0.8125rem] font-semibold text-[#111111]">Wardrobe Data</p>
       <Ul>
         <Li>Photos you upload of your pieces</Li>
         <Li>Piece details you enter (brand, year, condition, story, etc.)</Li>
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
         <Li>Hunt list items</Li>
       </Ul>
 
-      <p className="mb-2 text-[13px] font-semibold text-[#111111]">Usage Data</p>
+      <p className="mb-2 text-[0.8125rem] font-semibold text-[#111111]">Usage Data</p>
       <Ul>
         <Li>How you interact with the app (features used, screens visited)</Li>
         <Li>Device information (model, OS version)</Li>
@@ -71,9 +71,9 @@ export default function PrivacyPage() {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[11px] font-semibold uppercase tracking-wide text-[#999999]">Service</th>
-              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[11px] font-semibold uppercase tracking-wide text-[#999999]">Purpose</th>
-              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[11px] font-semibold uppercase tracking-wide text-[#999999]">Data Shared</th>
+              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-[#999999]">Service</th>
+              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-[#999999]">Purpose</th>
+              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-[#999999]">Data Shared</th>
             </tr>
           </thead>
           <tbody>
@@ -83,9 +83,9 @@ export default function PrivacyPage() {
               ["Expo", "App updates, crash reports", "Device info, crash logs"],
             ].map(([service, purpose, data]) => (
               <tr key={service}>
-                <td className="border-b border-[#F0F0F0] py-3 pr-4 align-top text-[13px] font-medium text-[#111111]">{service}</td>
-                <td className="border-b border-[#F0F0F0] py-3 pr-4 align-top text-[13px] text-[#555555]">{purpose}</td>
-                <td className="border-b border-[#F0F0F0] py-3 align-top text-[13px] text-[#555555]">{data}</td>
+                <td className="border-b border-[#F0F0F0] py-3 pr-4 align-top text-[0.8125rem] font-medium text-[#111111]">{service}</td>
+                <td className="border-b border-[#F0F0F0] py-3 pr-4 align-top text-[0.8125rem] text-[#555555]">{purpose}</td>
+                <td className="border-b border-[#F0F0F0] py-3 align-top text-[0.8125rem] text-[#555555]">{data}</td>
               </tr>
             ))}
           </tbody>

@@ -35,11 +35,11 @@ export async function VisitorFrame({ signedIn, children, banner }: { signedIn: b
     <div className="min-h-dvh bg-th-bg font-th-sans text-th-ink">
       <AppBanner />
       <header className="hidden items-center justify-between border-b border-th-border px-8 py-4 lg:flex">
-        <Link href="/" className="flex items-center gap-2.5 font-th-label font-light text-[12px] uppercase tracking-[0.2em]">
+        <Link href="/" className="flex items-center gap-2.5 font-th-label font-light text-[0.75rem] uppercase tracking-[0.2em]">
           <Logo size={28} />
           threadology
         </Link>
-        <nav className="flex items-center gap-2 text-[14px]">
+        <nav className="flex items-center gap-2 text-[0.875rem]">
           <a href={APP_STORE_URL} className="rounded-th-pill bg-[#1A1A1A] px-4 py-2 font-medium text-white hover:opacity-85">
             get the app
           </a>
@@ -58,10 +58,10 @@ export async function VisitorFrame({ signedIn, children, banner }: { signedIn: b
       <main className="mx-auto w-full max-w-6xl pb-16">{children}</main>
       <footer className="border-t border-th-border px-5 py-8 text-center">
         <Logo size={40} className="mx-auto mb-3 block" />
-        <p className="font-th-label font-light text-[11px] uppercase tracking-[0.2em] text-th-muted">threadology</p>
-        <p className="mt-2 text-[13px] text-th-muted">An archive for the clothes you keep.</p>
+        <p className="font-th-label font-light text-[0.6875rem] uppercase tracking-[0.2em] text-th-muted">threadology</p>
+        <p className="mt-2 text-[0.8125rem] text-th-muted">An archive for the clothes you keep.</p>
         {!signedIn && (
-          <Link href="/signup" className="mt-4 inline-block text-[13px] font-medium text-th-ink underline-offset-4 hover:underline">
+          <Link href="/signup" className="mt-4 inline-block text-[0.8125rem] font-medium text-th-ink underline-offset-4 hover:underline">
             start your own vault →
           </Link>
         )}
@@ -77,8 +77,8 @@ export async function VisitorFrame({ signedIn, children, banner }: { signedIn: b
 export function OwnerPreview({ href }: { href: string }) {
   return (
     <div className="mx-5 mt-4 flex items-center justify-between gap-4 rounded-th-chip bg-th-surface px-4 py-3 lg:mx-8">
-      <p className="text-[13px] text-th-muted">This is your link — you are seeing what a visitor sees.</p>
-      <Link href={href} className="shrink-0 text-[13px] font-medium text-th-accent underline-offset-2 hover:underline">
+      <p className="text-[0.8125rem] text-th-muted">This is your link — you are seeing what a visitor sees.</p>
+      <Link href={href} className="shrink-0 text-[0.8125rem] font-medium text-th-accent underline-offset-2 hover:underline">
         my view
       </Link>
     </div>

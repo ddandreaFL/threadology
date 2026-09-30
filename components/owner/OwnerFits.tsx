@@ -32,8 +32,8 @@ export function OwnerFits({ fits }: { fits: OwnerFit[] }) {
       />
       {fits.length === 0 ? (
         <div className="flex flex-col items-center px-10 py-24 text-center">
-          <p className="text-[22px] italic text-[#555555]">Nothing documented yet.</p>
-          <Link href="/fit/new" className="mt-6 rounded-th-pill bg-th-accent px-7 py-3.5 text-[14px] font-medium text-white">
+          <p className="text-[1.375rem] italic text-[#555555]">Nothing documented yet.</p>
+          <Link href="/fit/new" className="mt-6 rounded-th-pill bg-th-accent px-7 py-3.5 text-[0.875rem] font-medium text-white">
             Log your first fit
           </Link>
         </div>
@@ -48,12 +48,12 @@ export function OwnerFits({ fits }: { fits: OwnerFit[] }) {
             maxCardWidth={400}
           />
           <div className="mt-4 px-5 text-center">
-            <p className="truncate text-[16px] font-semibold tracking-[-0.3px] lg:text-[17px]">{active?.title || "untitled fit"}</p>
-            <p className="mt-1 text-[12px] text-[#999999]">{active ? meta(active) : " "}</p>
+            <p className="truncate text-[1rem] font-semibold tracking-[-0.0187rem] lg:text-[1.0625rem]">{active?.title || "untitled fit"}</p>
+            <p className="mt-1 text-[0.75rem] text-[#999999]">{active ? meta(active) : " "}</p>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 pt-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-5 lg:px-8">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-[1.375rem] px-3 pt-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-5 lg:px-8">
           {fits.map((f) => (
             <PieceCard key={f.id} href={`/fits/${f.id}`} photo={f.photo} title={f.title || "untitled fit"} subtitle={meta(f)} aspect="portrait" />
           ))}

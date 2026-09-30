@@ -112,13 +112,13 @@ export function ShareControl({
   }
 
   const option = (active: boolean) =>
-    `flex-1 rounded-full border px-4 py-2 text-[13px] transition-colors ${
+    `flex-1 rounded-full border px-4 py-2 text-[0.8125rem] transition-colors ${
       active ? "border-[#1A1A1A] bg-[#1A1A1A] text-white" : "border-[#E8E5DE] text-[#6B6358] hover:border-[#1A1A1A]"
     }`;
 
   return (
     <section className="rounded-2xl border border-[#E8E5DE] p-4">
-      <h2 className="font-mono text-[11px] uppercase tracking-[0.1em] text-[#999999]">sharing</h2>
+      <h2 className="font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-[#999999]">sharing</h2>
       <div className="mt-3 flex gap-2">
         <button type="button" disabled={busy} onClick={() => state.visibility !== "private" && turnOff()} className={option(state.visibility === "private")}>
           private
@@ -131,12 +131,12 @@ export function ShareControl({
       {url && (
         <div className="mt-4 space-y-3">
           <div className="flex items-center gap-2">
-            <input readOnly value={url} className="min-w-0 flex-1 truncate rounded-lg bg-[#F7F6F3] px-3 py-2 text-[12px] text-[#6B6358]" />
-            <button type="button" onClick={copy} className="rounded-full bg-[#1A1A1A] px-4 py-2 text-[12px] font-medium text-white">
+            <input readOnly value={url} className="min-w-0 flex-1 truncate rounded-lg bg-[#F7F6F3] px-3 py-2 text-[0.75rem] text-[#6B6358]" />
+            <button type="button" onClick={copy} className="rounded-full bg-[#1A1A1A] px-4 py-2 text-[0.75rem] font-medium text-white">
               {copied ? "copied" : "copy"}
             </button>
           </div>
-          <div className="flex items-center justify-between text-[12px]">
+          <div className="flex items-center justify-between text-[0.75rem]">
             <button type="button" disabled={busy} onClick={rotate} className="text-[#6B6358] underline disabled:opacity-40">
               new link (the old one stops working)
             </button>
@@ -144,8 +144,8 @@ export function ShareControl({
           <div className="flex items-center gap-2">
             {state.hasPassword ? (
               <>
-                <span className="flex-1 text-[12px] text-[#6B6358]">password protected</span>
-                <button type="button" disabled={busy} onClick={() => savePassword(null)} className="text-[12px] text-[#6B6358] underline">
+                <span className="flex-1 text-[0.75rem] text-[#6B6358]">password protected</span>
+                <button type="button" disabled={busy} onClick={() => savePassword(null)} className="text-[0.75rem] text-[#6B6358] underline">
                   remove password
                 </button>
               </>
@@ -156,13 +156,13 @@ export function ShareControl({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="add a password (optional)"
-                  className="min-w-0 flex-1 rounded-lg border border-[#E8E5DE] px-3 py-2 text-[12px]"
+                  className="min-w-0 flex-1 rounded-lg border border-[#E8E5DE] px-3 py-2 text-[0.75rem]"
                 />
                 <button
                   type="button"
                   disabled={busy || password.trim().length < 4}
                   onClick={() => savePassword(password.trim())}
-                  className="rounded-full border border-[#1A1A1A] px-4 py-2 text-[12px] disabled:opacity-40"
+                  className="rounded-full border border-[#1A1A1A] px-4 py-2 text-[0.75rem] disabled:opacity-40"
                 >
                   set
                 </button>
@@ -171,7 +171,7 @@ export function ShareControl({
           </div>
         </div>
       )}
-      {error && <p className="mt-3 text-[12px] text-red-600">{error}</p>}
+      {error && <p className="mt-3 text-[0.75rem] text-red-600">{error}</p>}
     </section>
   );
 }

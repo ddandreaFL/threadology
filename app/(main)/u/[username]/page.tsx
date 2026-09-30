@@ -26,7 +26,7 @@ export default async function UserPage({ params }: { params: { username: string 
     return (
       <div className="font-th-sans">
         <ScreenHeader title={`@${params.username}`} back={{ href: "/activity" }} />
-        <p className="px-5 pt-16 text-center text-[14px] text-th-muted">There&apos;s no one here by that name.</p>
+        <p className="px-5 pt-16 text-center text-[0.875rem] text-th-muted">There&apos;s no one here by that name.</p>
       </div>
     );
   }
@@ -75,14 +75,14 @@ export default async function UserPage({ params }: { params: { username: string 
             <section>
               <SectionHead label="pieces" />
               {pieces.length === 0 ? (
-                <p className="text-[14px] text-th-muted">Nothing here yet.</p>
+                <p className="text-[0.875rem] text-th-muted">Nothing here yet.</p>
               ) : (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                   {pieces.map((p) => (
                     <Link key={p.id} href={`/friend/piece/${p.id}`} className="min-w-0 hover:opacity-85">
                       <Thumb src={p.photo} className="aspect-square w-full rounded-th-chip" />
-                      <p className="mt-1.5 truncate text-[13px] leading-[17px]">{p.name ?? p.type}</p>
-                      <p className="truncate text-[13px] leading-[17px] text-th-muted">{p.brand}</p>
+                      <p className="mt-1.5 truncate text-[0.8125rem] leading-[1.0625rem]">{p.name ?? p.type}</p>
+                      <p className="truncate text-[0.8125rem] leading-[1.0625rem] text-th-muted">{p.brand}</p>
                     </Link>
                   ))}
                 </div>
@@ -91,10 +91,10 @@ export default async function UserPage({ params }: { params: { username: string 
           </>
         ) : (
           <div className="rounded-th-card bg-th-surface p-5">
-            <p className="text-[17px] font-bold leading-[22px] tracking-[-0.01em]">
+            <p className="text-[1.0625rem] font-bold leading-[1.375rem] tracking-[-0.01em]">
               {relationship === "incoming" ? `@${user.username} wants to be friends` : "Friends see each other's archives"}
             </p>
-            <p className="mt-1.5 text-[14px] leading-5 text-th-muted">
+            <p className="mt-1.5 text-[0.875rem] leading-5 text-th-muted">
               {relationship === "requested"
                 ? "Once they accept, their pieces, collections and fits show up here — and yours for them."
                 : "Pieces, collections and fits, minus anything marked private. Prices and values never show."}

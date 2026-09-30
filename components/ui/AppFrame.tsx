@@ -12,7 +12,7 @@ export function AppFrame({ username, children }: { username: string; children: R
   return (
     <div className="flex min-h-dvh bg-th-bg text-th-ink">
       <SideNav username={username} />
-      <main className="min-w-0 flex-1 pb-[calc(env(safe-area-inset-bottom)+124px)] lg:pb-16">{children}</main>
+      <main className="min-w-0 flex-1 pb-[calc(env(safe-area-inset-bottom)+7.75rem)] lg:pb-16">{children}</main>
       <TabBar />
     </div>
   );

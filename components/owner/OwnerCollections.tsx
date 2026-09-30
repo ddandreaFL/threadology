@@ -65,16 +65,16 @@ export function OwnerCollections({ collections }: { collections: OwnerCollection
           onSubmit();
         }}
       >
-        <label className="text-[11px] text-[#999999]">name</label>
+        <label className="text-[0.6875rem] text-[#999999]">name</label>
         <input
           autoFocus
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="tbl tees"
-          className="mt-1 w-full border-b border-[#E8E8E8] bg-transparent pb-2 pt-1 text-[16px] outline-none focus:border-th-ink"
+          className="mt-1 w-full border-b border-[#E8E8E8] bg-transparent pb-2 pt-1 text-[1rem] outline-none focus:border-th-ink"
         />
-        {error && <p className="mt-3 text-[13px] text-th-danger">{error}</p>}
-        <button disabled={busy || !name.trim()} className="mt-6 w-full rounded-th-pill bg-[#1A1A1A] py-3.5 text-[15px] font-medium text-white disabled:opacity-50">
+        {error && <p className="mt-3 text-[0.8125rem] text-th-danger">{error}</p>}
+        <button disabled={busy || !name.trim()} className="mt-6 w-full rounded-th-pill bg-[#1A1A1A] py-3.5 text-[0.9375rem] font-medium text-white disabled:opacity-50">
           {busy ? "…" : cta}
         </button>
       </form>
@@ -89,14 +89,14 @@ export function OwnerCollections({ collections }: { collections: OwnerCollection
         actions={[{ icon: "plus", label: "new collection", onClick: () => (setName(""), setError(""), setCreating(true)) }]}
       />
       {collections.length === 0 ? (
-        <p className="px-10 py-24 text-center text-[14px] text-th-muted">Group your pieces into collections.</p>
+        <p className="px-10 py-24 text-center text-[0.875rem] text-th-muted">Group your pieces into collections.</p>
       ) : (
         <div className="grid gap-3 px-4 pb-8 lg:grid-cols-2 lg:gap-4 lg:px-8 xl:grid-cols-3">
           {collections.map((c) => (
             <div key={c.id} className="relative rounded-th-card border border-th-border p-4 transition-colors hover:border-th-muted/40">
               <Link href={`/collections/${c.id}`} className="block">
-                <p className="truncate pr-10 text-[17px] font-semibold tracking-[-0.01em]">{c.name}</p>
-                <p className="mt-0.5 font-th-label font-light text-[11px] uppercase tracking-[0.1em] text-th-muted">
+                <p className="truncate pr-10 text-[1.0625rem] font-semibold tracking-[-0.01em]">{c.name}</p>
+                <p className="mt-0.5 font-th-label font-light text-[0.6875rem] uppercase tracking-[0.1em] text-th-muted">
                   <span className="text-th-accent">{c.count}</span> {c.count === 1 ? "piece" : "pieces"}
                 </p>
                 <div className="mt-3 grid grid-cols-4 gap-2">
@@ -119,13 +119,13 @@ export function OwnerCollections({ collections }: { collections: OwnerCollection
               </button>
               {menu === c.id && (
                 <div className="absolute right-3 top-12 z-10 w-44 overflow-hidden rounded-th-chip border border-th-border bg-white py-1 shadow-lg">
-                  <Link href={`/collections/${c.id}`} className="block px-4 py-2.5 text-[14px] hover:bg-th-surface">
+                  <Link href={`/collections/${c.id}`} className="block px-4 py-2.5 text-[0.875rem] hover:bg-th-surface">
                     open & share
                   </Link>
-                  <button onClick={() => (setMenu(null), setName(c.name), setError(""), setRenaming(c))} className="block w-full px-4 py-2.5 text-left text-[14px] hover:bg-th-surface">
+                  <button onClick={() => (setMenu(null), setName(c.name), setError(""), setRenaming(c))} className="block w-full px-4 py-2.5 text-left text-[0.875rem] hover:bg-th-surface">
                     rename
                   </button>
-                  <button onClick={() => remove(c)} className="block w-full px-4 py-2.5 text-left text-[14px] text-th-danger hover:bg-th-surface">
+                  <button onClick={() => remove(c)} className="block w-full px-4 py-2.5 text-left text-[0.875rem] text-th-danger hover:bg-th-surface">
                     delete
                   </button>
                 </div>

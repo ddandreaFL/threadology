@@ -53,7 +53,7 @@ export function SharedBrowser({
       {pieces.length > 0 && (
         <button
           onClick={() => openGallery(view === "coverflow" ? index : 0, true)}
-          className="inline-flex h-11 items-center gap-2 rounded-full bg-th-chip px-[18px] text-[13px] font-semibold text-th-ink hover:bg-th-chip-pressed"
+          className="inline-flex h-11 items-center gap-2 rounded-full bg-th-chip px-[1.125rem] text-[0.8125rem] font-semibold text-th-ink hover:bg-th-chip-pressed"
         >
           <Icon name="expand" size={15} /> enter gallery
         </button>
@@ -80,7 +80,7 @@ export function SharedBrowser({
 
       {pieces.length === 0 ? (
         <div className="flex flex-col items-center gap-5 py-24">
-          <p className="text-[15px] text-th-muted">Nothing in here yet.</p>
+          <p className="text-[0.9375rem] text-th-muted">Nothing in here yet.</p>
           {actions}
         </div>
       ) : view === "coverflow" ? (
@@ -96,15 +96,15 @@ export function SharedBrowser({
             hiddenIndex={gallery ? index : null}
           />
           <div className="mt-4 px-5 text-center">
-            <p className="truncate text-[14px] font-semibold tracking-[-0.2px] text-th-ink lg:text-[17px]">{active ? active.name ?? active.type : " "}</p>
-            <p className="mt-0.5 truncate text-[11px] text-[#999999] lg:text-[13px]">{active ? [active.brand, active.year].filter(Boolean).join(" · ") : " "}</p>
+            <p className="truncate text-[0.875rem] font-semibold tracking-[-0.0125rem] text-th-ink lg:text-[1.0625rem]">{active ? active.name ?? active.type : " "}</p>
+            <p className="mt-0.5 truncate text-[0.6875rem] text-[#999999] lg:text-[0.8125rem]">{active ? [active.brand, active.year].filter(Boolean).join(" · ") : " "}</p>
             <div className="mt-5">{actions}</div>
           </div>
         </div>
       ) : (
         <div className="px-3 lg:px-8">
           <div className="mb-6 flex justify-center">{actions}</div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-[22px] md:grid-cols-3 lg:grid-cols-4 lg:gap-x-5 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-[1.375rem] md:grid-cols-3 lg:grid-cols-4 lg:gap-x-5 xl:grid-cols-5">
             {pieces.map((p, i) => (
               <button key={p.id} onClick={() => setOpen(i)} className="text-left">
                 <PieceCard photo={p.photos?.[0] ?? null} title={p.name ?? p.type} subtitle={p.brand} />

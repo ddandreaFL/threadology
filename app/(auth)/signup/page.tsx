@@ -119,11 +119,11 @@ function SignupForm() {
   if (sentTo) {
     return (
       <AuthForm title="check your email">
-        <p className="text-[14px] leading-relaxed text-th-muted">
+        <p className="text-[0.875rem] leading-relaxed text-th-muted">
           We sent a confirmation link to <span className="text-[#111111]">{sentTo}</span>. Open it to finish creating
           your vault — it can take a minute to arrive, and sometimes lands in spam.
         </p>
-        <p className="mt-6 text-center text-[13px] text-[#999999]">
+        <p className="mt-6 text-center text-[0.8125rem] text-[#999999]">
           already confirmed?{" "}
           <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="font-medium text-th-ink underline">
             log in
@@ -166,7 +166,7 @@ function SignupForm() {
           error={fieldErrors.password}
         />
 
-        {formError && <p className="text-[13px] text-th-danger">{formError}</p>}
+        {formError && <p className="text-[0.8125rem] text-th-danger">{formError}</p>}
 
         <SubmitButton
           label="create account →"
@@ -176,7 +176,7 @@ function SignupForm() {
       </form>
       <AppHint />
 
-      <p className="mt-6 text-center text-[13px] text-[#999999]">
+      <p className="mt-6 text-center text-[0.8125rem] text-[#999999]">
         already have an account?{" "}
         <Link href={next === "/vault" ? "/login" : `/login?next=${encodeURIComponent(next)}`} className="font-medium text-th-ink underline">
           log in

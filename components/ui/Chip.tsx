@@ -12,7 +12,7 @@ export function Chip({ label, selected, onClick }: { label: string; selected: bo
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`rounded-full border px-3.5 py-2 font-th-sans text-[13px] transition-colors ${
+      className={`rounded-full border px-3.5 py-2 font-th-sans text-[0.8125rem] transition-colors ${
         selected ? "border-[#1A1A1A] bg-[#1A1A1A] text-white" : "border-[#EBEBEB] bg-white text-th-ink hover:border-th-ink"
       }`}
     >

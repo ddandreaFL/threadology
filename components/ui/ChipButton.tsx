@@ -43,7 +43,7 @@ export function ChipButton({
       <Icon name={icon} size={iconSize} className={size === "inline" && !primary ? "text-th-muted" : undefined} />
       {badge && (
         <span
-          className={`absolute right-[9px] top-[9px] h-2 w-2 rounded-full border-[1.5px] bg-th-accent ${
+          className={`absolute right-[0.5625rem] top-[0.5625rem] h-2 w-2 rounded-full border-[0.0938rem] bg-th-accent ${
             onMedia ? "border-th-chip-on-media" : "border-th-chip"
           }`}
         />

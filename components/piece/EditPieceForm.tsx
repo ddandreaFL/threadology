@@ -155,8 +155,8 @@ export function EditPieceForm({
           <CollectionChecklist collections={collections} selected={inCollections} onChange={setInCollections} />
         </Field>
         <Toggle label="private" detail="hidden from every shared link, even ones already sent" on={isPrivate} onChange={setIsPrivate} />
-        {error && <p className="text-[13px] text-th-danger">{error}</p>}
-        <button type="button" onClick={remove} disabled={saving} className="self-start text-[14px] font-medium text-th-danger">
+        {error && <p className="text-[0.8125rem] text-th-danger">{error}</p>}
+        <button type="button" onClick={remove} disabled={saving} className="self-start text-[0.875rem] font-medium text-th-danger">
           delete piece
         </button>
       </EditorBody>

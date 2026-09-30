@@ -6,7 +6,7 @@ export default function ProfileLoading() {
   const block = "bg-th-surface";
   const list = (
     <div>
-      <div className={`${block} h-3 w-[110px]`} />
+      <div className={`${block} h-3 w-[6.875rem]`} />
       <div className="mt-3 border-t border-th-border">
         {[88, 72, 64, 52, 44].map((w) => (
           <div key={w} className="border-b border-th-border py-3.5">
@@ -18,16 +18,16 @@ export default function ProfileLoading() {
     </div>
   );
   return (
-    <div aria-busy className="flex flex-col gap-7 px-5 pt-[88px] lg:mx-auto lg:max-w-xl lg:pt-10">
+    <div aria-busy className="flex flex-col gap-7 px-5 pt-[5.5rem] lg:mx-auto lg:max-w-xl lg:pt-10">
       <div className="flex items-center gap-4">
-        <div className={`${block} h-[72px] w-[72px] rounded-full`} />
+        <div className={`${block} h-[4.5rem] w-[4.5rem] rounded-full`} />
         <div className="flex flex-col gap-2.5">
-          <div className={`${block} h-[18px] w-[120px]`} />
-          <div className={`${block} h-3 w-[150px]`} />
+          <div className={`${block} h-[1.125rem] w-[7.5rem]`} />
+          <div className={`${block} h-3 w-[9.375rem]`} />
         </div>
       </div>
       <div className={`${block} -mt-3 h-3.5 w-4/5`} />
-      <div className={`${block} h-[76px] rounded-th-chip`} />
+      <div className={`${block} h-[4.75rem] rounded-th-chip`} />
       {list}
       {list}
     </div>

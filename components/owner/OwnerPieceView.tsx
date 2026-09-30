@@ -100,13 +100,13 @@ export function OwnerPieceView({
 
       <Sheet open={picking} title="collections" onClose={() => setPicking(false)}>
         {collections.length === 0 ? (
-          <p className="text-[14px] text-th-muted">No collections yet — make one from the collections tab.</p>
+          <p className="text-[0.875rem] text-th-muted">No collections yet — make one from the collections tab.</p>
         ) : (
           <div className="flex flex-col">
             {collections.map((c) => {
               const on = selected.includes(c.id);
               return (
-                <label key={c.id} className="flex cursor-pointer items-center justify-between border-b border-th-border py-3.5 text-[15px]">
+                <label key={c.id} className="flex cursor-pointer items-center justify-between border-b border-th-border py-3.5 text-[0.9375rem]">
                   {c.name}
                   <input
                     type="checkbox"
@@ -117,7 +117,7 @@ export function OwnerPieceView({
                 </label>
               );
             })}
-            <button onClick={saveCollections} disabled={saving} className="mt-5 rounded-th-pill bg-[#1A1A1A] py-3 text-[15px] font-medium text-white disabled:opacity-60">
+            <button onClick={saveCollections} disabled={saving} className="mt-5 rounded-th-pill bg-[#1A1A1A] py-3 text-[0.9375rem] font-medium text-white disabled:opacity-60">
               {saving ? "saving…" : "save"}
             </button>
           </div>

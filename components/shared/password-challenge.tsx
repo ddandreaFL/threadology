@@ -41,11 +41,11 @@ export function PasswordChallenge({
 
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 font-th-sans">
-      <p className="text-[72px] leading-[72px] text-[#EBEBEB]" aria-hidden>
+      <p className="text-[4.5rem] leading-[4.5rem] text-[#EBEBEB]" aria-hidden>
         ✦
       </p>
-      <p className="mt-6 text-[17px] font-medium text-th-ink">This link needs a password.</p>
-      <p className="mt-1.5 text-[13px] text-th-muted">Ask whoever sent it.</p>
+      <p className="mt-6 text-[1.0625rem] font-medium text-th-ink">This link needs a password.</p>
+      <p className="mt-1.5 text-[0.8125rem] text-th-muted">Ask whoever sent it.</p>
       <form onSubmit={submit} className="mt-7 w-full max-w-xs">
         <input
           type="password"
@@ -53,13 +53,13 @@ export function PasswordChallenge({
           onChange={(e) => setPassword(e.target.value)}
           placeholder="password"
           autoFocus
-          className="w-full border-b border-[#E8E8E8] bg-transparent pb-2.5 text-center text-[17px] text-th-ink outline-none placeholder:text-[#C8C8C8] focus:border-th-ink"
+          className="w-full border-b border-[#E8E8E8] bg-transparent pb-2.5 text-center text-[1.0625rem] text-th-ink outline-none placeholder:text-[#C8C8C8] focus:border-th-ink"
         />
-        {wrong && <p className="mt-3 text-center text-[13px] text-th-danger">That password does not open this link.</p>}
+        {wrong && <p className="mt-3 text-center text-[0.8125rem] text-th-danger">That password does not open this link.</p>}
         <button
           type="submit"
           disabled={!password.trim() || busy}
-          className="mt-6 w-full rounded-[30px] bg-[#1A1A1A] py-3.5 text-[15px] font-medium text-white disabled:bg-[#D6D6D6]"
+          className="mt-6 w-full rounded-[1.875rem] bg-[#1A1A1A] py-3.5 text-[0.9375rem] font-medium text-white disabled:bg-[#D6D6D6]"
         >
           {busy ? "opening…" : "open"}
         </button>

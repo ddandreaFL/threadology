@@ -46,9 +46,9 @@ export function OwnerVault({ pieces, collections }: { pieces: OwnerPiece[]; coll
         <ScreenHeader title="vault" subtitle="0 pieces" />
         <div className="flex flex-col items-center px-10 py-24 text-center">
           <p className="text-4xl text-[#CCCCCC]">✦</p>
-          <p className="mt-4 text-[22px] font-semibold tracking-[-0.02em]">your vault awaits</p>
-          <p className="mt-2 text-[14px] text-th-muted">start archiving the pieces that define your style</p>
-          <Link href="/vault/add" className="mt-7 rounded-th-pill bg-[#1A1A1A] px-7 py-3.5 text-[14px] font-medium text-white">
+          <p className="mt-4 text-[1.375rem] font-semibold tracking-[-0.02em]">your vault awaits</p>
+          <p className="mt-2 text-[0.875rem] text-th-muted">start archiving the pieces that define your style</p>
+          <Link href="/vault/add" className="mt-7 rounded-th-pill bg-[#1A1A1A] px-7 py-3.5 text-[0.875rem] font-medium text-white">
             add your first piece →
           </Link>
         </div>
@@ -74,7 +74,7 @@ export function OwnerVault({ pieces, collections }: { pieces: OwnerPiece[]; coll
                 setIndex(0);
               }}
               aria-pressed={active === c.id}
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-[13px] transition-colors ${
+              className={`shrink-0 rounded-full px-3.5 py-1.5 text-[0.8125rem] transition-colors ${
                 active === c.id ? "bg-[#1A1A1A] text-white" : "border border-[#EBEBEB] text-[#999999] hover:text-th-ink"
               }`}
             >
@@ -85,7 +85,7 @@ export function OwnerVault({ pieces, collections }: { pieces: OwnerPiece[]; coll
       )}
 
       {shown.length === 0 ? (
-        <p className="py-24 text-center text-[14px] text-th-muted">This collection is empty.</p>
+        <p className="py-24 text-center text-[0.875rem] text-th-muted">This collection is empty.</p>
       ) : view.mode === "coverflow" ? (
         <div className="pt-4 lg:pt-8">
           <Coverflow
@@ -100,24 +100,24 @@ export function OwnerVault({ pieces, collections }: { pieces: OwnerPiece[]; coll
           />
           <div className="mt-4 px-5 text-center">
             <div className="relative inline-block max-w-full">
-              <p className="truncate text-[14px] font-semibold tracking-[-0.2px] lg:text-[17px]">{piece ? piece.name ?? piece.type : " "}</p>
+              <p className="truncate text-[0.875rem] font-semibold tracking-[-0.0125rem] lg:text-[1.0625rem]">{piece ? piece.name ?? piece.type : " "}</p>
               {piece && (
                 <Link href={`/pieces/${piece.id}/edit`} aria-label="edit piece" className="absolute -right-8 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center text-th-muted hover:text-th-ink">
                   <Icon name="pencil" size={15} />
                 </Link>
               )}
             </div>
-            <p className="mt-0.5 truncate text-[11px] text-[#999999] lg:text-[13px]">{piece ? [piece.brand, piece.year].filter(Boolean).join(" · ") : " "}</p>
+            <p className="mt-0.5 truncate text-[0.6875rem] text-[#999999] lg:text-[0.8125rem]">{piece ? [piece.brand, piece.year].filter(Boolean).join(" · ") : " "}</p>
             <button
               onClick={() => setGallery({ start: index, origin: cf.current?.measureActiveCard() ?? null, scope: active })}
-              className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-th-chip px-[18px] text-[13px] font-semibold hover:bg-th-chip-pressed"
+              className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-th-chip px-[1.125rem] text-[0.8125rem] font-semibold hover:bg-th-chip-pressed"
             >
               <Icon name="expand" size={15} /> enter gallery
             </button>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 pt-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-5 lg:px-8 xl:grid-cols-5">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-[1.375rem] px-3 pt-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-5 lg:px-8 xl:grid-cols-5">
           {shown.map((p) => (
             <PieceCard key={p.id} href={`/pieces/${p.id}`} photo={p.photo} title={p.name ?? p.type} subtitle={p.brand} />
           ))}

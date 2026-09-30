@@ -127,11 +127,11 @@ export function AddPieceFlow({
         title={meta.title}
         subtitle={meta.subtitle}
         {...(step === 1 ? { close: { onClick: leave } } : { back: { onClick: () => setStep(step - 1) } })}
-        trailing={<span className="pt-3 font-th-label font-light text-[11px] text-th-muted">{step}/{STEPS.length}</span>}
+        trailing={<span className="pt-3 font-th-label font-light text-[0.6875rem] text-th-muted">{step}/{STEPS.length}</span>}
       />
       <div className="mx-auto mb-5 flex max-w-xl gap-1 px-5">
         {STEPS.map((_, i) => (
-          <span key={i} className={`h-[3px] flex-1 rounded-full ${i < step ? "bg-[#1A1A1A]" : "bg-[#F0F0F0]"}`} />
+          <span key={i} className={`h-[0.1875rem] flex-1 rounded-full ${i < step ? "bg-[#1A1A1A]" : "bg-[#F0F0F0]"}`} />
         ))}
       </div>
 
@@ -140,7 +140,7 @@ export function AddPieceFlow({
 
         {step === 2 && (
           <>
-            <input autoFocus value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="e.g. Engineered Garments" className={`${inputClass} text-[22px]`} onKeyDown={(e) => e.key === "Enter" && ok[1] && setStep(3)} />
+            <input autoFocus value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="e.g. Engineered Garments" className={`${inputClass} text-[1.375rem]`} onKeyDown={(e) => e.key === "Enter" && ok[1] && setStep(3)} />
             {topBrands.length > 0 && (
               <Field label="recent">
                 <div className="flex flex-wrap gap-2">
@@ -166,8 +166,8 @@ export function AddPieceFlow({
                   }}
                   className={`flex flex-col items-start gap-3 rounded-2xl border px-4 py-4 text-left ${category === t.id ? "border-[#1A1A1A] bg-[#1A1A1A] text-white" : "border-[#EBEBEB] text-th-ink hover:border-th-ink"}`}
                 >
-                  <span className="text-[26px]">{t.icon}</span>
-                  <span className="text-[15px] font-medium">{t.label}</span>
+                  <span className="text-[1.625rem]">{t.icon}</span>
+                  <span className="text-[0.9375rem] font-medium">{t.label}</span>
                 </button>
               ))}
             </div>
@@ -215,8 +215,8 @@ export function AddPieceFlow({
             <div className="flex flex-col divide-y divide-[#F0F0F0] rounded-2xl border border-[#EBEBEB]">
               {summary.map(([label, v, s]) => (
                 <button key={label} type="button" onClick={() => setStep(s)} className="flex items-center justify-between gap-4 px-4 py-3 text-left">
-                  <span className="text-[12px] text-[#999999]">{label}</span>
-                  <span className={`truncate text-[14px] ${v ? "text-th-ink" : "text-[#C8C8C8]"}`}>{v ?? "add"}</span>
+                  <span className="text-[0.75rem] text-[#999999]">{label}</span>
+                  <span className={`truncate text-[0.875rem] ${v ? "text-th-ink" : "text-[#C8C8C8]"}`}>{v ?? "add"}</span>
                 </button>
               ))}
             </div>
@@ -229,7 +229,7 @@ export function AddPieceFlow({
             <Field label="collections">
               <CollectionChecklist collections={collections} selected={inCollections} onChange={setInCollections} />
             </Field>
-            {error && <p className="text-[13px] text-th-danger">{error}</p>}
+            {error && <p className="text-[0.8125rem] text-th-danger">{error}</p>}
           </>
         )}
       </EditorBody>

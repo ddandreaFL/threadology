@@ -29,16 +29,16 @@ export function AppBanner() {
             localStorage.setItem("app_banner_dismissed", "1");
           } catch {}
         }}
-        className="text-[18px] leading-none text-th-muted"
+        className="text-[1.125rem] leading-none text-th-muted"
       >
         ×
       </button>
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[9px] bg-[#1A1A1A] font-th-label font-light text-[13px] text-white">t</span>
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.5625rem] bg-[#1A1A1A] font-th-label font-light text-[0.8125rem] text-white">t</span>
       <div className="min-w-0 flex-1">
-        <p className="text-[13px] font-semibold text-th-ink">threadology</p>
-        <p className="truncate text-[12px] text-th-muted">Better in the app — cover flow, gallery, your own vault.</p>
+        <p className="text-[0.8125rem] font-semibold text-th-ink">threadology</p>
+        <p className="truncate text-[0.75rem] text-th-muted">Better in the app — cover flow, gallery, your own vault.</p>
       </div>
-      <a href={APP_STORE_URL} className="rounded-full bg-[#1A1A1A] px-4 py-1.5 text-[13px] font-semibold text-white">
+      <a href={APP_STORE_URL} className="rounded-full bg-[#1A1A1A] px-4 py-1.5 text-[0.8125rem] font-semibold text-white">
         get
       </a>
     </div>
@@ -52,13 +52,13 @@ export function AppBanner() {
 export function AppNudge({ line = "Keep your own archive of the clothes you keep." }: { line?: string }) {
   return (
     <div className="mx-auto mt-12 max-w-md rounded-th-card bg-[#1A1A1A] px-6 py-6 text-center font-th-sans">
-      <p className="font-th-label font-light text-[11px] uppercase tracking-[0.2em] text-white/50">threadology</p>
-      <p className="mt-2 text-[17px] font-medium tracking-[-0.01em] text-white">{line}</p>
+      <p className="font-th-label font-light text-[0.6875rem] uppercase tracking-[0.2em] text-white/50">threadology</p>
+      <p className="mt-2 text-[1.0625rem] font-medium tracking-[-0.01em] text-white">{line}</p>
       <div className="mt-5 flex flex-col gap-2">
-        <a href={APP_STORE_URL} className="rounded-th-pill bg-white py-3 text-[15px] font-medium text-[#1A1A1A] transition-opacity hover:opacity-85">
+        <a href={APP_STORE_URL} className="rounded-th-pill bg-white py-3 text-[0.9375rem] font-medium text-[#1A1A1A] transition-opacity hover:opacity-85">
           get the app
         </a>
-        <a href="/signup" className="py-1 text-[13px] text-white/50 hover:text-white/80">
+        <a href="/signup" className="py-1 text-[0.8125rem] text-white/50 hover:text-white/80">
           or start on the web
         </a>
       </div>

@@ -87,17 +87,17 @@ export function OwnerCollectionView({
       {menu && (
         <div className="absolute right-0 top-12 z-20 w-48 overflow-hidden rounded-th-chip border border-th-border bg-white py-1 shadow-lg">
           {pieces.length > 0 && (
-            <button onClick={() => (setMenu(false), setGallery({ start: 0, origin: null }))} className="block w-full px-4 py-2.5 text-left text-[14px] hover:bg-th-surface">
+            <button onClick={() => (setMenu(false), setGallery({ start: 0, origin: null }))} className="block w-full px-4 py-2.5 text-left text-[0.875rem] hover:bg-th-surface">
               enter gallery
             </button>
           )}
-          <button onClick={() => (setMenu(false), setSheet("share"))} className="block w-full px-4 py-2.5 text-left text-[14px] hover:bg-th-surface">
+          <button onClick={() => (setMenu(false), setSheet("share"))} className="block w-full px-4 py-2.5 text-left text-[0.875rem] hover:bg-th-surface">
             share
           </button>
-          <button onClick={startEdit} className="block w-full px-4 py-2.5 text-left text-[14px] hover:bg-th-surface">
+          <button onClick={startEdit} className="block w-full px-4 py-2.5 text-left text-[0.875rem] hover:bg-th-surface">
             edit
           </button>
-          <button onClick={remove} className="block w-full px-4 py-2.5 text-left text-[14px] text-th-danger hover:bg-th-surface">
+          <button onClick={remove} className="block w-full px-4 py-2.5 text-left text-[0.875rem] text-th-danger hover:bg-th-surface">
             delete
           </button>
         </div>
@@ -116,7 +116,7 @@ export function OwnerCollectionView({
       />
 
       {pieces.length === 0 ? (
-        <p className="px-10 py-24 text-center text-[14px] text-th-muted">Nothing in here yet. Add pieces with edit, or from a piece&apos;s page.</p>
+        <p className="px-10 py-24 text-center text-[0.875rem] text-th-muted">Nothing in here yet. Add pieces with edit, or from a piece&apos;s page.</p>
       ) : view.mode === "coverflow" ? (
         <div className="pt-4 lg:pt-8">
           <Coverflow
@@ -129,11 +129,11 @@ export function OwnerCollectionView({
             hiddenIndex={gallery?.origin ? index : null}
           />
           <div className="mt-4 px-5 text-center">
-            <p className="truncate text-[14px] font-semibold tracking-[-0.2px] lg:text-[17px]">{active ? active.name ?? active.type : " "}</p>
-            <p className="mt-0.5 truncate text-[11px] text-[#999999] lg:text-[13px]">{active ? [active.brand, active.year].filter(Boolean).join(" · ") : " "}</p>
+            <p className="truncate text-[0.875rem] font-semibold tracking-[-0.0125rem] lg:text-[1.0625rem]">{active ? active.name ?? active.type : " "}</p>
+            <p className="mt-0.5 truncate text-[0.6875rem] text-[#999999] lg:text-[0.8125rem]">{active ? [active.brand, active.year].filter(Boolean).join(" · ") : " "}</p>
             <button
               onClick={() => setGallery({ start: index, origin: cf.current?.measureActiveCard() ?? null })}
-              className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-th-chip px-[18px] text-[13px] font-semibold hover:bg-th-chip-pressed"
+              className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-th-chip px-[1.125rem] text-[0.8125rem] font-semibold hover:bg-th-chip-pressed"
             >
               <Icon name="expand" size={15} /> enter gallery
             </button>
@@ -142,7 +142,7 @@ export function OwnerCollectionView({
       ) : (
         // Two columns on a phone at every size, as the app keeps it; wider
         // on a desktop.
-        <div className="grid grid-cols-2 gap-x-3 gap-y-[22px] px-3 pt-2 lg:grid-cols-4 lg:gap-x-5 lg:px-8">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-[1.375rem] px-3 pt-2 lg:grid-cols-4 lg:gap-x-5 lg:px-8">
           {pieces.map((p) => (
             <PieceCard key={p.id} href={`/pieces/${p.id}`} photo={p.photo} title={p.name ?? p.type} subtitle={p.brand} />
           ))}
@@ -155,7 +155,7 @@ export function OwnerCollectionView({
       <Sheet open={sheet === "edit"} title="edit collection" onClose={() => setSheet(null)}>
         {/* The app's edit card: the name, the pieces with a remove on each,
             and the rest of your vault to add from. */}
-        <input value={newName} onChange={(e) => setNewName(e.target.value)} aria-label="name" className="w-full border-b border-[#E8E8E8] bg-transparent pb-2 text-[16px] outline-none focus:border-th-ink" />
+        <input value={newName} onChange={(e) => setNewName(e.target.value)} aria-label="name" className="w-full border-b border-[#E8E8E8] bg-transparent pb-2 text-[1rem] outline-none focus:border-th-ink" />
         <div className="mt-5 max-h-[50vh] overflow-y-auto">
           {(adding ? vault.filter((p) => !members.includes(p.id)) : vault.filter((p) => members.includes(p.id))).map((p) => (
             <div key={p.id} className="flex items-center gap-3 border-b border-[#F4F4F4] py-2 last:border-0">
@@ -166,28 +166,28 @@ export function OwnerCollectionView({
                 <span className="h-12 w-9 rounded-md bg-[#F0F0F0]" />
               )}
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-th-label font-light text-[10px] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
-                <span className="block truncate text-[14px]">{p.name ?? p.type}</span>
+                <span className="block truncate font-th-label font-light text-[0.625rem] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
+                <span className="block truncate text-[0.875rem]">{p.name ?? p.type}</span>
               </span>
               {adding ? (
-                <button type="button" onClick={() => setMembers([...members, p.id])} className="text-[13px] font-semibold text-th-accent">
+                <button type="button" onClick={() => setMembers([...members, p.id])} className="text-[0.8125rem] font-semibold text-th-accent">
                   add
                 </button>
               ) : (
-                <button type="button" onClick={() => setMembers(members.filter((m) => m !== p.id))} className="text-[13px] text-[#999999]">
+                <button type="button" onClick={() => setMembers(members.filter((m) => m !== p.id))} className="text-[0.8125rem] text-[#999999]">
                   remove
                 </button>
               )}
             </div>
           ))}
-          {!adding && members.length === 0 && <p className="py-4 text-center text-[13px] text-th-muted">no pieces</p>}
-          {adding && vault.every((p) => members.includes(p.id)) && <p className="py-4 text-center text-[13px] text-th-muted">every piece is already in here</p>}
+          {!adding && members.length === 0 && <p className="py-4 text-center text-[0.8125rem] text-th-muted">no pieces</p>}
+          {adding && vault.every((p) => members.includes(p.id)) && <p className="py-4 text-center text-[0.8125rem] text-th-muted">every piece is already in here</p>}
         </div>
-        <button type="button" onClick={() => setAdding(!adding)} className="mt-3 w-full rounded-th-pill border border-[#EBEBEB] py-3 text-[14px] font-medium">
+        <button type="button" onClick={() => setAdding(!adding)} className="mt-3 w-full rounded-th-pill border border-[#EBEBEB] py-3 text-[0.875rem] font-medium">
           {adding ? `back to ${plural(members.length, "piece")}` : "add pieces"}
         </button>
-        {editError && <p className="mt-3 text-[13px] text-th-danger">{editError}</p>}
-        <button type="button" onClick={saveEdit} disabled={!newName.trim() || saving} className="mt-3 w-full rounded-th-pill bg-[#1A1A1A] py-3.5 text-[15px] font-medium text-white disabled:opacity-50">
+        {editError && <p className="mt-3 text-[0.8125rem] text-th-danger">{editError}</p>}
+        <button type="button" onClick={saveEdit} disabled={!newName.trim() || saving} className="mt-3 w-full rounded-th-pill bg-[#1A1A1A] py-3.5 text-[0.9375rem] font-medium text-white disabled:opacity-50">
           {saving ? "saving…" : "save"}
         </button>
       </Sheet>

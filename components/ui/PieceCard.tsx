@@ -27,8 +27,8 @@ export function PieceCard({
           <div className="flex h-full items-center justify-center text-3xl text-[#CCCCCC]">✦</div>
         )}
       </div>
-      <p className="mt-2 truncate text-[13px] font-medium text-th-ink">{title}</p>
-      {subtitle ? <p className="mt-0.5 truncate text-[11px] text-th-muted">{subtitle}</p> : null}
+      <p className="mt-2 truncate text-[0.8125rem] font-medium text-th-ink">{title}</p>
+      {subtitle ? <p className="mt-0.5 truncate text-[0.6875rem] text-th-muted">{subtitle}</p> : null}
     </>
   );
   return href ? (

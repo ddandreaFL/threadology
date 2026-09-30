@@ -97,7 +97,7 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
               if (!p) return null;
               return (
                 <div key={id} className="flex items-center gap-3">
-                  <span className="w-4 font-th-label font-light text-[11px] text-th-muted">{n + 1}</span>
+                  <span className="w-4 font-th-label font-light text-[0.6875rem] text-th-muted">{n + 1}</span>
                   {p.photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={p.photo} alt="" className="h-12 w-9 rounded-md object-cover" />
@@ -105,18 +105,18 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
                     <span className="h-12 w-9 rounded-md bg-[#F0F0F0]" />
                   )}
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate font-th-label font-light text-[10px] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
-                    <span className="block truncate text-[14px]">{p.name ?? p.type}</span>
+                    <span className="block truncate font-th-label font-light text-[0.625rem] uppercase tracking-[0.1em] text-th-muted">{p.brand}</span>
+                    <span className="block truncate text-[0.875rem]">{p.name ?? p.type}</span>
                   </span>
-                  <button type="button" onClick={() => setWorn(worn.filter((x) => x !== id))} className="text-[12px] text-[#999999]">
+                  <button type="button" onClick={() => setWorn(worn.filter((x) => x !== id))} className="text-[0.75rem] text-[#999999]">
                     remove
                   </button>
                 </div>
               );
             })}
-            <button type="button" onClick={() => setPicking(true)} className="flex items-center justify-between rounded-2xl border border-[#EBEBEB] px-4 py-3 text-left text-[14px] font-semibold">
+            <button type="button" onClick={() => setPicking(true)} className="flex items-center justify-between rounded-2xl border border-[#EBEBEB] px-4 py-3 text-left text-[0.875rem] font-semibold">
               {worn.length ? "change pieces" : "choose pieces"}
-              <span className="text-[16px] text-[#CCCCCC]">›</span>
+              <span className="text-[1rem] text-[#CCCCCC]">›</span>
             </button>
           </div>
         </Field>
@@ -126,9 +126,9 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
         <Field label="caption" name="caption">
           <textarea value={caption} onChange={(e) => setCaption(e.target.value)} rows={4} placeholder="something small about today" className={`${inputClass} resize-none`} />
         </Field>
-        {error && <p className="text-[13px] text-th-danger">{error}</p>}
+        {error && <p className="text-[0.8125rem] text-th-danger">{error}</p>}
         {fit && (
-          <button type="button" onClick={remove} disabled={saving} className="self-start text-[14px] font-medium text-th-danger">
+          <button type="button" onClick={remove} disabled={saving} className="self-start text-[0.875rem] font-medium text-th-danger">
             delete fit
           </button>
         )}
@@ -137,7 +137,7 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
 
       <Sheet open={picking} onClose={() => setPicking(false)} title="what you wore">
         {pieces.length === 0 ? (
-          <p className="py-6 text-center text-[14px] text-th-muted">your vault is empty — add a piece first.</p>
+          <p className="py-6 text-center text-[0.875rem] text-th-muted">your vault is empty — add a piece first.</p>
         ) : (
           <div className="grid max-h-[60vh] grid-cols-3 gap-2 overflow-y-auto pb-2 sm:grid-cols-4">
             {pieces.map((p) => {
@@ -153,17 +153,17 @@ export function FitEditor({ userId, pieces, fit }: { userId: string; pieces: Fit
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={p.photo} alt={p.name ?? p.type} className="h-full w-full object-cover" />
                   ) : (
-                    <span className="flex h-full items-center justify-center bg-[#F0F0F0] text-[11px] text-th-muted">{p.brand}</span>
+                    <span className="flex h-full items-center justify-center bg-[#F0F0F0] text-[0.6875rem] text-th-muted">{p.brand}</span>
                   )}
                   {at !== -1 && (
-                    <span className="absolute right-1.5 top-1.5 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-[#1A1A1A] text-[11px] font-bold text-white">{at + 1}</span>
+                    <span className="absolute right-1.5 top-1.5 flex h-[1.375rem] w-[1.375rem] items-center justify-center rounded-full bg-[#1A1A1A] text-[0.6875rem] font-bold text-white">{at + 1}</span>
                   )}
                 </button>
               );
             })}
           </div>
         )}
-        <button type="button" onClick={() => setPicking(false)} className="mt-3 w-full rounded-[30px] bg-[#1A1A1A] py-3.5 text-[13px] font-semibold uppercase tracking-[0.07em] text-white">
+        <button type="button" onClick={() => setPicking(false)} className="mt-3 w-full rounded-[1.875rem] bg-[#1A1A1A] py-3.5 text-[0.8125rem] font-semibold uppercase tracking-[0.07em] text-white">
           done{worn.length ? ` · ${worn.length}` : ""}
         </button>
       </Sheet>

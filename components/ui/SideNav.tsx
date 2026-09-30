@@ -26,13 +26,13 @@ export function SideNav({ username }: { username: string }) {
         key={href}
         href={href}
         aria-current={active ? "page" : undefined}
-        className={`flex h-11 items-center gap-3 rounded-th-chip px-3 text-[15px] transition-colors ${
+        className={`flex h-11 items-center gap-3 rounded-th-chip px-3 text-[0.9375rem] transition-colors ${
           active ? "bg-th-chip font-semibold text-th-ink" : "text-th-muted hover:bg-th-surface hover:text-th-ink"
         }`}
       >
         <span className="relative">
           <Icon name={icon} size={20} />
-          {dot && <span className="absolute -right-[3px] -top-px h-2 w-2 rounded-full bg-th-accent" />}
+          {dot && <span className="absolute -right-[0.1875rem] -top-px h-2 w-2 rounded-full bg-th-accent" />}
         </span>
         {label}
       </Link>
@@ -40,8 +40,8 @@ export function SideNav({ username }: { username: string }) {
   };
 
   return (
-    <aside className="sticky top-0 hidden h-dvh w-[248px] shrink-0 flex-col border-r border-th-border px-4 py-6 font-th-sans lg:flex">
-      <Link href="/vault" className="flex items-center gap-2.5 px-3 font-th-label font-light text-[12px] uppercase tracking-[0.2em] text-th-ink">
+    <aside className="sticky top-0 hidden h-dvh w-[15.5rem] shrink-0 flex-col border-r border-th-border px-4 py-6 font-th-sans lg:flex">
+      <Link href="/vault" className="flex items-center gap-2.5 px-3 font-th-label font-light text-[0.75rem] uppercase tracking-[0.2em] text-th-ink">
         <Logo size={28} />
         threadology
       </Link>
@@ -51,14 +51,14 @@ export function SideNav({ username }: { username: string }) {
           type="button"
           onClick={() => setCreating((v) => !v)}
           aria-expanded={creating}
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-th-pill bg-[#1A1A1A] text-[14px] font-medium text-th-on-ink"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-th-pill bg-[#1A1A1A] text-[0.875rem] font-medium text-th-on-ink"
         >
           <Icon name={creating ? "close" : "plus"} size={18} /> new
         </button>
         {creating && (
-          <div className="absolute inset-x-0 top-[52px] z-10 rounded-th-card bg-[#1A1A1A] py-2 shadow-lg">
+          <div className="absolute inset-x-0 top-[3.25rem] z-10 rounded-th-card bg-[#1A1A1A] py-2 shadow-lg">
             {CREATE.map((c) => (
-              <Link key={c.href} href={c.href} onClick={() => setCreating(false)} className="flex h-11 items-center gap-3 px-4 text-[14px] text-th-on-ink hover:bg-white/5">
+              <Link key={c.href} href={c.href} onClick={() => setCreating(false)} className="flex h-11 items-center gap-3 px-4 text-[0.875rem] text-th-on-ink hover:bg-white/5">
                 <Icon name={c.icon} size={18} /> {c.label}
               </Link>
             ))}
@@ -75,7 +75,7 @@ export function SideNav({ username }: { username: string }) {
         {row("/settings", "settings", "gear")}
       </nav>
 
-      <p className="mt-auto truncate px-3 text-[13px] text-th-muted">@{username}</p>
+      <p className="mt-auto truncate px-3 text-[0.8125rem] text-th-muted">@{username}</p>
     </aside>
   );
 }

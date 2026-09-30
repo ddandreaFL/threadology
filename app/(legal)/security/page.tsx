@@ -3,16 +3,16 @@ import type { Metadata } from "next";
 export const metadata: Metadata = { title: "Trust & Security — Threadology" };
 
 function H2({ children }: { children: React.ReactNode }) {
-  return <h2 className="mb-3 mt-8 text-[15px] font-semibold text-[#111111]">{children}</h2>;
+  return <h2 className="mb-3 mt-8 text-[0.9375rem] font-semibold text-[#111111]">{children}</h2>;
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mb-4 text-[14px] leading-relaxed text-[#555555]">{children}</p>;
+  return <p className="mb-4 text-[0.875rem] leading-relaxed text-[#555555]">{children}</p>;
 }
 
 function Li({ children }: { children: React.ReactNode }) {
   return (
-    <li className="flex gap-3 text-[14px] leading-relaxed text-[#555555]">
+    <li className="flex gap-3 text-[0.875rem] leading-relaxed text-[#555555]">
       <span className="shrink-0 text-[#CCCCCC]">—</span>
       <span>{children}</span>
     </li>
@@ -26,10 +26,10 @@ function Ul({ children }: { children: React.ReactNode }) {
 export default function SecurityPage() {
   return (
     <>
-      <h1 className="mb-1 text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
+      <h1 className="mb-1 text-[1.75rem] font-semibold tracking-[-0.02em] text-[#111111]">
         Trust &amp; Security
       </h1>
-      <span className="mb-10 block text-[12px] text-[#999999]">Last updated: April 2026</span>
+      <span className="mb-10 block text-[0.75rem] text-[#999999]">Last updated: April 2026</span>
 
       <H2>Our Commitment</H2>
       <P>Your wardrobe data is personal. We treat it that way.</P>
@@ -65,10 +65,10 @@ export default function SecurityPage() {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[11px] font-semibold uppercase tracking-wide text-[#999999]">
+              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-[#999999]">
                 Provider
               </th>
-              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[11px] font-semibold uppercase tracking-wide text-[#999999]">
+              <th className="border-b border-[#EBEBEB] pb-2 text-left text-[0.6875rem] font-semibold uppercase tracking-wide text-[#999999]">
                 Security
               </th>
             </tr>
@@ -79,10 +79,10 @@ export default function SecurityPage() {
               ["Vercel", "SOC 2 Type II compliant"],
             ].map(([provider, security]) => (
               <tr key={provider}>
-                <td className="border-b border-[#F0F0F0] py-3 pr-6 align-top text-[13px] font-medium text-[#111111]">
+                <td className="border-b border-[#F0F0F0] py-3 pr-6 align-top text-[0.8125rem] font-medium text-[#111111]">
                   {provider}
                 </td>
-                <td className="border-b border-[#F0F0F0] py-3 align-top text-[13px] text-[#555555]">
+                <td className="border-b border-[#F0F0F0] py-3 align-top text-[0.8125rem] text-[#555555]">
                   {security}
                 </td>
               </tr>

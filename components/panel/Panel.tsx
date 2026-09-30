@@ -48,9 +48,9 @@ export function Panel({ children, label }: { children: ReactNode; label: string 
       {/* Desktop: starts right of the side column (248px), which stays usable —
           a click there navigates, and the panel closes on its own (@panel's
           catch-all). Phone: the whole screen. */}
-      <div className="fixed inset-0 z-[70] flex justify-end lg:left-[248px]" role="dialog" aria-modal aria-label={label}>
+      <div className="fixed inset-0 z-[70] flex justify-end lg:left-[15.5rem]" role="dialog" aria-modal aria-label={label}>
         <button type="button" aria-label="close" tabIndex={-1} onClick={() => router.back()} className="animate-panel-fade hidden flex-1 cursor-default bg-th-ink/20 lg:block" />
-        <div className="animate-panel-in relative h-full w-full overflow-y-auto overscroll-contain bg-th-bg lg:w-[min(960px,calc(100vw-296px))] lg:shadow-[-24px_0_60px_-30px_rgba(27,26,23,0.35)]">
+        <div className="animate-panel-in relative h-full w-full overflow-y-auto overscroll-contain bg-th-bg lg:w-[min(60rem,calc(100vw-18.5rem))] lg:shadow-[-1.5rem_0_3.75rem_-1.875rem_rgba(27,26,23,0.35)]">
           {children}
         </div>
       </div>
