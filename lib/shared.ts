@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { createServerClient } from "@/lib/supabase-server";
 
 /**
  * A password-gated link, once opened, stays open for that browser: the
@@ -84,6 +85,17 @@ export type SharedResult =
   | { kind: "password" }
   | { kind: "unavailable" };
 
+/** The signed-in viewer's access token, or null (signed out, or outside a request). */
+async function viewerSession(): Promise<string | null> {
+  try {
+    const supabase = await createServerClient();
+    const { data } = await supabase.auth.getSession();
+    return data.session?.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function callShared(
   fn: "shared_vault" | "shared_collection" | "shared_fit" | "shared_piece",
   token: string | undefined,
@@ -97,16 +109,27 @@ async function callShared(
   if (!url || !key) return { kind: "unavailable" };
   password ??= rememberedPassword(token);
 
-  const res = await fetch(`${url}/rest/v1/rpc/${fn}`, {
-    method: "POST",
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ p_token: token, p_password: password ?? null }),
-    cache: "no-store",
-  });
+  // A signed-in viewer reads as themselves: shared_fit's viewer block, the
+  // reactions' `mine` and the owner check all key on auth.uid(). Reading with
+  // the anon key made every signed-in viewer look signed out, so the fit page
+  // offered "sign in to react" to people who were.
+  const session = await viewerSession();
+
+  const read = (bearer: string) =>
+    fetch(`${url}/rest/v1/rpc/${fn}`, {
+      method: "POST",
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${bearer}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ p_token: token, p_password: password ?? null }),
+      cache: "no-store",
+    });
+  let res = await read(session ?? key);
+  // A stale session is refused outright; the link itself is still good, so
+  // read it as a visitor rather than showing a dead link.
+  if (!res.ok && session) res = await read(key);
   if (!res.ok) return { kind: "unavailable" };
 
   const data = await res.json();

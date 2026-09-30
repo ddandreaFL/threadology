@@ -37,6 +37,7 @@ export function VisitorFrame({ signedIn, children, banner }: { signedIn: boolean
       {banner}
       <main className="mx-auto w-full max-w-6xl pb-16">{children}</main>
       <footer className="border-t border-th-border px-5 py-8 text-center">
+        <Logo size={40} className="mx-auto mb-3 block" />
         <p className="font-th-label font-light text-[11px] uppercase tracking-[0.2em] text-th-muted">threadology</p>
         <p className="mt-2 text-[13px] text-th-muted">An archive for the clothes you keep.</p>
         {!signedIn && (
