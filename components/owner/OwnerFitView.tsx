@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Sheet } from "@/components/ui/Sheet";
 import { ShareControl } from "@/components/sharing/share-control";
 import { DetailChip, MoreMenu } from "@/components/detail/kit";
+import { useBack } from "@/components/ui/useBack";
 import { FitDetail, type FitDetailData, type FitDetailPiece } from "@/components/detail/FitDetail";
 import type { Reaction, Reactor } from "@/components/detail/Reactions";
 import { deleteFit } from "@/lib/actions/fits";
@@ -23,6 +24,7 @@ export type OwnerFitDetail = FitDetailData & {
 export function OwnerFitView({ fit, username, share }: { fit: OwnerFitDetail; username: string; share: ShareState }) {
   const router = useRouter();
   const [sharing, setSharing] = useState(false);
+  const back = useBack("/fits");
 
   async function remove() {
     if (!window.confirm("Delete this fit? Your pieces are not deleted.")) return;
@@ -33,7 +35,7 @@ export function OwnerFitView({ fit, username, share }: { fit: OwnerFitDetail; us
 
   const chips = (glass: boolean) => (
     <>
-      <DetailChip icon="chevron-left" label="Back" href="/fits" glass={glass} />
+      <DetailChip icon="chevron-left" label="Back" onClick={back} glass={glass} />
       <span className="flex gap-2">
         <DetailChip icon="share" label="Share" onClick={() => setSharing(true)} glass={glass} />
         <MoreMenu

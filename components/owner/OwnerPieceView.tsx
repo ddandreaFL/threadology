@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Sheet } from "@/components/ui/Sheet";
 import { ShareControl } from "@/components/sharing/share-control";
 import { DetailChip, MoreMenu, type StripItem } from "@/components/detail/kit";
+import { useBack } from "@/components/ui/useBack";
 import { PieceDetail, type PieceDetailData } from "@/components/detail/PieceDetail";
 import { deletePiece, setPiecePrivate } from "@/lib/actions/pieces";
 import { addPieceToCollections } from "@/lib/actions/collections";
@@ -34,6 +35,7 @@ export function OwnerPieceView({
 }) {
   const router = useRouter();
   const [sharing, setSharing] = useState(false);
+  const back = useBack("/vault");
   const [picking, setPicking] = useState(false);
   const [selected, setSelected] = useState<string[]>(memberOf);
   const [saving, setSaving] = useState(false);
@@ -62,7 +64,7 @@ export function OwnerPieceView({
 
   const chips = (glass: boolean) => (
     <>
-      <DetailChip icon="chevron-left" label="Back" href="/vault" glass={glass} />
+      <DetailChip icon="chevron-left" label="Back" onClick={back} glass={glass} />
       <span className="flex gap-2">
         {/* A private piece is in no shared link, so there is nothing to share. */}
         {!piece.is_private && <DetailChip icon="share" label="Share" onClick={() => setSharing(true)} glass={glass} />}

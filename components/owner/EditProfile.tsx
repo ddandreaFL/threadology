@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { ChipButton } from "@/components/ui/ChipButton";
+import { BackChip } from "@/components/ui/BackChip";
 import { Icon } from "@/components/ui/Icon";
 import { Avatar } from "@/components/profile/kit";
 import { updateProfile } from "@/lib/actions/profile";
@@ -70,7 +70,7 @@ export function EditProfile({
   return (
     <div className="font-th-sans">
       <header className="flex items-center px-5 pb-3.5 pt-[15px]">
-        <ChipButton icon="chevron-left" label="back" href="/profile" />
+        <BackChip fallback="/profile" />
         <h1 className="flex-1 text-center text-[17px] font-bold tracking-[-0.01em]">edit profile</h1>
         <span className="w-11" />
       </header>

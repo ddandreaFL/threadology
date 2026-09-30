@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useBack } from "@/components/ui/useBack";
 import { DetailChip } from "./kit";
 
 /**
@@ -8,7 +8,7 @@ import { DetailChip } from "./kit";
  * the system sheet on a phone, the link copied on a desktop.
  */
 export function VisitorChips({ glass, extra }: { glass: boolean; extra?: React.ReactNode }) {
-  const router = useRouter();
+  const back = useBack("/");
   async function share() {
     const url = window.location.href;
     if (navigator.share) return navigator.share({ url }).catch(() => {});
@@ -16,7 +16,7 @@ export function VisitorChips({ glass, extra }: { glass: boolean; extra?: React.R
   }
   return (
     <>
-      <DetailChip icon="chevron-left" label="Back" glass={glass} onClick={() => (window.history.length > 1 ? router.back() : router.push("/"))} />
+      <DetailChip icon="chevron-left" label="Back" glass={glass} onClick={back} />
       <span className="flex gap-2">
         {extra}
         <DetailChip icon="share" label="Share" glass={glass} onClick={share} />

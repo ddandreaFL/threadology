@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Cormorant_Garamond, DM_Sans, Inter } from "next/font/google";
 import { PageTransition } from "@/components/page-transition";
+import { NavTracker } from "@/components/ui/useBack";
 import "./globals.css";
 import { APP_STORE_ID } from "@/lib/app-store";
 
@@ -59,6 +60,7 @@ export default function RootLayout({
       <body
         className={`${dmSans.variable} ${interLabel.variable} ${cormorant.variable} ${geistMono.variable} font-mono-display antialiased`}
       >
+        <NavTracker />
         <PageTransition>{children}</PageTransition>
       </body>
     </html>

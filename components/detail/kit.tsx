@@ -17,9 +17,11 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 export function DetailLayout({ media, toolbar, children }: { media: ReactNode; toolbar: ReactNode; children: ReactNode }) {
   return (
     <div className="font-th-sans text-th-ink lg:grid lg:grid-cols-[640px_minmax(0,1fr)] lg:items-start">
-      <div className="relative lg:sticky lg:top-0 lg:p-8">{media}</div>
-      <div className="pb-12 lg:max-w-[600px] lg:pb-12 lg:pl-8 lg:pr-16 lg:pt-8">
-        <div className="mb-7 hidden items-center justify-between lg:flex">{toolbar}</div>
+      {/* Desktop: back top-left, the rest top-right — where every screen's
+          header chips sit, so back does not jump across the page. */}
+      <div className="hidden items-center justify-between px-5 pb-3.5 pt-[15px] lg:col-span-2 lg:flex">{toolbar}</div>
+      <div className="relative lg:sticky lg:top-0 lg:px-8 lg:pb-8">{media}</div>
+      <div className="pb-12 lg:max-w-[600px] lg:pb-12 lg:pl-8 lg:pr-16">
         {children}
       </div>
     </div>

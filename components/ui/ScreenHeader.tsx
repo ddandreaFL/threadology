@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ChipButton, type ChipDescriptor } from "./ChipButton";
+import { BackChip } from "./BackChip";
 
 /**
  * The one header (threadology-native/components/chrome/ScreenHeader.tsx): a
@@ -36,7 +37,7 @@ export function ScreenHeader({
       : null;
   return (
     <header className="flex items-start gap-2 px-5 pb-3.5 pt-[15px] font-th-sans">
-      {leading && <ChipButton {...leading} />}
+      {back && !close && !back.onClick ? <BackChip fallback={back.href ?? "/profile"} /> : leading && <ChipButton {...leading} />}
       <div className="flex min-h-11 min-w-0 flex-1 flex-col gap-1.5">
         <h1 className="line-clamp-2 text-[28px] font-bold leading-8 tracking-[-0.02em] text-th-ink">{keepEmojiAttached(title)}</h1>
         {subtitle ? (
