@@ -84,7 +84,7 @@ export function PieceDetail({
         />
       }
     >
-      <div className="pt-7 lg:pt-0">
+      <div className="pt-7 @3xl:pt-0">
         <Identity eyebrow={byline ? `${byline} · ${piece.brand}` : piece.brand} title={title} sub={piece.name ? piece.type : null}>
           {owner && piece.is_private ? <PrivateBadge /> : null}
         </Identity>

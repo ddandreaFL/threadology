@@ -90,7 +90,7 @@ export function SavedShelf({ userId, initial }: { userId: string; initial: Saved
           <p className="mt-2 text-[14px] text-th-muted">Open a link someone sends you and save it — it will wait here, and you will hear when it grows.</p>
         </div>
       ) : (
-        <ul className="mx-auto max-w-2xl divide-y divide-[#F0F0F0] px-5">
+        <ul className="th-page divide-y divide-[#F0F0F0]">
           {rows.map((r) => {
             const to = href(r);
             const row = (

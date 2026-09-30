@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { BackChip } from "@/components/ui/BackChip";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { Icon } from "@/components/ui/Icon";
 import { Avatar } from "@/components/profile/kit";
 import { updateProfile } from "@/lib/actions/profile";
@@ -69,13 +69,9 @@ export function EditProfile({
 
   return (
     <div className="font-th-sans">
-      <header className="flex items-center px-5 pb-3.5 pt-[15px]">
-        <BackChip fallback="/profile" />
-        <h1 className="flex-1 text-center text-[17px] font-bold tracking-[-0.01em]">edit profile</h1>
-        <span className="w-11" />
-      </header>
+      <ScreenHeader title="edit profile" back={{ href: "/profile" }} />
 
-      <div className="mx-auto max-w-xl px-5 pb-10">
+      <div className="th-page pb-10">
         <div className="flex flex-col items-center gap-3 pb-7 pt-3">
           <button type="button" onClick={() => file.current?.click()} disabled={uploading} aria-label="change photo" className="relative rounded-full">
             <Avatar src={avatar || null} username={username} size={112} />

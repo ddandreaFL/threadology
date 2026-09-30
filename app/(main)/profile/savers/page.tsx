@@ -19,11 +19,13 @@ export default async function SaversPage() {
   return (
     <div className="font-th-sans">
       <ScreenHeader title="saved by" subtitle={`${saver_count} ${saver_count === 1 ? "person" : "people"}`} back={{ href: "/activity" }} />
-      <ul className="mx-auto max-w-xl border-t border-th-border px-5 pb-10 lg:mt-3">
-        {savers.map((s) => (
-          <PersonRow key={s.username} person={s} sub={`saved ${s.count} ${s.count === 1 ? "thing" : "things"} · ${timeAgo(s.latest_at)}`} />
-        ))}
-      </ul>
+      <div className="th-page pb-10 pt-3">
+        <ul className="border-t border-th-border">
+          {savers.map((s) => (
+            <PersonRow key={s.username} person={s} sub={`saved ${s.count} ${s.count === 1 ? "thing" : "things"} · ${timeAgo(s.latest_at)}`} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

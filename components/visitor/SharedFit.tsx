@@ -42,7 +42,7 @@ export function SharedFit({ data, token, save, nudge }: { data: SharedFitData; t
       chips={<VisitorChips glass />}
       toolbar={<VisitorChips glass={false} />}
       footer={
-        <div className="px-5 lg:px-0">
+        <div className="px-5 @3xl:px-0">
           <div className="mt-8">{save}</div>
           {nudge}
         </div>

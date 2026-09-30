@@ -56,7 +56,7 @@ export function NotificationList({ initial }: { initial: NotificationRow[] }) {
   }
 
   return (
-    <ul className="mx-auto max-w-2xl divide-y divide-[#F0F0F0] px-5 font-th-sans">
+    <ul className="th-page divide-y divide-[#F0F0F0] font-th-sans">
       {initial.map((n) => (
         <li key={n.id}>
           <Row n={n} />

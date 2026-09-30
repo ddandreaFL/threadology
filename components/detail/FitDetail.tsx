@@ -98,7 +98,7 @@ export function FitDetail({
     >
       {/* The title below the photo: always on a desktop; on a phone only when
           there is no photo to set it on. */}
-      <div className={`pt-7 lg:block lg:pt-0 ${hasPhoto ? "hidden" : ""}`}>
+      <div className={`pt-7 @3xl:block @3xl:pt-0 ${hasPhoto ? "hidden" : ""}`}>
         <Identity eyebrow={eyebrow} title={title} />
       </div>
 

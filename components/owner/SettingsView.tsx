@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BackChip } from "@/components/ui/BackChip";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { Sheet } from "@/components/ui/Sheet";
 import { ShareControl } from "@/components/sharing/share-control";
 import { NavGroup, NavRow, SectionHead } from "@/components/profile/kit";
@@ -53,12 +53,8 @@ export function SettingsView({
 
   return (
     <div className="font-th-sans">
-      <header className="flex items-center px-5 pb-3.5 pt-[15px]">
-        <BackChip fallback="/profile" />
-        <h1 className="flex-1 text-center text-[17px] font-bold tracking-[-0.01em]">settings</h1>
-        <span className="w-11" />
-      </header>
-      <div className="mx-auto flex max-w-xl flex-col gap-7 px-5 pb-10">
+      <ScreenHeader title="settings" back={{ href: "/profile" }} />
+      <div className="th-page flex flex-col gap-7 pb-10 pt-3">
         <section>
           <SectionHead label="account" />
           <NavGroup>

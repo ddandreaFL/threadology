@@ -16,13 +16,15 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 
 export function DetailLayout({ media, toolbar, children }: { media: ReactNode; toolbar: ReactNode; children: ReactNode }) {
   return (
-    <div className="font-th-sans text-th-ink lg:grid lg:grid-cols-[640px_minmax(0,1fr)] lg:items-start">
-      {/* Desktop: back top-left, the rest top-right — where every screen's
-          header chips sit, so back does not jump across the page. */}
-      <div className="hidden items-center justify-between px-5 pb-3.5 pt-[15px] lg:col-span-2 lg:flex">{toolbar}</div>
-      <div className="relative lg:sticky lg:top-0 lg:px-8 lg:pb-8">{media}</div>
-      <div className="pb-12 lg:max-w-[600px] lg:pb-12 lg:pl-8 lg:pr-16">
-        {children}
+    // Sized by its container, not the window: the same page lays out as a
+    // full screen or inside the slide-over panel.
+    <div className="@container font-th-sans text-th-ink">
+      <div className="@3xl:grid @3xl:grid-cols-2 @3xl:items-start @5xl:grid-cols-[640px_minmax(0,1fr)]">
+        {/* Wide: back top-left, the rest top-right — where every screen's
+            header chips sit, so back does not jump across the page. */}
+        <div className="hidden items-center justify-between px-5 pb-3.5 pt-[15px] @3xl:col-span-2 @3xl:flex">{toolbar}</div>
+        <div className="relative @3xl:sticky @3xl:top-0 @3xl:px-8 @3xl:pb-8">{media}</div>
+        <div className="pb-12 @3xl:max-w-[600px] @3xl:pb-12 @3xl:pl-8 @3xl:pr-16">{children}</div>
       </div>
     </div>
   );
@@ -67,7 +69,7 @@ export function DetailHero({
 
   return (
     <div>
-      <div className={`relative w-full overflow-hidden bg-th-surface lg:rounded-th-card ${aspect}`}>
+      <div className={`relative w-full overflow-hidden bg-th-surface @3xl:rounded-th-card ${aspect}`}>
         {photos.length > 0 ? (
           <div
             ref={strip}
@@ -87,19 +89,19 @@ export function DetailHero({
             {placeholder && <span className="th-label">{placeholder}</span>}
           </div>
         )}
-        {overlay && <div className="lg:hidden">{overlay}</div>}
+        {overlay && <div className="@3xl:hidden">{overlay}</div>}
         {counter && photos.length > 1 && (
           <span
             aria-label={`Photo ${i + 1} of ${photos.length}`}
-            className="th-glass th-label absolute bottom-4 left-5 flex h-7 items-center whitespace-nowrap rounded-th-chip px-3 !text-th-ink lg:hidden"
+            className="th-glass th-label absolute bottom-4 left-5 flex h-7 items-center whitespace-nowrap rounded-th-chip px-3 !text-th-ink @3xl:hidden"
           >
             {i + 1} / {photos.length}
           </span>
         )}
-        <div className="absolute left-5 right-5 top-[calc(env(safe-area-inset-top)+16px)] flex justify-between lg:hidden">{chips}</div>
+        <div className="absolute left-5 right-5 top-[calc(env(safe-area-inset-top)+16px)] flex justify-between @3xl:hidden">{chips}</div>
       </div>
       {thumbs && photos.length > 1 && (
-        <div className="mt-3 hidden gap-2 lg:flex">
+        <div className="mt-3 hidden gap-2 @3xl:flex">
           {photos.map((src, n) => (
             <button
               key={`${src}-${n}`}
@@ -184,9 +186,9 @@ export function MoreMenu({ glass = false, items }: { glass?: boolean; items: { l
 
 export function Identity({ eyebrow, title, sub, onPhoto = false, children }: { eyebrow: string; title: string; sub?: string | null; onPhoto?: boolean; children?: ReactNode }) {
   return (
-    <div className="px-5 lg:px-0">
+    <div className="px-5 @3xl:px-0">
       <p className={`th-label ${onPhoto ? "!text-white" : "!text-th-accent"}`}>{eyebrow}</p>
-      <h1 className={`mt-1.5 text-[28px] font-bold leading-8 tracking-[-0.56px] [text-wrap:pretty] lg:text-[34px] lg:leading-[38px] ${onPhoto ? "text-white" : ""}`}>{title}</h1>
+      <h1 className={`mt-1.5 text-[28px] font-bold leading-8 tracking-[-0.56px] [text-wrap:pretty] @3xl:text-[34px] @3xl:leading-[38px] ${onPhoto ? "text-white" : ""}`}>{title}</h1>
       {sub && <p className="mt-1.5 text-[14px] leading-5 text-th-muted">{sub}</p>}
       {children}
     </div>
@@ -221,7 +223,7 @@ export function Section({
 }) {
   return (
     <section className="mt-7">
-      <div className="mb-3 flex items-baseline justify-between px-5 lg:px-0">
+      <div className="mb-3 flex items-baseline justify-between px-5 @3xl:px-0">
         <h2 className="th-label">{label}</h2>
         {action ? (
           action.href ? (
@@ -237,7 +239,7 @@ export function Section({
           <span className="th-label">{meta}</span>
         ) : null}
       </div>
-      <div className={bleed ? "lg:px-0" : "px-5 lg:px-0"}>{children}</div>
+      <div className={bleed ? "@3xl:px-0" : "px-5 @3xl:px-0"}>{children}</div>
     </section>
   );
 }
@@ -351,7 +353,7 @@ export type StripItem = { id: string; photo: string | null | undefined; title: s
 
 export function Strip({ items }: { items: StripItem[] }) {
   return (
-    <div className="flex gap-3 overflow-x-auto px-5 [scrollbar-width:none] lg:flex-wrap lg:overflow-visible lg:px-0 [&::-webkit-scrollbar]:hidden">
+    <div className="flex gap-3 overflow-x-auto px-5 [scrollbar-width:none] @3xl:flex-wrap @3xl:overflow-visible @3xl:px-0 [&::-webkit-scrollbar]:hidden">
       {items.map((it) => (
         <Link key={it.id} href={it.href} className="w-[120px] shrink-0 hover:opacity-85">
           <Thumb src={it.photo} className="h-40 w-[120px] rounded-th-chip" />

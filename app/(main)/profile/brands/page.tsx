@@ -16,7 +16,7 @@ export default async function BrandsPage() {
   return (
     <div className="font-th-sans">
       <ScreenHeader title="brands" subtitle={`${n} ${n === 1 ? "brand" : "brands"}`} back={{ href: "/profile" }} />
-      <div className="mx-auto max-w-xl px-5 pb-10 pt-3">
+      <div className="th-page pb-10 pt-3">
         <RankList rows={stats.brands} />
       </div>
     </div>

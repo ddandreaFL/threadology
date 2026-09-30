@@ -1,15 +1,6 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { SharedPieceView } from "@/components/shared/SharedPieceView";
 import { getSharedPiece } from "@/lib/shared";
-import { viewerIsOwner } from "@/lib/shared-viewer";
-import { getUser } from "@/lib/auth";
-import { VisitorFrame, OwnerPreview } from "@/components/visitor/VisitorFrame";
-import { PieceDetail } from "@/components/detail/PieceDetail";
-import { VisitorChips } from "@/components/detail/VisitorChips";
-import { AppNudge } from "@/components/visitor/GetTheApp";
-import { PasswordChallenge } from "@/components/shared/password-challenge";
-import { DeadLink } from "@/components/shared/dead-link";
-import { SaveButton } from "@/components/shared/save-button";
 
 /**
  * A single piece, shared by link.
@@ -48,59 +39,6 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
-
-export default async function SharedPiecePage({ params, searchParams }: Props) {
-  const [result, viewer] = await Promise.all([getSharedPiece(searchParams.k), getUser()]);
-  const signedIn = !!viewer;
-
-  if (result.kind === "unavailable") {
-    return (
-      <VisitorFrame signedIn={signedIn}>
-        <DeadLink />
-      </VisitorFrame>
-    );
-  }
-
-  if (result.kind === "password") {
-    return (
-      <VisitorFrame signedIn={signedIn}>
-        <PasswordChallenge fn="shared_piece" token={searchParams.k!} kind="piece" />
-      </VisitorFrame>
-    );
-  }
-
-  const { owner, piece, worn_in = [], collections = [] } = result.data;
-  const isOwner = await viewerIsOwner(params.username);
-  const ownHref = `/pieces/${piece.id}`;
-  if (isOwner && searchParams.preview !== "1") redirect(ownHref);
-
-  return (
-    <VisitorFrame signedIn={signedIn} banner={isOwner ? <OwnerPreview href={ownHref} /> : undefined}>
-      <PieceDetail
-        piece={{ ...piece, photos: piece.photos ?? [], added_on: piece.created_at?.slice(0, 10) ?? null }}
-        owner={false}
-        byline={`@${owner.username}`}
-        // Only fits and collections that are out by link themselves, each
-        // opened through its own token.
-        wornIn={worn_in.map((f) => ({
-          id: f.id,
-          title: f.title ?? "untitled fit",
-          date: f.date,
-          photo: f.photo,
-          href: `/fit/${owner.username}/${f.slug}?k=${f.share_token}`,
-        }))}
-        collections={collections.map((c) => ({ id: c.id, name: c.name, href: `/vault/${owner.username}/c/${c.slug}?k=${c.share_token}` }))}
-        chips={<VisitorChips glass />}
-        toolbar={<VisitorChips glass={false} />}
-        footer={
-          <div className="px-5 lg:px-0">
-            <div className="mt-8">
-              <SaveButton containerType="piece" token={searchParams.k} label="save this piece" />
-            </div>
-            {!signedIn && <AppNudge line={`@${owner.username} keeps their archive on threadology.`} />}
-          </div>
-        }
-      />
-    </VisitorFrame>
-  );
+export default async function SharedPiecePage(props: Props) {
+  return <SharedPieceView {...props} />;
 }

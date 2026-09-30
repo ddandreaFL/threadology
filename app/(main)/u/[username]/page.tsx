@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { createServerClient } from "@/lib/supabase-server";
 import { fetchUserProfile } from "@/lib/friends";
-import { BackHeader } from "@/components/friends/BackHeader";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { FriendButtons } from "@/components/friends/FriendButtons";
 import { IdentityHead, SectionHead, Totals } from "@/components/profile/kit";
 import { LinkedRow, RowList, Strip, Thumb } from "@/components/detail/kit";
@@ -25,7 +25,7 @@ export default async function UserPage({ params }: { params: { username: string 
   if (!profile) {
     return (
       <div className="font-th-sans">
-        <BackHeader title={`@${params.username}`} />
+        <ScreenHeader title={`@${params.username}`} back={{ href: "/activity" }} />
         <p className="px-5 pt-16 text-center text-[14px] text-th-muted">There&apos;s no one here by that name.</p>
       </div>
     );
@@ -38,8 +38,8 @@ export default async function UserPage({ params }: { params: { username: string 
 
   return (
     <div className="font-th-sans">
-      <BackHeader title={`@${user.username}`} />
-      <div className="mx-auto flex max-w-3xl flex-col gap-7 px-5 pb-10 pt-3">
+      <ScreenHeader title={`@${user.username}`} back={{ href: "/activity" }} />
+      <div className="th-page flex flex-col gap-7 pb-10 pt-3">
         <div className="flex flex-col gap-4">
           <IdentityHead user={user} />
           <FriendButtons username={user.username} relationship={relationship} />
@@ -57,7 +57,7 @@ export default async function UserPage({ params }: { params: { username: string 
             {fits.length > 0 && (
               <section>
                 <SectionHead label="fits" />
-                <div className="-mx-5 lg:mx-0">
+                <div className="-mx-5">
                   <Strip items={fits.map((f) => ({ id: f.id, photo: f.photo, title: f.title ?? "untitled fit", date: f.date, href: `/friend/fit/${f.id}` }))} />
                 </div>
               </section>
@@ -77,7 +77,7 @@ export default async function UserPage({ params }: { params: { username: string 
               {pieces.length === 0 ? (
                 <p className="text-[14px] text-th-muted">Nothing here yet.</p>
               ) : (
-                <div className="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5">
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                   {pieces.map((p) => (
                     <Link key={p.id} href={`/friend/piece/${p.id}`} className="min-w-0 hover:opacity-85">
                       <Thumb src={p.photo} className="aspect-square w-full rounded-th-chip" />
