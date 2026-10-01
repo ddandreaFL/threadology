@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Avatar } from "@/components/profile/kit";
 import { supabase } from "@/lib/supabase";
 
 /**
@@ -70,9 +71,15 @@ function Row({ n }: { n: NotificationRow }) {
   const href = targetHref(n);
   const body = (
     <div className={`flex items-center gap-3 py-4 ${href ? "transition-opacity hover:opacity-70" : ""}`}>
-      <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[0.625rem] bg-th-surface">
-        {n.thumbnail && <Image src={n.thumbnail} alt="" fill sizes="48px" className="object-cover" />}
-      </div>
+      {/* A person (a friend request) is a circle with their initial when
+          there's no photo; a thing is a rounded square. */}
+      {n.container_type === "user" ? (
+        <Avatar src={n.thumbnail} username={n.actor_username ?? "?"} size={48} />
+      ) : (
+        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-[0.625rem] bg-th-surface">
+          {n.thumbnail && <Image src={n.thumbnail} alt="" fill sizes="48px" className="object-cover" />}
+        </div>
+      )}
       <div className="min-w-0 flex-1">
         <p className="text-[0.9375rem] leading-snug text-th-ink">{describe(n)}</p>
         <p className="mt-0.5 text-[0.8125rem] text-th-muted">{ago(n.created_at)}</p>
